@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-// import { Button, buttonVariants } from "../ui/button";
+import { Button, buttonVariants } from "../ui/button";
 import Image from "next/image";
 import Logo from "@/public/logo.jpeg";
 
@@ -14,13 +14,12 @@ import { ThemeToggle } from "./ThemeToggle";
 //   SheetTitle,
 //   SheetTrigger,
 // } from "@/components/ui/sheet";
-// import { auth } from "@/app/utils/auth";
+import { auth, signOut } from "@/app/utils/auth";
 // import { ThemeToggle } from "./ThemeToggle";
 // import { UserDropdown } from "./UserDropdown";
 
-// export async function Navbar() {
-export function Navbar() {
-  //   const session = await auth();
+export async function Navbar() {
+  const session = await auth();
 
   return (
     <nav className="flex justify-between items-center py-5">
@@ -37,12 +36,23 @@ export function Navbar() {
         {/* <Link href="/post-job" className={buttonVariants({ size: "lg" })}>
           Post Job
         </Link> */}
-        {/* {session?.user ? (
-          <UserDropdown
-            email={session.user.email as string}
-            name={session.user.name as string}
-            image={session.user.image as string}
-          />
+        {session?.user ? (
+          // <UserDropdown
+          //   email={session.user.email as string}
+          //   name={session.user.name as string}
+          //   image={session.user.image as string}
+          // />
+
+          <form
+            action={async () => {
+              "use server";
+              await signOut({
+                redirectTo: "/",
+              });
+            }}
+          >
+            <button> Logout</button>
+          </form>
         ) : (
           <Link
             href="/login"
@@ -50,7 +60,7 @@ export function Navbar() {
           >
             Login
           </Link>
-        )} */}
+        )}
       </div>
 
       {/* Mobile Navigation */}
