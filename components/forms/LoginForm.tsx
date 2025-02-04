@@ -89,7 +89,7 @@ export async function LoginForm() {
                 action={async () => {
                   "use server";
                   await signIn("google", {
-                    redirectTo: "/onboarding",
+                    redirectTo: "/",
                   });
                 }}
               >
