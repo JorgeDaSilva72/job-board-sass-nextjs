@@ -46,7 +46,7 @@ const Home: FC = () => {
               Trouvez votre prochain emploi en Afrique
             </h1>
             <p className="text-xl mb-8">
-              Des milliers d'opportunités professionnelles à travers le
+              Des milliers d&apos;opportunités professionnelles à travers le
               continent
             </p>
 
@@ -160,7 +160,7 @@ const Home: FC = () => {
               <h4 className="text-lg font-semibold mb-4">À propos</h4>
               <ul className="space-y-2">
                 <li>Notre mission</li>
-                <li>L'équipe</li>
+                <li>L&apos;équipe</li>
                 <li>Nous contacter</li>
               </ul>
             </div>
