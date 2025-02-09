@@ -2,21 +2,20 @@ import Link from "next/link";
 
 import { Button, buttonVariants } from "../ui/button";
 import Image from "next/image";
-import Logo from "@/public/logo.jpeg";
+import Logo from "@/public/logo.png";
 
 import { Menu } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { auth } from "@/app/utils/auth";
 import { ThemeToggle } from "./ThemeToggle";
-// import {
-//   Sheet,
-//   SheetContent,
-//   SheetDescription,
-//   SheetHeader,
-//   SheetTitle,
-//   SheetTrigger,
-// } from "@/components/ui/sheet";
-import { auth, signOut } from "@/app/utils/auth";
-// import { ThemeToggle } from "./ThemeToggle";
-// import { UserDropdown } from "./UserDropdown";
+import { UserDropdown } from "./UserDropdown";
 
 export async function Navbar() {
   const session = await auth();
@@ -33,26 +32,15 @@ export async function Navbar() {
       {/* Desktop Navigation */}
       <div className="hidden md:flex items-center gap-5">
         <ThemeToggle />
-        {/* <Link href="/post-job" className={buttonVariants({ size: "lg" })}>
+        <Link href="/post-job" className={buttonVariants({ size: "lg" })}>
           Post Job
-        </Link> */}
+        </Link>
         {session?.user ? (
-          // <UserDropdown
-          //   email={session.user.email as string}
-          //   name={session.user.name as string}
-          //   image={session.user.image as string}
-          // />
-
-          <form
-            action={async () => {
-              "use server";
-              await signOut({
-                redirectTo: "/",
-              });
-            }}
-          >
-            <button> Logout</button>
-          </form>
+          <UserDropdown
+            email={session.user.email as string}
+            name={session.user.name as string}
+            image={session.user.image as string}
+          />
         ) : (
           <Link
             href="/login"
@@ -64,7 +52,7 @@ export async function Navbar() {
       </div>
 
       {/* Mobile Navigation */}
-      {/* <div className="md:hidden flex items-center gap-4">
+      <div className="md:hidden flex items-center gap-4">
         <ThemeToggle />
         {session?.user ? (
           <UserDropdown
@@ -112,7 +100,7 @@ export async function Navbar() {
             </SheetContent>
           </Sheet>
         )}
-      </div> */}
+      </div>
     </nav>
   );
 }
