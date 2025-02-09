@@ -196,6 +196,7 @@ export default function CompanyForm() {
                         size="icon"
                         className="absolute -top-2 -right-2 "
                         onClick={() => field.onChange("")}
+                        aria-label="Supprimer le logo"
                       >
                         <XIcon className="h-4 w-4" />
                       </Button>

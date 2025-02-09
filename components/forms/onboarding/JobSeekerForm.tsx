@@ -21,8 +21,8 @@ import { XIcon } from "lucide-react";
 
 import PDFImage from "@/public/pdf.png";
 import Image from "next/image";
-// import { UploadDropzone } from "@/components/general/UploadThingReExport";
-// import { createJobSeeker } from "@/app/actions";
+import { UploadDropzone } from "@/components/general/UploadThingReExport";
+import { createJobSeeker } from "@/app/actions";
 
 export default function JobSeekerForm() {
   const form = useForm<z.infer<typeof jobSeekerSchema>>({
@@ -34,20 +34,20 @@ export default function JobSeekerForm() {
     },
   });
   const [pending, setPending] = useState(false);
-  // async function onSubmit(values: z.infer<typeof jobSeekerSchema>) {
-  //   try {
-  //     setPending(true);
-  //     await createJobSeeker(values);
-  //   } catch (error) {
-  //     if (error instanceof Error && error.message !== "NEXT_REDIRECT") {
-  //       toast.error("Something went wrong. Please try again.");
-  //     }
-  //   } finally {
-  //     setPending(false);
-  //   }
-  // }
 
-  async function onSubmit(values: z.infer<typeof jobSeekerSchema>) {}
+  async function onSubmit(values: z.infer<typeof jobSeekerSchema>) {
+    try {
+      setPending(true);
+      await createJobSeeker(values);
+    } catch (error) {
+      if (error instanceof Error && error.message !== "NEXT_REDIRECT") {
+        // toast.error("Something went wrong. Please try again.");
+      }
+    } finally {
+      setPending(false);
+    }
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -83,7 +83,7 @@ export default function JobSeekerForm() {
           )}
         />
 
-        {/* <FormField
+        <FormField
           control={form.control}
           name="resume"
           render={({ field }) => (
@@ -115,10 +115,10 @@ export default function JobSeekerForm() {
                       endpoint="resumeUploader"
                       onClientUploadComplete={(res) => {
                         field.onChange(res[0].url);
-                        toast.success("Resume uploaded successfully!");
+                        // toast.success("Resume uploaded successfully!");
                       }}
                       onUploadError={() => {
-                        toast.error("Something went wrong. Please try again.");
+                        // toast.error("Something went wrong. Please try again.");
                       }}
                       className="ut-button:bg-primary ut-button:text-white ut-button:hover:bg-primary/90 ut-label:text-muted-foreground ut-allowed-content:text-muted-foreground border-primary"
                     />
@@ -128,7 +128,7 @@ export default function JobSeekerForm() {
               <FormMessage />
             </FormItem>
           )}
-        /> */}
+        />
 
         <Button type="submit" className="w-full" disabled={pending}>
           {pending ? "Submitting..." : "Continue"}
