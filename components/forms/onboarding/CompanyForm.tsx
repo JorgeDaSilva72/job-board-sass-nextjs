@@ -109,8 +109,11 @@ export default function CompanyForm() {
                       <SelectLabel>Location</SelectLabel>
                       {countryList.map((country) => (
                         <SelectItem value={country.name} key={country.code}>
-                          <span>{country.flagEmoji}</span>
-                          <span className="pl-2">{country.name}</span>
+                          <div className="flex flex-row justify-between items-center w-full">
+                            <img src={country.flagEmoji} className="h-8 w-8" />
+                            {/* <span>{country.flagEmoji}</span> */}
+                            <span className="pl-2">{country.name}</span>
+                          </div>
                         </SelectItem>
                       ))}
                     </SelectGroup>
