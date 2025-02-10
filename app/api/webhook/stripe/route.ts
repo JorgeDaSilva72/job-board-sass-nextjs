@@ -13,7 +13,7 @@ function methodNotAllowed() {
   );
 }
 // Gérer la méthode GET (optionnel, pour les tests)
-export async function GET(req: Request) {
+export async function GET() {
   console.log("GET request received on /api/webhook/stripe");
   return methodNotAllowed();
 }
@@ -22,7 +22,7 @@ export async function PUT() {
   return methodNotAllowed();
 }
 
-export async function DELETE(req: Request) {
+export async function DELETE() {
   return methodNotAllowed();
 }
 
