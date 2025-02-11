@@ -28,8 +28,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async redirect({ url, baseUrl }) {
-      console.log("🔄 Redirecting to:", url);
+      console.log("🔄 [Redirect Callback] URL demandée :", url);
+      console.log("🌍 [Redirect Callback] Base URL :", baseUrl);
       return url.startsWith(baseUrl) ? url : baseUrl;
+    },
+    async signIn({ user, account, profile }) {
+      console.log("✅ [SignIn Callback] Utilisateur :", user);
+      console.log("🔑 [SignIn Callback] Compte :", account);
+      console.log("📄 [SignIn Callback] Profil :", profile);
+      return true;
     },
   },
 });
