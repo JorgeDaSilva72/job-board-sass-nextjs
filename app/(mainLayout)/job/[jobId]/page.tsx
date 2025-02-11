@@ -18,7 +18,7 @@ import {
 } from "@/components/general/SubmitButtons";
 import { getFlagEmoji } from "@/app/utils/countriesList";
 import { JsonToHtml } from "@/components/general/JsonToHtml";
-// import { saveJobPost, unsaveJobPost } from "@/app/actions";
+import { saveJobPost, unsaveJobPost } from "@/app/actions";
 // import arcjet, { detectBot, fixedWindow } from "@/app/utils/arcjet";
 import arcjet, { detectBot, tokenBucket } from "@/app/utils/arcjet";
 
@@ -172,17 +172,15 @@ const JobIdPage = async ({ params }: { params: Params }) => {
             </div>
 
             {session?.user ? (
-              // <form
-              //   action={
-              //     savedJob
-              //       ? unsaveJobPost.bind(null, savedJob.id)
-              //       : saveJobPost.bind(null, jobId)
-              //   }
-              // >
-              //   <SaveJobButton savedJob={!!savedJob} />
-              // </form>
-
-              <></>
+              <form
+                action={
+                  savedJob
+                    ? unsaveJobPost.bind(null, savedJob.id)
+                    : saveJobPost.bind(null, jobId)
+                }
+              >
+                <SaveJobButton savedJob={!!savedJob} />
+              </form>
             ) : (
               <Button variant="outline" asChild>
                 <Link href="/login">
