@@ -11,6 +11,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Google({
       clientId: process.env.AUTH_GOOGLE_ID,
       clientSecret: process.env.AUTH_GOOGLE_SECRET,
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
     }),
   ],
   // Ajoutez la configuration pour les URLs
@@ -18,5 +25,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/login",
     // signOut: '/auth/signout', // Optionnel
     // error: '/auth/error', // Optionnel
+  },
+  callbacks: {
+    async redirect({ url, baseUrl }) {
+      console.log("🔄 Redirecting to:", url);
+      return url.startsWith(baseUrl) ? url : baseUrl;
+    },
   },
 });
