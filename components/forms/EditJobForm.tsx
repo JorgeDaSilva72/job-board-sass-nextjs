@@ -34,7 +34,7 @@ import { jobSchema } from "@/app/utils/zodSchemas";
 import { SalaryRangeSelector } from "../general/SalaryRangeSelector";
 import JobDescriptionEditor from "../richTextEditor/JobDescriptionEditor";
 import BenefitsSelector from "../general/BenefitsSelector";
-// import { updateJobPost } from "@/app/actions";
+import { updateJobPost } from "@/app/actions";
 
 interface iAppProps {
   jobPost: {
@@ -84,7 +84,7 @@ export function EditJobForm({ jobPost }: iAppProps) {
     try {
       setPending(true);
 
-      // await updateJobPost(values, jobPost.id);
+      await updateJobPost(values, jobPost.id);
     } catch (error) {
       if (error instanceof Error && error.message !== "NEXT_REDIRECT") {
         // toast.error("Something went wrong. Please try again.");
@@ -426,7 +426,7 @@ export function EditJobForm({ jobPost }: iAppProps) {
         </Card>
 
         <Button type="submit" className="w-full" disabled={pending}>
-          {pending ? "Submitting..." : "Continue"}
+          {pending ? "Submitting..." : "Edit Job Post"}
         </Button>
       </form>
     </Form>
