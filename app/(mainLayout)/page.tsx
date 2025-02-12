@@ -75,7 +75,7 @@ const JobPage = async ({ searchParams }: SearchParamsProps) => {
               className="w-full flex items-center justify-center gap-2"
             >
               <Filter className="h-4 w-4" />
-              Filtres
+              Filters
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-[300px] sm:w-[400px]">
