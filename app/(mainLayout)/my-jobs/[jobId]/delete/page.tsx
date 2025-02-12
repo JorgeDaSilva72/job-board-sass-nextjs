@@ -1,4 +1,5 @@
-// import { deleteJobPost } from "@/app/actions";
+import { deleteJobPost } from "@/app/actions";
+import { requireUser } from "@/app/utils/hooks";
 import { GeneralSubmitButton } from "@/components/general/SubmitButtons";
 
 import { buttonVariants } from "@/components/ui/button";
@@ -17,6 +18,7 @@ import React from "react";
 type Params = Promise<{ jobId: string }>;
 
 const DeleteJobPage = async ({ params }: { params: Params }) => {
+  await requireUser();
   const { jobId } = await params;
   return (
     <div className="flex items-center justify-center h-screen">
@@ -41,7 +43,7 @@ const DeleteJobPage = async ({ params }: { params: Params }) => {
           <form
             action={async () => {
               "use server";
-              // await deleteJobPost(jobId);
+              await deleteJobPost(jobId);
             }}
           >
             <GeneralSubmitButton

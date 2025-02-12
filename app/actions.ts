@@ -247,6 +247,35 @@ export async function updateJobPost(
   return redirect("/my-jobs");
 }
 
+export async function deleteJobPost(jobId: string) {
+  const user = await requireUser();
+
+  // Access the request object so Arcjet can analyze it
+  const req = await request();
+  // Call Arcjet protect
+  const decision = await aj.protect(req);
+
+  if (decision.isDenied()) {
+    throw new Error("Forbidden");
+  }
+
+  await prisma.jobPost.delete({
+    where: {
+      id: jobId,
+      company: {
+        userId: user.id,
+      },
+    },
+  });
+
+  await inngest.send({
+    name: "job/cancel.expiration",
+    data: { jobId: jobId },
+  });
+
+  return redirect("/my-jobs");
+}
+
 export async function saveJobPost(jobId: string) {
   const user = await requireUser();
 
