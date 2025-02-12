@@ -334,8 +334,8 @@ export function JobFilters() {
             </SelectContent>
           </Select>
         </div>
-        <Separator />
-        <div className="space-y-4">
+        {/* <Separator /> */}
+        {/* <div className="space-y-4">
           <Label className="text-base sm:text-lg font-semibold">
             Salary Range
           </Label>
@@ -367,7 +367,7 @@ export function JobFilters() {
               />
             </div>
           </div>
-        </div>
+        </div> */}
       </CardContent>
     </Card>
   );

@@ -6,7 +6,7 @@ import { JobPostStatus } from "@prisma/client";
 
 async function getJobs(
   page: number = 1,
-  pageSize: number = 1,
+  pageSize: number = 12,
   jobTypes: string[] = [],
   location: string = ""
 ) {
