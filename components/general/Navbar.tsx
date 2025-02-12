@@ -70,7 +70,7 @@ export async function Navbar() {
             <SheetContent>
               <SheetHeader className="text-left">
                 <SheetTitle>
-                  Job<span className="text-primary">Marshal</span>
+                  Afrique Avenir<span className="text-primary">Emploi</span>
                 </SheetTitle>
                 <SheetDescription>
                   Find or post your next job opportunity
