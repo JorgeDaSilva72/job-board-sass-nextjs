@@ -467,9 +467,10 @@ const JobIdPage = async ({
   return (
     <div className="container mx-auto py-12 px-4">
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-xl p-8 mb-8">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-          <div className="flex items-center gap-6">
+      <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-xl p-4 md:p-8 mb-8">
+        <div className="flex flex-col gap-6">
+          {/* Company Logo and Job Title Section */}
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
             <Image
               src={
                 jobData.company.logo ??
@@ -478,18 +479,24 @@ const JobIdPage = async ({
               alt={jobData.company.name}
               width={80}
               height={80}
-              className="rounded-xl shadow-lg"
+              className="rounded-xl shadow-lg self-start"
             />
-            <div>
-              <h1 className="text-4xl font-bold mb-2">{jobData.jobTitle}</h1>
-              <div className="flex flex-wrap items-center gap-3">
+            <div className="flex-1 min-w-0">
+              <h1 className="text-2xl md:text-4xl font-bold mb-2 break-words">
+                {jobData.jobTitle}
+              </h1>
+              <div className="flex flex-wrap items-center gap-y-2 gap-x-3">
                 <span className="flex items-center gap-2">
-                  <Building2 className="size-4 text-muted-foreground" />
-                  <span className="font-medium">{jobData.company.name}</span>
+                  <Building2 className="size-4 text-muted-foreground shrink-0" />
+                  <span className="font-medium truncate">
+                    {jobData.company.name}
+                  </span>
                 </span>
-                <span className="text-muted-foreground">•</span>
+                <span className="hidden sm:inline text-muted-foreground">
+                  •
+                </span>
                 <span className="flex items-center gap-2">
-                  <MapPin className="size-4 text-muted-foreground" />
+                  <MapPin className="size-4 text-muted-foreground shrink-0" />
                   <Badge className="rounded-full" variant="secondary">
                     {locationFlag && (
                       <img
@@ -501,17 +508,21 @@ const JobIdPage = async ({
                     {jobData.location}
                   </Badge>
                 </span>
-                <span className="text-muted-foreground">•</span>
+                <span className="hidden sm:inline text-muted-foreground">
+                  •
+                </span>
                 <Badge className="rounded-full bg-primary/10 text-primary">
                   {jobData.employmentType}
                 </Badge>
               </div>
             </div>
           </div>
-          <div className="flex gap-3 w-full md:w-auto">
+
+          {/* Action Buttons Section */}
+          <div className="flex gap-3">
             {session?.user ? (
               <form
-                className="w-full md:w-auto"
+                className="flex-1 sm:flex-none"
                 action={
                   savedJob
                     ? unsaveJobPost.bind(null, savedJob.id)
@@ -521,14 +532,14 @@ const JobIdPage = async ({
                 <SaveJobButton savedJob={!!savedJob} />
               </form>
             ) : (
-              <Button variant="outline" asChild className="w-full md:w-auto">
+              <Button variant="outline" asChild className="flex-1 sm:flex-none">
                 <Link href="/login">
                   <Heart className="size-4 mr-2" />
                   Save
                 </Link>
               </Button>
             )}
-            <Button variant="outline" className="w-full md:w-auto">
+            <Button variant="outline" className="flex-1 sm:flex-none">
               <Share2 className="size-4 mr-2" />
               Share
             </Button>
