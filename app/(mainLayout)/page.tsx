@@ -1,4 +1,5 @@
 import { ContactSection } from "@/components/landing/Contact";
+import { CTASection } from "@/components/landing/CTASection";
 import { FAQSection } from "@/components/landing/Faq";
 import { FeaturesSection } from "@/components/landing/Features";
 import { HeroSection } from "@/components/landing/Hero";
@@ -19,6 +20,7 @@ export default function LandingPage() {
         <PricingSection />
         <ContactSection />
         <FAQSection />
+        <CTASection />
       </div>
     </div>
   );
