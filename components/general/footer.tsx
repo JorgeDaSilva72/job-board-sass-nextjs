@@ -130,7 +130,7 @@
 //     </footer>
 //   );
 // };
-import DiscordIcon from "@/components/icons/discord-icon";
+// import DiscordIcon from "@/components/icons/discord-icon";
 import { Separator } from "@/components/ui/separator";
 import {
   Linkedin,
