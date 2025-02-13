@@ -1,6 +1,5 @@
-// import CTA from "@/components/landing/CTA";
-// import Features from "@/components/landing/Features";
 import { FAQSection } from "@/components/landing/Faq";
+import { FeaturesSection } from "@/components/landing/Features";
 import { HeroSection } from "@/components/landing/Hero";
 import { SponsorsSection } from "@/components/landing/sponsors";
 import { TeamSection } from "@/components/landing/Team";
@@ -11,19 +10,12 @@ export default function LandingPage() {
     <div>
       <div className="flex flex-col items-center">
         <HeroSection />
-        {/* <Features /> */}
+        <FeaturesSection />
         <SponsorsSection />
         <TestimonialSection />
         <TeamSection />
-
         <FAQSection />
-
-        {/* <CTA /> */}
       </div>
-      {/* <Hero /> */}
-      {/* <Features />
-      <CTA />
-      <Testimonials /> */}
     </div>
   );
 }
