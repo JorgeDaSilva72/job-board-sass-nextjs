@@ -1,7 +1,7 @@
 // import CTA from "@/components/landing/CTA";
 // import Features from "@/components/landing/Features";
 import { HeroSection } from "@/components/landing/Hero";
-// import Testimonials from "@/components/landing/Testimonials";
+import { TestimonialSection } from "@/components/landing/Testimonial";
 
 export default function LandingPage() {
   return (
@@ -9,7 +9,7 @@ export default function LandingPage() {
       <div className="flex flex-col items-center">
         <HeroSection />
         {/* <Features /> */}
-        {/* <Testimonials /> */}
+        <TestimonialSection />
         {/* <CTA /> */}
       </div>
       {/* <Hero /> */}
