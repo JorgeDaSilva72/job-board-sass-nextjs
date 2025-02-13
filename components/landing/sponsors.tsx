@@ -1,10 +1,10 @@
 "use client";
 
 // import AdBanner from "@/components/AdBanner";
-import { ads } from "@/lib/data";
+// import { ads } from "@/lib/data";
 import { Marquee } from "@devnomic/marquee";
 import "@devnomic/marquee/dist/index.css";
-import { icons } from "lucide-react";
+// import { icons } from "lucide-react";
 // import TopWave from "./topWave";
 // import BottomWave from "./bottomWave";
 import Image from "next/image";
