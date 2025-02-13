@@ -1,15 +1,15 @@
-const testimonials = [
-  {
-    name: "Amina K.",
-    text: "chouette",
-    role: "Développeuse",
-  },
-  {
-    name: "Marc D.",
-    text: "Super",
-    role: "Recruteur",
-  },
-];
+// const testimonials = [
+//   {
+//     name: "Amina K.",
+//     text: "chouette",
+//     role: "Recruteur",
+//   },
+//   {
+//     name: "Marc D.",
+//     text: "Super",
+//     role: "Recruteur",
+//   },
+// ];
 
 const Testimonials = () => {
   return (
@@ -18,13 +18,13 @@ const Testimonials = () => {
         Ce que disent nos utilisateurs
       </h2>
       <div className="grid md:grid-cols-2 gap-6">
-        {testimonials.map((t, index) => (
+        {/* {testimonials.map((t, index) => (
           <div key={index} className="p-6 bg-white shadow-md rounded-lg">
             <p className="text-gray-600 italic">"{t.text}"</p>
             <h4 className="mt-4 font-semibold">{t.name}</h4>
             <span className="text-sm text-gray-500">{t.role}</span>
           </div>
-        ))}
+        ))} */}
       </div>
     </section>
   );
