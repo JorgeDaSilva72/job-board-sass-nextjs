@@ -127,7 +127,7 @@ import { cn } from "@/lib/utils";
 const NavigationLinks = ({ className }: { className?: string }) => (
   <div className={cn("flex flex-col gap-2", className)}>
     <Link
-      href="/"
+      href="/find-job"
       className="text-lg font-medium hover:text-primary transition-colors"
     >
       Find Jobs

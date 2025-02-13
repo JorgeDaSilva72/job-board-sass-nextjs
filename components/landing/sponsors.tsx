@@ -72,7 +72,7 @@ const sponsors: SponsorsProps[] = [
   },
   {
     image: "/ads/pub.png", // Placeholder pour une publicité personnalisée
-    name: "Votre publicité ici",
+    name: "Votre pub ici",
     link: "#",
   },
 ];
