@@ -1,12 +1,12 @@
 const testimonials = [
   {
     name: "Amina K.",
-    text: "J’ai trouvé un job en une semaine grâce à cette plateforme !",
+    text: "chouette",
     role: "Développeuse",
   },
   {
     name: "Marc D.",
-    text: "Très pratique pour publier et gérer les annonces d’emploi.",
+    text: "Super",
     role: "Recruteur",
   },
 ];
