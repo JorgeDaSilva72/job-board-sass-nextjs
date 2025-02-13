@@ -80,7 +80,7 @@ const reviewList: ReviewProps[] = [
 
 export const TestimonialSection = () => {
   return (
-    <section id="testimonials" className="container relative  pt-12 sm:pt-16 ">
+    <section id="testimonials" className="container relative py-24 sm:py-32 ">
       {/* <TopWave /> */}
       <div className="text-center mb-8">
         <h2 className="mt-2 text-3xl md:text-4xl text-primary text-center mb-2 tracking-wider ">

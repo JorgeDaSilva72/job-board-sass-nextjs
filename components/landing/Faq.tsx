@@ -43,7 +43,7 @@ export const FAQSection = () => {
   return (
     <section
       id="faq"
-      className="container mx-auto px-4 lg:flex lg:space-x-4 pt-12 sm:pt-16"
+      className="container mx-auto px-4 lg:flex lg:space-x-4 py-24 sm:py-32"
     >
       {/* Left Sidebar for Ads */}
       <div className="hidden lg:block lg:w-1/5">

@@ -195,7 +195,7 @@ export const TeamSection = () => {
   };
 
   return (
-    <section id="team" className="container  pt-12 sm:pt-16">
+    <section id="team" className="container  py-24 sm:py-32">
       <div className="text-center mb-8">
         {/* <h2 className="text-lg text-primary text-center mb-2 tracking-wider">
           Team
