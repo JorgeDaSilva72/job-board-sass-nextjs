@@ -341,6 +341,7 @@ import {
   Clock,
   BriefcaseIcon,
   Share2,
+  BanknoteIcon,
 } from "lucide-react";
 import { notFound } from "next/navigation";
 import { benefits } from "@/app/utils/listOfBenefits";
@@ -394,6 +395,14 @@ function getClient(session: boolean) {
   }
 }
 
+const formatSalary = (amount: number) => {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(amount);
+};
+
 async function getJob(jobId: string, userId?: string) {
   const [jobData, savedJob] = await Promise.all([
     prisma.jobPost.findUnique({
@@ -406,7 +415,8 @@ async function getJob(jobId: string, userId?: string) {
         jobDescription: true,
 
         location: true,
-
+        salaryFrom: true,
+        salaryTo: true,
         employmentType: true,
         benefits: true,
 
@@ -642,6 +652,34 @@ const JobIdPage = async ({
                     {jobData.employmentType}
                   </p>
                 </div>
+              </div>
+            </div>
+          </Card>
+
+          {/* New Salary Card */}
+          <Card className="p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="bg-primary/10 p-2 rounded-full">
+                <BanknoteIcon className="size-5 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold">Salary Range</h3>
+            </div>
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-muted-foreground">From</span>
+                <span className="font-medium">
+                  {formatSalary(jobData.salaryFrom)}
+                </span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-muted-foreground">To</span>
+                <span className="font-medium">
+                  {formatSalary(jobData.salaryTo)}
+                </span>
+              </div>
+              <div className="mt-4 text-sm text-muted-foreground">
+                Final salary will be determined based on experience and
+                qualifications
               </div>
             </div>
           </Card>
