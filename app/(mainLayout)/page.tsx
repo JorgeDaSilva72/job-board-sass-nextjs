@@ -1,3 +1,4 @@
+import { ContactSection } from "@/components/landing/Contact";
 import { FAQSection } from "@/components/landing/Faq";
 import { FeaturesSection } from "@/components/landing/Features";
 import { HeroSection } from "@/components/landing/Hero";
@@ -14,6 +15,7 @@ export default function LandingPage() {
         <SponsorsSection />
         <TestimonialSection />
         <TeamSection />
+        <ContactSection />
         <FAQSection />
       </div>
     </div>
