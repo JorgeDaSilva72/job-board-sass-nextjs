@@ -1,6 +1,7 @@
 // import CTA from "@/components/landing/CTA";
 // import Features from "@/components/landing/Features";
 import { HeroSection } from "@/components/landing/Hero";
+import { TeamSection } from "@/components/landing/Team";
 import { TestimonialSection } from "@/components/landing/Testimonial";
 
 export default function LandingPage() {
@@ -10,6 +11,7 @@ export default function LandingPage() {
         <HeroSection />
         {/* <Features /> */}
         <TestimonialSection />
+        <TeamSection />
         {/* <CTA /> */}
       </div>
       {/* <Hero /> */}
