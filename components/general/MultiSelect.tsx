@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-export function MultiSelect({ options, selected, onChange, placeholder }) {
+export function MultiSelect({ options, selected, onChange }) {
   const [selectedItems, setSelectedItems] = useState(selected || []);
 
   const handleSelect = (value) => {
