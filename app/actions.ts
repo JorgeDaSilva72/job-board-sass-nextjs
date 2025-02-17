@@ -11,6 +11,7 @@ import arcjet, { detectBot, shield } from "./utils/arcjet";
 import { request } from "@arcjet/next";
 import { inngest } from "./utils/inngest/client";
 import { revalidatePath } from "next/cache";
+import type { Availability, JobType } from "@prisma/client";
 
 const aj = arcjet
   .withRule(
@@ -61,35 +62,72 @@ export async function createCompany(data: z.infer<typeof companySchema>) {
 }
 
 export async function createJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
-  const user = await requireUser();
+  try {
+    const user = await requireUser();
 
-  //Access the request object so Arcjet can analyze it
-  const req = await request();
-  //Call Arcjet protect
-  const decision = await aj.protect(req);
+    //Access the request object so Arcjet can analyze it
+    const req = await request();
+    //Call Arcjet protect
+    const decision = await aj.protect(req);
 
-  if (decision.isDenied()) {
-    throw new Error("Forbidden");
-  }
+    if (decision.isDenied()) {
+      throw new Error("Forbidden");
+    }
 
-  const validatedData = jobSeekerSchema.parse(data);
+    const validatedData = jobSeekerSchema.safeParse(data);
 
-  await prisma.user.update({
-    where: {
-      id: user.id,
-    },
-    data: {
-      onboardingCompleted: true,
-      userType: "JOB_SEEKER",
-      JobSeeker: {
-        create: {
-          ...validatedData,
+    if (!validatedData.success) {
+      throw new Error("Invalid fields");
+    }
+
+    await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        onboardingCompleted: true,
+        userType: "JOB_SEEKER",
+        JobSeeker: {
+          create: {
+            firstName: validatedData.data.firstName,
+            lastName: validatedData.data.lastName,
+            email: validatedData.data.email,
+            about: validatedData.data.about,
+            title: validatedData.data.title,
+            experience: validatedData.data.experience,
+            skills: validatedData.data.skills,
+            languages: validatedData.data.languages,
+            city: validatedData.data.city,
+            countryCode: validatedData.data.countryCode,
+            phoneNumber: validatedData.data.phoneNumber,
+            linkedinProfile: validatedData.data.linkedinProfile,
+            portfolioUrl: validatedData.data.portfolioUrl,
+            availability: validatedData.data
+              .availability as (typeof Availability)[keyof typeof Availability],
+            preferredJobType: validatedData.data.preferredJobType as Array<
+              (typeof JobType)[keyof typeof JobType]
+            >,
+            expectedSalary: validatedData.data.expectedSalary,
+            resume: validatedData.data.resume,
+          },
         },
       },
-    },
-  });
+    });
+    // Revalidate the job seekers page to show updated data
+    // revalidatePath("/job-seekers");
 
-  return redirect("/");
+    // Redirect to a success page or dashboard
+    // redirect("/job-seekers/success");
+    // await new Promise((resolve) => setTimeout(resolve, 500)); //avant la redirection pour laisser le temps au toast d'apparaître.
+    // return redirect("/find-job");
+    return { success: true };
+  } catch (error) {
+    // Log the error for debugging (in a production environment)
+    console.error("Error creating job seeker:", error);
+
+    // Re-throw the error to be handled by the client
+    throw error;
+  }
 }
 
 export async function createJob(data: z.infer<typeof jobSchema>) {

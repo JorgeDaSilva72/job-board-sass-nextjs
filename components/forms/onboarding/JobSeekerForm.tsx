@@ -1188,6 +1188,7 @@ import PDFImage from "@/public/pdf.png";
 import Image from "next/image";
 import { createJobSeeker } from "@/app/actions";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useRouter } from "next/navigation";
 
 const JobSeekerForm = () => {
   const form = useForm<z.infer<typeof jobSeekerSchema>>({
@@ -1217,10 +1218,20 @@ const JobSeekerForm = () => {
   const [newSkill, setNewSkill] = useState("");
   const [newLanguage, setNewLanguage] = useState("");
 
+  const router = useRouter();
+
   async function onSubmit(values: z.infer<typeof jobSeekerSchema>) {
     try {
       setPending(true);
-      await createJobSeeker(values);
+      const result = await createJobSeeker(values);
+      if (result.success) {
+        toast.success("Profile created successfully!");
+
+        // Attendre un peu pour laisser le toast s'afficher
+        setTimeout(() => {
+          router.push("/find-job");
+        }, 1000);
+      }
     } catch (error) {
       if (error instanceof Error && error.message !== "NEXT_REDIRECT") {
         toast.error("Something went wrong. Please try again.");
@@ -1371,7 +1382,7 @@ const JobSeekerForm = () => {
                 {form.watch("skills").map((skill, index) => (
                   <div
                     key={index}
-                    className="bg-gray-100 px-3 py-1 rounded-full"
+                    className="bg-gray-100 px-3 py-1 rounded-full  dark:bg-gray-700 dark:text-white" // Ajoutez des styles pour le mode sombre
                   >
                     {skill}
                     <button
@@ -1409,12 +1420,12 @@ const JobSeekerForm = () => {
                 {form.watch("languages").map((language, index) => (
                   <div
                     key={index}
-                    className="bg-gray-100 px-3 py-1 rounded-full"
+                    className="bg-gray-100 px-3 py-1 rounded-full   dark:bg-gray-700 dark:text-white" // Ajoutez des styles pour le mode sombre
                   >
                     {language}
                     <button
                       type="button"
-                      className="ml-2 text-red-500"
+                      className="ml-2 text-red-800"
                       onClick={() => {
                         const languages = form.getValues("languages");
                         form.setValue(
@@ -1580,29 +1591,6 @@ const JobSeekerForm = () => {
                 </FormItem>
               )}
             />
-
-            {/* <FormField
-              control={form.control}
-              name="resume"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Resume</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="file"
-                      accept=".pdf,.doc,.docx"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          field.onChange(file);
-                        }
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
 
             <FormField
               control={form.control}

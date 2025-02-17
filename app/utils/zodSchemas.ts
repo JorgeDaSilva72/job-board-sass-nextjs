@@ -52,26 +52,24 @@ export const jobSeekerSchema = z.object({
         degree: z.string(),
         school: z.string(),
         endDate: z.date(),
-        startDate: z.date().optional(),
+        startDate: z.date(),
       })
     )
+    .nullable()
     .optional(),
-  countryCode: z
-    .string()
-    .length(2, "Country code must be 2 characters")
-    .optional(),
-  city: z.string().min(2, "City must be at least 2 characters").optional(),
-  phoneNumber: z
-    .string()
-    .min(10, "Please enter a valid phone number")
-    .optional(),
+  countryCode: z.string().optional(),
+  city: z.string().optional(),
+  phoneNumber: z.string().optional(),
   linkedinProfile: z
     .string()
-    .url("Please enter a valid LinkedIn URL")
+    // .url("Please enter a valid LinkedIn URL")
     .optional(),
-  portfolioUrl: z.string().url("Please enter a valid portfolio URL").optional(),
+  portfolioUrl: z
+    .string()
+    // .url("Please enter a valid portfolio URL")
+    .optional(),
 
-  expectedSalary: z.number().min(0, "Salary cannot be negative").optional(),
+  expectedSalary: z.number().optional(),
 });
 
 export const jobSchema = z.object({
