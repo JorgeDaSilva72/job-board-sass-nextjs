@@ -81,12 +81,13 @@ model Company {
   name     String
   location String
   logo     String
-  website  String
-  xAccount String?
+  
   about    String
   user     User    @relation(fields: [userId], references: [id])
   userId   String  @unique
 
+  website  String?
+  xAccount String?
   industry        String?
   companySize     String?  // Taille de l'entreprise (0-10, 11-50, etc.)
   countryCode     String?  // Code pays pour filtrage géographique

@@ -27,44 +27,81 @@ const aj = arcjet
   );
 
 export async function createCompany(data: z.infer<typeof companySchema>) {
-  const user = await requireUser();
+  try {
+    // Vérification de l'authentification
+    const user = await requireUser();
 
-  // Access the request object so Arcjet can analyze it
-  const req = await request();
-  // Call Arcjet protect
-  const decision = await aj.protect(req);
+    if (!user) {
+      throw new Error("Unauthorized");
+    }
 
-  if (decision.isDenied()) {
-    throw new Error("Forbidden");
-  }
+    // Protection Arcjet
+    // Access the request object so Arcjet can analyze it
+    const req = await request();
+    // Call Arcjet protect
+    const decision = await aj.protect(req);
 
-  // Server-side validation
-  const validatedData = companySchema.parse(data);
+    if (decision.isDenied()) {
+      throw new Error("Forbidden");
+    }
 
-  console.log(validatedData);
+    // Server-side validation
+    const validatedData = companySchema.safeParse(data);
 
-  await prisma.user.update({
-    where: {
-      id: user.id,
-    },
-    data: {
-      onboardingCompleted: true,
-      userType: "COMPANY",
-      Company: {
-        create: {
-          ...validatedData, // works only if zod schema naming is the same than prisma schema naming
+    if (!validatedData.success) {
+      throw new Error(`Validation failed: ${validatedData.error.message}`);
+    }
+
+    // console.log(validatedData);
+
+    // Création de la company et mise à jour du user
+    const result = await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        onboardingCompleted: true,
+        userType: "COMPANY",
+        Company: {
+          create: {
+            ...validatedData.data, // works only if zod schema naming is the same than prisma schema naming
+          },
         },
       },
-    },
-  });
+      include: {
+        Company: true,
+      },
+    });
 
-  return redirect("/");
+    if (!result) {
+      throw new Error("Failed to create company");
+    }
+
+    return { success: true };
+  } catch (error) {
+    // Log the error for debugging (in a production environment)
+    console.error("Error creating job seeker:", error);
+
+    // Gestion des erreurs
+    if (error instanceof z.ZodError) {
+      throw new Error(`Validation error: ${error.message}`);
+    }
+    if (error instanceof Error) {
+      throw new Error(`Failed to create company: ${error.message}`);
+    }
+    throw new Error("An unexpected error occurred");
+  }
 }
 
 export async function createJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
   try {
+    // Vérification de l'authentification
     const user = await requireUser();
+    if (!user) {
+      throw new Error("Unauthorized");
+    }
 
+    // Protection Arcjet
     //Access the request object so Arcjet can analyze it
     const req = await request();
     //Call Arcjet protect
@@ -77,10 +114,10 @@ export async function createJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
     const validatedData = jobSeekerSchema.safeParse(data);
 
     if (!validatedData.success) {
-      throw new Error("Invalid fields");
+      throw new Error(`Validation failed: ${validatedData.error.message}`);
     }
 
-    await prisma.user.update({
+    const result = await prisma.user.update({
       where: {
         id: user.id,
       },
@@ -113,6 +150,10 @@ export async function createJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
         },
       },
     });
+
+    if (!result) {
+      throw new Error("Failed to create company");
+    }
     // Revalidate the job seekers page to show updated data
     // revalidatePath("/job-seekers");
 
@@ -124,9 +165,14 @@ export async function createJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
   } catch (error) {
     // Log the error for debugging (in a production environment)
     console.error("Error creating job seeker:", error);
-
-    // Re-throw the error to be handled by the client
-    throw error;
+    // Gestion des erreurs
+    if (error instanceof z.ZodError) {
+      throw new Error(`Validation error: ${error.message}`);
+    }
+    if (error instanceof Error) {
+      throw new Error(`Failed to create company: ${error.message}`);
+    }
+    throw new Error("An unexpected error occurred");
   }
 }
 

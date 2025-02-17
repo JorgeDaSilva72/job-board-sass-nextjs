@@ -1,14 +1,26 @@
 import { z } from "zod";
 
 export const companySchema = z.object({
+  // Champs obligatoires
   name: z.string().min(2, "Company name must be at least 2 characters"),
   location: z.string().min(2, "Location must be at least 2 characters"),
   about: z
     .string()
     .min(10, "Please provide more information about your company"),
   logo: z.string().min(1, "Please upload a logo"),
-  website: z.string().url("Please enter a valid website URL"),
+  languages: z.array(z.string()).min(1, "At least one language is required"),
+  // Champs optionnels
+  website: z.string().optional(),
   xAccount: z.string().optional(),
+  industry: z.string().optional(),
+  companySize: z.string().optional(),
+  countryCode: z.string().optional(),
+  city: z.string().optional(),
+  phoneNumber: z.string().optional(),
+  linkedinProfile: z
+    .string()
+
+    .optional(),
 });
 
 export const Availability = {
