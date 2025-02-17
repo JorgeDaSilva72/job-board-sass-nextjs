@@ -11,10 +11,67 @@ export const companySchema = z.object({
   xAccount: z.string().optional(),
 });
 
+export const Availability = {
+  IMMEDIATE: "IMMEDIATE",
+  ONE_WEEK: "ONE_WEEK",
+  TWO_WEEKS: "TWO_WEEKS",
+  ONE_MONTH: "ONE_MONTH",
+  MORE_THAN_MONTH: "MORE_THAN_MONTH",
+} as const;
+
+export const JobType = {
+  FULL_TIME: "FULL_TIME",
+  PART_TIME: "PART_TIME",
+  CONTRACT: "CONTRACT",
+  INTERNSHIP: "INTERNSHIP",
+  REMOTE: "REMOTE",
+} as const;
+
 export const jobSeekerSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  about: z.string().min(10, "Please provide more information about yourself"),
-  resume: z.string().min(1, "Please upload a resume"),
+  // Champs obligatoires de base
+  firstName: z.string().min(2, "First name must be at least 2 characters"),
+  lastName: z.string().min(2, "Last name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  about: z.string().min(10, "Bio must be at least 10 characters"),
+  resume: z.string().min(1, "Resume is required"),
+
+  // Champs obligatoires professionnels
+  title: z.string().min(2, "Job title must be at least 2 characters"),
+  experience: z.number().min(0, "Experience cannot be negative"),
+  skills: z.array(z.string()).min(1, "At least one skill is required"),
+  languages: z.array(z.string()).min(1, "At least one language is required"),
+  availability: z.enum(Object.values(Availability) as [string, ...string[]]),
+  preferredJobType: z
+    .array(z.enum(Object.values(JobType) as [string, ...string[]]))
+    .min(1, "At least one preferred job type is required"),
+
+  // Champs optionnels
+  education: z
+    .array(
+      z.object({
+        degree: z.string(),
+        school: z.string(),
+        endDate: z.date(),
+        startDate: z.date().optional(),
+      })
+    )
+    .optional(),
+  countryCode: z
+    .string()
+    .length(2, "Country code must be 2 characters")
+    .optional(),
+  city: z.string().min(2, "City must be at least 2 characters").optional(),
+  phoneNumber: z
+    .string()
+    .min(10, "Please enter a valid phone number")
+    .optional(),
+  linkedinProfile: z
+    .string()
+    .url("Please enter a valid LinkedIn URL")
+    .optional(),
+  portfolioUrl: z.string().url("Please enter a valid portfolio URL").optional(),
+
+  expectedSalary: z.number().min(0, "Salary cannot be negative").optional(),
 });
 
 export const jobSchema = z.object({

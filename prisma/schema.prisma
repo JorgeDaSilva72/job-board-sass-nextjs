@@ -87,18 +87,53 @@ model Company {
   user     User    @relation(fields: [userId], references: [id])
   userId   String  @unique
 
+  industry        String?
+  companySize     String?  // Taille de l'entreprise (0-10, 11-50, etc.)
+  countryCode     String?  // Code pays pour filtrage géographique
+  city            String?
+  phoneNumber     String?
+  linkedinProfile String?
+  languages       String[] // Langues de travail
+
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   JobPost   JobPost[]
+
+  
 }
+
 
 model JobSeeker {
   id     String @id @default(uuid())
-  name   String
-  about  String
-  resume String
+  firstName       String    // Obligatoire, min 2 chars
+  lastName        String    // Obligatoire, min 2 chars
+  email           String    @unique  // Obligatoire, format email
+  about           String    // Obligatoire, min 10 chars
+  resume          String    // Obligatoire
   user   User   @relation(fields: [userId], references: [id])
   userId String @unique
+
+  title           String        // Poste actuel/recherché, Obligatoire, min 2 chars
+  experience      Int           // Années d'expérience, Obligatoire, >= 0
+  
+  skills          String[]      // Compétences, Obligatoire, min 1 élément
+  languages       String[]      // Langues maîtrisées, Obligatoire, min 1 élément
+
+// Champs optionnels
+  education       Education[]   // Relation avec le modèle Education
+  countryCode     String?        // Localisation
+  city            String?
+  phoneNumber     String?
+  linkedinProfile String?
+  portfolioUrl    String?
+  expectedSalary  Int?
+
+  // Champs obligatoires avec des valeurs spécifiques
+  availability    Availability  // IMMEDIATE, ONE_MONTH, etc.
+  preferredJobType JobType[]   // FULL_TIME, PART_TIME, etc.
+  
+
+  jobApplications JobApplication[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -116,8 +151,20 @@ model JobPost {
   listingDuration Int
   benefits        String[]
 
+  
+
   status       JobPostStatus @default(DRAFT)
-  applications Int           @default(0)
+
+  requiredSkills    String[]
+  requiredLanguages String[]
+  experienceLevel   ExperienceLevel
+  educationLevel    EducationLevel
+  jobType           JobType[]
+  remote            Boolean  @default(false)
+  currency          String   // Pour gérer différentes devises africaines
+  applications      JobApplication[]
+  views             Int      @default(0)
+  deadline          DateTime?
 
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
   companyId String
@@ -125,6 +172,22 @@ model JobPost {
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   SavedJobPost SavedJobPost[]
+}
+
+enum ExperienceLevel {
+  ENTRY
+  JUNIOR
+  MID
+  SENIOR
+  EXECUTIVE
+}
+
+enum EducationLevel {
+  HIGH_SCHOOL
+  BACHELOR
+  MASTER
+  PHD
+  OTHER
 }
 
 enum JobPostStatus {
@@ -145,4 +208,52 @@ model SavedJobPost {
   updatedAt DateTime @updatedAt
 
   @@unique([userId, jobId])
+}
+
+model Education {
+  id          String    @id @default(uuid())
+  institution String
+  degree      String
+  fieldOfStudy String
+  startDate   DateTime
+  endDate     DateTime?
+  jobSeeker   JobSeeker @relation(fields: [jobSeekerId], references: [id])
+  jobSeekerId String
+}
+
+model JobApplication {
+  id          String    @id @default(uuid())
+  jobPost     JobPost   @relation(fields: [jobPostId], references: [id])
+  jobPostId   String
+  jobSeeker   JobSeeker @relation(fields: [jobSeekerId], references: [id])
+  jobSeekerId String
+  status      ApplicationStatus @default(PENDING)
+  coverLetter String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+enum ApplicationStatus {
+  PENDING
+  REVIEWED
+  SHORTLISTED
+  INTERVIEWED
+  ACCEPTED
+  REJECTED
+}
+
+enum Availability {
+  IMMEDIATE
+  ONE_WEEK
+  TWO_WEEKS
+  ONE_MONTH
+  MORE_THAN_MONTH
+}
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERNSHIP
+  REMOTE
 }
