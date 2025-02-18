@@ -24,7 +24,7 @@ import { Textarea } from "../ui/textarea";
 import { XIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import Image from "next/image";
-// import { toast } from "sonner";
+import { toast } from "sonner";
 import { UploadDropzone } from "../general/UploadThingReExport";
 import { useState } from "react";
 import { z } from "zod";
@@ -36,6 +36,16 @@ import JobDescriptionEditor from "../richTextEditor/JobDescriptionEditor";
 import BenefitsSelector from "../general/BenefitsSelector";
 import { JobListingDurationSelector } from "../general/JobListingDurationSelector";
 import { createJob } from "@/app/actions";
+// import {
+//   JobPostStatus,
+//   ExperienceLevel,
+//   EducationLevel,
+//   JobType,
+// } from "@prisma/client";
+// import { Checkbox } from "../ui/checkbox";
+// import { languagesList, skillsList } from "@/lib/data";
+// import MultiSelect from "../general/MultiSelect";
+// import DatePicker from "../general/DatePicker";
 
 interface CreateJobFormProps {
   companyName: string;
@@ -71,6 +81,15 @@ export function CreateJobForm({
       salaryTo: 0,
       companyLogo: companyLogo,
       listingDuration: 30,
+      // status: JobPostStatus.DRAFT,
+      // requiredSkills: [],
+      // requiredLanguages: [],
+      // experienceLevel: ExperienceLevel.ENTRY,
+      // educationLevel: EducationLevel.BACHELOR,
+      // jobType: [],
+      // remote: false,
+      // currency: "USD",
+      // deadline: undefined,
     },
   });
 
@@ -78,9 +97,20 @@ export function CreateJobForm({
   async function onSubmit(values: z.infer<typeof jobSchema>) {
     try {
       setPending(true);
-      await createJob(values);
-    } catch {
-      // toast.error("Something went wrong. Please try again.");
+      const result = await createJob(values);
+      if (result.error) {
+        // Gérer l'erreur (par exemple avec un toast)
+        toast.error(result.error);
+        return;
+      }
+      if (result.redirectUrl) {
+        // Rediriger côté client
+        window.location.href = result.redirectUrl;
+      }
+    } catch (error) {
+      console.error("Error:", error);
+
+      toast.error("Something went wrong. Please try again.");
     } finally {
       setPending(false);
     }
@@ -234,6 +264,226 @@ export function CreateJobForm({
             />
           </CardContent>
         </Card>
+
+        {/* <Card>
+          <CardHeader>
+            <CardTitle>Additional Job Details</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-6">
+              <FormField
+                control={form.control}
+                name="experienceLevel"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Experience Level</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Experience Level" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {Object.values(ExperienceLevel).map((level) => (
+                          <SelectItem key={level} value={level}>
+                            {level.replace("_", " ")}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="educationLevel"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Education Level</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Education Level" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {Object.values(EducationLevel).map((level) => (
+                          <SelectItem key={level} value={level}>
+                            {level.replace("_", " ")}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <FormField
+                control={form.control}
+                name="requiredSkills"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Required Skills</FormLabel>
+                    <FormControl>
+                      <MultiSelect
+                        values={field.value}
+                        onChange={field.onChange}
+                        options={skillsList} // Vous devrez définir cette liste
+                        placeholder="Select required skills"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="requiredLanguages"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Required Languages</FormLabel>
+                    <FormControl>
+                      <MultiSelect
+                        values={field.value}
+                        onChange={field.onChange}
+                        options={languagesList} // Vous devrez définir cette liste
+                        placeholder="Select required languages"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <FormField
+                control={form.control}
+                name="jobType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Job Type</FormLabel>
+                    <FormControl>
+                      <MultiSelect
+                        values={field.value}
+                        onChange={field.onChange}
+                        options={Object.values(JobType).map((type) => ({
+                          label: type.replace("_", " "),
+                          value: type,
+                        }))}
+                        placeholder="Select job types"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+            <FormField
+              control={form.control}
+              name="currency"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Currency</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Currency" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="USD">USD</SelectItem>
+                      <SelectItem value="EUR">EUR</SelectItem>
+                      <SelectItem value="GBP">GBP</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="flex gap-6">
+              <FormField
+                control={form.control}
+                name="remote"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center gap-2">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel>Remote Position</FormLabel>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="deadline"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Application Deadline</FormLabel>
+                    <FormControl>
+                      <DatePicker
+                        selected={field.value}
+                        onChange={(date) => field.onChange(date)}
+                        minDate={new Date()}
+                        placeholderText="Select deadline (optional)"
+                        className="w-full p-2 border rounded"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Post Status</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select status" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {Object.values(JobPostStatus).map((status) => (
+                        <SelectItem key={status} value={status}>
+                          {status.replace("_", " ")}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
+        </Card> */}
 
         <Card>
           <CardHeader>
@@ -416,7 +666,6 @@ export function CreateJobForm({
             />
           </CardContent>
         </Card>
-
         <Card>
           <CardHeader>
             <CardTitle>Job Listing Duration</CardTitle>
@@ -436,6 +685,7 @@ export function CreateJobForm({
             />
           </CardContent>
         </Card>
+
         <Button type="submit" className="w-full" disabled={pending}>
           {pending ? "Submitting..." : "Continue"}
         </Button>

@@ -1,4 +1,10 @@
 import { z } from "zod";
+// import {
+//   JobPostStatus,
+//   ExperienceLevel,
+//   EducationLevel,
+//   // JobType,
+// } from "@prisma/client";
 
 export const companySchema = z.object({
   // Champs obligatoires
@@ -95,8 +101,18 @@ export const jobSchema = z.object({
   companyName: z.string().min(1, "Company name is required"),
   companyLocation: z.string().min(1, "Company location is required"),
   companyLogo: z.string().min(1, "Company logo is required"),
-  companyWebsite: z.string().min(1, "Company website is required"),
+  companyWebsite: z.string().optional(),
   companyXAccount: z.string().optional(),
   companyDescription: z.string().min(1, "Company description is required"),
   listingDuration: z.number().min(1, "Listing duration is required"),
+  // status: z.nativeEnum(JobPostStatus).default(JobPostStatus.DRAFT),
+  // requiredSkills: z.array(z.string()).optional(),
+  // requiredLanguages: z.array(z.string()).optional(),
+  // experienceLevel: z.nativeEnum(ExperienceLevel),
+  // educationLevel: z.nativeEnum(EducationLevel),
+  // jobType: z.array(z.nativeEnum(JobType)),
+  // remote: z.boolean().default(false),
+  // currency: z.string().optional(),
+  // deadline: z.date().optional(),
+  // companyId: z.string().uuid(),
 });

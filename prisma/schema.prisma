@@ -155,17 +155,19 @@ model JobPost {
   
 
   status       JobPostStatus @default(DRAFT)
+  // applications Int           @default(0)
 
-  requiredSkills    String[]
-  requiredLanguages String[]
-  experienceLevel   ExperienceLevel
-  educationLevel    EducationLevel
-  jobType           JobType[]
-  remote            Boolean  @default(false)
-  currency          String   // Pour gérer différentes devises africaines
+
+  // requiredSkills    String[]
+  // requiredLanguages String[]
+  // experienceLevel   ExperienceLevel?
+  // educationLevel    EducationLevel?
+  // jobType           JobType[]
+  // remote            Boolean  @default(false)
+  // currency          String?   // Pour gérer différentes devises africaines
   applications      JobApplication[]
-  views             Int      @default(0)
-  deadline          DateTime?
+  // views             Int      @default(0)
+  // deadline          DateTime?
 
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
   companyId String
