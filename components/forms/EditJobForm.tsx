@@ -35,6 +35,7 @@ import { SalaryRangeSelector } from "../general/SalaryRangeSelector";
 import JobDescriptionEditor from "../richTextEditor/JobDescriptionEditor";
 import BenefitsSelector from "../general/BenefitsSelector";
 import { updateJobPost } from "@/app/actions";
+import { toast } from "sonner";
 
 interface iAppProps {
   jobPost: {
@@ -47,14 +48,14 @@ interface iAppProps {
     jobDescription: string;
     benefits: string[];
     listingDuration: number;
-    company: {
-      location: string;
-      name: string;
-      logo: string;
-      website: string;
-      xAccount: string | null;
-      about: string;
-    };
+    // company: {
+    //   location: string;
+    //   name: string;
+    //   logo: string;
+    //   website: string;
+    //   xAccount: string | null;
+    //   about: string;
+    // };
   };
 }
 
@@ -63,18 +64,18 @@ export function EditJobForm({ jobPost }: iAppProps) {
     resolver: zodResolver(jobSchema),
     defaultValues: {
       benefits: jobPost.benefits,
-      companyDescription: jobPost.company.about,
-      companyLocation: jobPost.company.location,
-      companyName: jobPost.company.name,
-      companyWebsite: jobPost.company.website,
-      companyXAccount: jobPost.company.xAccount || "",
+      // companyDescription: jobPost.company.about,
+      // companyLocation: jobPost.company.location,
+      // companyName: jobPost.company.name,
+      // companyWebsite: jobPost.company.website,
+      // companyXAccount: jobPost.company.xAccount || "",
       employmentType: jobPost.employmentType,
       jobDescription: jobPost.jobDescription,
       jobTitle: jobPost.jobTitle,
       location: jobPost.location,
       salaryFrom: jobPost.salaryFrom,
       salaryTo: jobPost.salaryTo,
-      companyLogo: jobPost.company.logo,
+      // companyLogo: jobPost.company.logo,
       listingDuration: jobPost.listingDuration,
     },
   });
@@ -243,6 +244,7 @@ export function EditJobForm({ jobPost }: iAppProps) {
           </CardContent>
         </Card>
 
+        {/* 
         <Card>
           <CardHeader>
             <CardTitle>Company Information</CardTitle>
@@ -295,7 +297,7 @@ export function EditJobForm({ jobPost }: iAppProps) {
                                   src={country.flagEmoji}
                                   className="h-8 w-8"
                                 />
-                                {/* <span>{country.flagEmoji}</span> */}
+
                                 <span className="pl-2">{country.name}</span>
                               </div>
                             </SelectItem>
@@ -407,12 +409,12 @@ export function EditJobForm({ jobPost }: iAppProps) {
                           endpoint="imageUploader"
                           onClientUploadComplete={(res) => {
                             field.onChange(res[0].url);
-                            // toast.success("Logo uploaded successfully!");
+                            toast.success("Logo uploaded successfully!");
                           }}
                           onUploadError={() => {
-                            // toast.error(
-                            //   "Something went wrong. Please try again."
-                            // );
+                            toast.error(
+                              "Something went wrong. Please try again."
+                            );
                           }}
                         />
                       )}
@@ -424,6 +426,7 @@ export function EditJobForm({ jobPost }: iAppProps) {
             />
           </CardContent>
         </Card>
+ */}
 
         <Button type="submit" className="w-full" disabled={pending}>
           {pending ? "Submitting..." : "Edit Job Post"}
