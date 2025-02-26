@@ -20,12 +20,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { Textarea } from "../ui/textarea";
-import { XIcon } from "lucide-react";
+// import { Textarea } from "../ui/textarea";
+// import { XIcon } from "lucide-react";
 import { Button } from "../ui/button";
-import Image from "next/image";
+// import Image from "next/image";
 // import { toast } from "sonner";
-import { UploadDropzone } from "../general/UploadThingReExport";
+// import { UploadDropzone } from "../general/UploadThingReExport";
 import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -35,7 +35,7 @@ import { SalaryRangeSelector } from "../general/SalaryRangeSelector";
 import JobDescriptionEditor from "../richTextEditor/JobDescriptionEditor";
 import BenefitsSelector from "../general/BenefitsSelector";
 import { updateJobPost } from "@/app/actions";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 
 interface iAppProps {
   jobPost: {
