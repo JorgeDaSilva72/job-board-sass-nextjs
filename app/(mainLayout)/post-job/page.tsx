@@ -83,8 +83,8 @@ const PostJobPage = async () => {
         companyLocation={data.location}
         companyLogo={data.logo}
         companyName={data.name}
-        companyXAccount={data.xAccount}
-        companyWebsite={data.website}
+        companyXAccount={data.xAccount ?? ""}
+        companyWebsite={data.website ?? ""}
       />
 
       <div className="col-span-1">
