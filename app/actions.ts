@@ -4,7 +4,7 @@ import { z } from "zod";
 import { requireUser } from "./utils/hooks";
 import { companySchema, jobSchema, jobSeekerSchema } from "./utils/zodSchemas";
 import { prisma } from "./utils/db";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { stripe } from "./utils/stripe";
 import { jobListingDurationPricing } from "./utils/pricingTiers";
 import arcjet, { detectBot, shield } from "./utils/arcjet";
@@ -686,4 +686,192 @@ export async function unsaveJobPost(savedJobPostId: string) {
   });
 
   revalidatePath(`/job/${data.jobId}`);
+}
+
+export async function getJobSeekerProfile() {
+  try {
+    // Vérification de l'authentification
+    const user = await requireUser();
+
+    if (!user) {
+      throw new Error("Unauthorized");
+    }
+
+    // Protection Arcjet
+    // Access the request object so Arcjet can analyze it
+    const req = await request();
+    // Call Arcjet protect
+    const decision = await aj.protect(req);
+
+    if (decision.isDenied()) {
+      throw new Error("Forbidden");
+    }
+
+    const jobSeeker = await prisma.user.findUnique({
+      where: {
+        id: user.id,
+        JobSeeker: {
+          userId: user.id,
+        },
+      },
+      select: {
+        id: true,
+
+        JobSeeker: {
+          select: {
+            about: true,
+            resume: true,
+            userId: true,
+            title: true,
+            experience: true,
+            languages: true,
+            availability: true,
+            preferredJobType: true,
+            expectedSalary: true,
+            email: true,
+            firstName: true,
+            lastName: true,
+            skills: true,
+            city: true,
+            countryCode: true,
+            phoneNumber: true,
+            linkedinProfile: true,
+            portfolioUrl: true,
+          },
+        },
+      },
+    });
+
+    if (!jobSeeker) {
+      return notFound();
+    }
+
+    return jobSeeker;
+  } catch (error) {
+    // Log the error for debugging (in a production environment)
+    console.error("Error fetching  job seeker profile:", error);
+    throw new Error("An unexpected error occurred");
+  }
+}
+
+export async function updateJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
+  try {
+    // Vérification de l'authentification
+    const user = await requireUser();
+    if (!user) {
+      throw new Error("Unauthorized");
+    }
+
+    // Protection Arcjet
+    //Access the request object so Arcjet can analyze it
+    const req = await request();
+    //Call Arcjet protect
+    const decision = await aj.protect(req);
+
+    if (decision.isDenied()) {
+      throw new Error("Forbidden");
+    }
+
+    const validatedData = jobSeekerSchema.safeParse(data);
+
+    if (!validatedData.success) {
+      throw new Error(`Validation failed: ${validatedData.error.message}`);
+    }
+
+    // Vérifier si le jobSeeker existe déjà
+    const existingJobSeeker = await prisma.jobSeeker.findFirst({
+      where: {
+        userId: user.id,
+      },
+    });
+
+    let result;
+
+    if (existingJobSeeker) {
+      result = await prisma.jobSeeker.update({
+        where: {
+          userId: user.id,
+        },
+        data: {
+          firstName: validatedData.data.firstName,
+          lastName: validatedData.data.lastName,
+          email: validatedData.data.email,
+          about: validatedData.data.about,
+          title: validatedData.data.title,
+          experience: validatedData.data.experience,
+          skills: validatedData.data.skills,
+          languages: validatedData.data.languages,
+          city: validatedData.data.city,
+          countryCode: validatedData.data.countryCode,
+          phoneNumber: validatedData.data.phoneNumber,
+          linkedinProfile: validatedData.data.linkedinProfile,
+          portfolioUrl: validatedData.data.portfolioUrl,
+          availability: validatedData.data
+            .availability as (typeof Availability)[keyof typeof Availability],
+          preferredJobType: validatedData.data.preferredJobType as Array<
+            (typeof JobType)[keyof typeof JobType]
+          >,
+          expectedSalary: validatedData.data.expectedSalary,
+          resume: validatedData.data.resume,
+        },
+      });
+    } else {
+      // Création d'un nouveau profil si aucun n'existe
+      result = await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          onboardingCompleted: true,
+          userType: "JOB_SEEKER",
+          JobSeeker: {
+            create: {
+              firstName: validatedData.data.firstName,
+              lastName: validatedData.data.lastName,
+              email: validatedData.data.email,
+              about: validatedData.data.about,
+              title: validatedData.data.title,
+              experience: validatedData.data.experience,
+              skills: validatedData.data.skills,
+              languages: validatedData.data.languages,
+              city: validatedData.data.city,
+              countryCode: validatedData.data.countryCode,
+              phoneNumber: validatedData.data.phoneNumber,
+              linkedinProfile: validatedData.data.linkedinProfile,
+              portfolioUrl: validatedData.data.portfolioUrl,
+              availability: validatedData.data
+                .availability as (typeof Availability)[keyof typeof Availability],
+              preferredJobType: validatedData.data.preferredJobType as Array<
+                (typeof JobType)[keyof typeof JobType]
+              >,
+              expectedSalary: validatedData.data.expectedSalary,
+              resume: validatedData.data.resume,
+            },
+          },
+        },
+      });
+    }
+    if (!result) {
+      throw new Error("Failed to update job seeker profile");
+    }
+    // Revalidate the job seekers page to show updated data
+    // revalidatePath("/job-seekers");
+
+    // Redirect to a success page or dashboard
+    // redirect("/job-seekers/success");
+    // await new Promise((resolve) => setTimeout(resolve, 500)); //avant la redirection pour laisser le temps au toast d'apparaître.
+    // return redirect("/find-job");
+    return { success: true };
+  } catch (error) {
+    // Log the error for debugging (in a production environment)
+    console.error("Error updating  job seeker:", error);
+    // Gestion des erreurs
+    if (error instanceof z.ZodError) {
+      throw new Error(`Validation error: ${error.message}`);
+    }
+    if (error instanceof Error) {
+      throw new Error(`Failed to update job seeker: ${error.message}`);
+    }
+    throw new Error("An unexpected error occurred");
+  }
 }

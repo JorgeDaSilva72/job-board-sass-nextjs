@@ -265,7 +265,7 @@ export function UserDropdown({
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild className="flex items-center gap-2 py-2">
-              <Link href="/profile">
+              <Link href="/job-seeker/profile">
                 <User
                   size={16}
                   className="text-muted-foreground"
