@@ -557,7 +557,7 @@ const EditJobSeekerForm = ({ jobSeeker }: EditJobSeekerFormProps) => {
                 type="button"
                 variant="outline"
                 className="w-full"
-                onClick={() => router.push("/job-seeker/profile/edit")}
+                onClick={() => router.push("/job-seeker/profile/")}
                 disabled={pending}
               >
                 Cancel

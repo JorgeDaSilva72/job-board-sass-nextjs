@@ -31,14 +31,18 @@ const ViewJobSeekerForm = ({ jobSeeker }: EditJobSeekerFormProps) => {
     email,
     about,
     title,
+    experience,
     skills = [],
     languages = [],
     countryCode,
     city,
+    phoneNumber,
     linkedinProfile,
     portfolioUrl,
     availability,
     preferredJobType = [],
+    expectedSalary,
+    resume,
   } = jobSeeker.JobSeeker;
 
   return (
@@ -64,7 +68,6 @@ const ViewJobSeekerForm = ({ jobSeeker }: EditJobSeekerFormProps) => {
               <Input value={lastName} readOnly />
             </div>
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Email
@@ -75,21 +78,24 @@ const ViewJobSeekerForm = ({ jobSeeker }: EditJobSeekerFormProps) => {
               className="bg-gray-100 dark:bg-gray-800"
             />
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700">
               About
             </label>
             <Textarea value={about} readOnly />
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Job Title
             </label>
             <Input value={title} readOnly />
           </div>
-
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Years of Experience
+            </label>
+            <Input value={experience} readOnly />
+          </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Skills
@@ -109,7 +115,6 @@ const ViewJobSeekerForm = ({ jobSeeker }: EditJobSeekerFormProps) => {
               )}
             </div>
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Languages
@@ -129,7 +134,6 @@ const ViewJobSeekerForm = ({ jobSeeker }: EditJobSeekerFormProps) => {
               )}
             </div>
           </div>
-
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700">
@@ -154,6 +158,32 @@ const ViewJobSeekerForm = ({ jobSeeker }: EditJobSeekerFormProps) => {
           </div>
 
           <div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Phone Number
+              </label>
+              {phoneNumber ? (
+                <Input value={phoneNumber} readOnly />
+              ) : (
+                <Input value={""} readOnly />
+              )}
+            </div>
+          </div>
+          <div>
+            {linkedinProfile ? (
+              <a
+                href={linkedinProfile}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500"
+              >
+                {linkedinProfile}
+              </a>
+            ) : (
+              <p className="text-gray-500">Not specified.</p>
+            )}
+          </div>
+          <div>
             <label className="block text-sm font-medium text-gray-700">
               LinkedIn Profile
             </label>
@@ -170,7 +200,6 @@ const ViewJobSeekerForm = ({ jobSeeker }: EditJobSeekerFormProps) => {
               <p className="text-gray-500">Not specified.</p>
             )}
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Portfolio URL
@@ -188,14 +217,12 @@ const ViewJobSeekerForm = ({ jobSeeker }: EditJobSeekerFormProps) => {
               <p className="text-gray-500">Not specified.</p>
             )}
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Availability
             </label>
             <Input value={availability.replace("_", " ")} readOnly />
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Preferred Job Types
@@ -216,6 +243,34 @@ const ViewJobSeekerForm = ({ jobSeeker }: EditJobSeekerFormProps) => {
             </div>
           </div>
 
+          <div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Expected Salary
+              </label>
+              {expectedSalary ? (
+                <Input value={expectedSalary} readOnly />
+              ) : (
+                <Input value={""} readOnly />
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Resume
+              </label>
+              {resume && (
+                <a
+                  href={resume}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 hover:underline"
+                >
+                  View Resume
+                </a>
+              )}
+            </div>
+          </div>
           <div className="mt-4 flex gap-4">
             <Button
               type="button"
