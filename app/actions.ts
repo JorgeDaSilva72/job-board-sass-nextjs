@@ -938,3 +938,111 @@ export async function getCompanyProfile() {
     throw new Error("An unexpected error occurred");
   }
 }
+
+export async function updateCompany(data: z.infer<typeof companySchema>) {
+  try {
+    // Vérification de l'authentification
+    const user = await requireUser();
+    if (!user) {
+      throw new Error("Unauthorized");
+    }
+
+    // Protection Arcjet
+    //Access the request object so Arcjet can analyze it
+    const req = await request();
+    //Call Arcjet protect
+    const decision = await aj.protect(req);
+
+    if (decision.isDenied()) {
+      throw new Error("Forbidden");
+    }
+
+    const validatedData = companySchema.safeParse(data);
+
+    if (!validatedData.success) {
+      throw new Error(`Validation failed: ${validatedData.error.message}`);
+    }
+
+    // Vérifier si le jobSeeker existe déjà
+    const existingCompany = await prisma.company.findFirst({
+      where: {
+        userId: user.id,
+      },
+    });
+
+    let result;
+
+    if (existingCompany) {
+      result = await prisma.company.update({
+        where: {
+          userId: user.id,
+        },
+        data: {
+          name: validatedData.data.name,
+          location: validatedData.data.location,
+          logo: validatedData.data.logo,
+          about: validatedData.data.about,
+          website: validatedData.data.website,
+          xAccount: validatedData.data.xAccount,
+          industry: validatedData.data.industry,
+          companySize: validatedData.data.companySize,
+          languages: validatedData.data.languages,
+          city: validatedData.data.city,
+          countryCode: validatedData.data.countryCode,
+          phoneNumber: validatedData.data.phoneNumber,
+          linkedinProfile: validatedData.data.linkedinProfile,
+        },
+      });
+    } else {
+      // Création d'un nouveau profil si aucun n'existe
+      result = await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          onboardingCompleted: true,
+          userType: "COMPANY",
+          Company: {
+            create: {
+              name: validatedData.data.name,
+              location: validatedData.data.location,
+              logo: validatedData.data.logo,
+              about: validatedData.data.about,
+              website: validatedData.data.website,
+              xAccount: validatedData.data.xAccount,
+              industry: validatedData.data.industry,
+              companySize: validatedData.data.companySize,
+              languages: validatedData.data.languages,
+              city: validatedData.data.city,
+              countryCode: validatedData.data.countryCode,
+              phoneNumber: validatedData.data.phoneNumber,
+              linkedinProfile: validatedData.data.linkedinProfile,
+            },
+          },
+        },
+      });
+    }
+    if (!result) {
+      throw new Error("Failed to update company profile");
+    }
+    // Revalidate the job seekers page to show updated data
+    // revalidatePath("/job-seekers");
+
+    // Redirect to a success page or dashboard
+    // redirect("/job-seekers/success");
+    // await new Promise((resolve) => setTimeout(resolve, 500)); //avant la redirection pour laisser le temps au toast d'apparaître.
+    // return redirect("/find-job");
+    return { success: true };
+  } catch (error) {
+    // Log the error for debugging (in a production environment)
+    console.error("Error updating company profile:", error);
+    // Gestion des erreurs
+    if (error instanceof z.ZodError) {
+      throw new Error(`Validation error: ${error.message}`);
+    }
+    if (error instanceof Error) {
+      throw new Error(`Failed to update company profile: ${error.message}`);
+    }
+    throw new Error("An unexpected error occurred");
+  }
+}

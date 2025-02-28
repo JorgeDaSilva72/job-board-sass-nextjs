@@ -54,5 +54,5 @@ export type CompanyProfileData = {
 
 // Définition du type pour les props du composant
 export type EditCompanyFormProps = {
-  Company: CompanyProfileData;
+  company: CompanyProfileData;
 };
