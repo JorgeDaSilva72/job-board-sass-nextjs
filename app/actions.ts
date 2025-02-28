@@ -875,3 +875,66 @@ export async function updateJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
     throw new Error("An unexpected error occurred");
   }
 }
+
+export async function getCompanyProfile() {
+  try {
+    // Vérification de l'authentification
+    const user = await requireUser();
+
+    if (!user) {
+      throw new Error("Unauthorized");
+    }
+
+    // Protection Arcjet
+    // Access the request object so Arcjet can analyze it
+    const req = await request();
+    // Call Arcjet protect
+    const decision = await aj.protect(req);
+
+    if (decision.isDenied()) {
+      throw new Error("Forbidden");
+    }
+
+    const company = await prisma.user.findUnique({
+      where: {
+        id: user.id,
+        Company: {
+          userId: user.id,
+        },
+      },
+      select: {
+        id: true,
+
+        Company: {
+          select: {
+            id: true,
+            name: true,
+            location: true,
+            logo: true,
+            about: true,
+            website: true,
+            userId: true,
+            xAccount: true,
+            industry: true,
+            companySize: true,
+            countryCode: true,
+            city: true,
+            phoneNumber: true,
+            linkedinProfile: true,
+            languages: true,
+          },
+        },
+      },
+    });
+
+    if (!company) {
+      return notFound();
+    }
+
+    return company;
+  } catch (error) {
+    // Log the error for debugging (in a production environment)
+    console.error("Error fetching  company profile:", error);
+    throw new Error("An unexpected error occurred");
+  }
+}

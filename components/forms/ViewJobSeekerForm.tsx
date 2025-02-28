@@ -169,20 +169,7 @@ const ViewJobSeekerForm = ({ jobSeeker }: EditJobSeekerFormProps) => {
               )}
             </div>
           </div>
-          <div>
-            {linkedinProfile ? (
-              <a
-                href={linkedinProfile}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500"
-              >
-                {linkedinProfile}
-              </a>
-            ) : (
-              <p className="text-gray-500">Not specified.</p>
-            )}
-          </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700">
               LinkedIn Profile

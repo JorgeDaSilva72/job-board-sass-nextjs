@@ -29,3 +29,30 @@ export type JobSeekerProfileData = {
 export type EditJobSeekerFormProps = {
   jobSeeker: JobSeekerProfileData;
 };
+
+// Définition du type pour représenter les données retournées par getCompanyProfile
+export type CompanyProfileData = {
+  id: string;
+  Company: {
+    name: string;
+    location: string;
+    logo: string;
+    about: string;
+
+    userId: string;
+    website?: string | null;
+    xAccount?: string | null;
+    industry?: string | null;
+    companySize?: string | null;
+    countryCode?: string | null;
+    phoneNumber?: string | null;
+    linkedinProfile?: string | null;
+    languages: string[];
+    city?: string | null;
+  } | null;
+};
+
+// Définition du type pour les props du composant
+export type EditCompanyFormProps = {
+  Company: CompanyProfileData;
+};

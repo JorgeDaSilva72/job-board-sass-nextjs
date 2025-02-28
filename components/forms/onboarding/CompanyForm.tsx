@@ -670,10 +670,12 @@ export default function CompanyForm() {
                           endpoint="imageUploader"
                           onClientUploadComplete={(res) => {
                             field.onChange(res[0].url);
-                            // toast.success("Logo uploaded successfully!");
+                            toast.success("Logo uploaded successfully!");
                           }}
                           onUploadError={() => {
-                            // toast.error("Something went wrong. Please try again.");
+                            toast.error(
+                              "Something went wrong. Please try again."
+                            );
                           }}
                           className="ut-button:bg-primary ut-button:text-white ut-button:hover:bg-primary/90 ut-label:text-muted-foreground ut-allowed-content:text-muted-foreground border-primary"
                         />
