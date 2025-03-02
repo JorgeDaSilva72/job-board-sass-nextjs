@@ -25,6 +25,7 @@ import { JsonToHtml } from "@/components/general/JsonToHtml";
 import { saveJobPost, unsaveJobPost } from "@/app/actions";
 import arcjet, { detectBot, tokenBucket } from "@/app/utils/arcjet";
 import { request } from "@arcjet/next";
+import { getUserType } from "@/lib/userUtils";
 
 const aj = arcjet.withRule(
   detectBot({
@@ -91,6 +92,7 @@ async function getJob(jobId: string, userId?: string) {
         listingDuration: true,
         company: {
           select: {
+            id: true,
             name: true,
             logo: true,
             location: true,
@@ -140,6 +142,8 @@ const JobIdPage = async ({
 
   const { jobData, savedJob } = await getJob(jobId, session?.user?.id);
   const locationFlag = getFlagEmoji(jobData.location);
+
+  const { type, data, user } = await getUserType(session?.user?.id!);
 
   return (
     <div className="container mx-auto py-12 px-4">
@@ -263,25 +267,26 @@ const JobIdPage = async ({
 
         {/* Sidebar */}
         <div className="space-y-6">
-          <Card className="p-6 bg-primary/5 border-primary/20">
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold">Apply Now</h3>
-              <p className="text-sm text-muted-foreground">
-                Please let {jobData.company.name} know you found this job on
-                Afrique Avenir. This helps us grow!
-              </p>
-              <form className="mt-6">
-                <input type="hidden" name="jobId" value={jobId} />
-                {/* <GeneralSubmitButton text="Apply Now" /> */}
-                <Link href={`/job/${jobId}/apply`} className="w-full">
-                  <Button variant="default" className="w-full mt-4">
-                    Apply Now
-                  </Button>
-                </Link>
-              </form>
-            </div>
-          </Card>
-
+          {type === "JOB_SEEKER" && (
+            <Card className="p-6 bg-primary/5 border-primary/20">
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold">Apply Now</h3>
+                <p className="text-sm text-muted-foreground">
+                  Please let {jobData.company.name} know you found this job on
+                  Afrique Avenir. This helps us grow!
+                </p>
+                <form className="mt-6">
+                  <input type="hidden" name="jobId" value={jobId} />
+                  {/* <GeneralSubmitButton text="Apply Now" /> */}
+                  <Link href={`/job/${jobId}/apply`} className="w-full">
+                    <Button variant="default" className="w-full mt-4">
+                      Apply Now
+                    </Button>
+                  </Link>
+                </form>
+              </div>
+            </Card>
+          )}
           <Card className="p-6">
             <h3 className="text-xl font-semibold mb-6">Job Details</h3>
             <div className="space-y-4">
@@ -327,7 +332,6 @@ const JobIdPage = async ({
               </div>
             </div>
           </Card>
-
           {/* New Salary Card */}
           <Card className="p-6">
             <div className="flex items-center gap-3 mb-4">
@@ -355,7 +359,6 @@ const JobIdPage = async ({
               </div>
             </div>
           </Card>
-
           <Card className="p-6">
             <h3 className="text-xl font-semibold mb-4">About the Company</h3>
             <div className="flex items-center gap-4 mb-4">
@@ -379,8 +382,10 @@ const JobIdPage = async ({
             <p className="text-sm text-muted-foreground">
               {jobData.company.about}
             </p>
-            <Button variant="outline" className="w-full mt-4">
-              View Company Profile
+            <Button variant="outline" className="w-full mt-4" asChild>
+              <Link href={`/company/${jobData.company.id}`}>
+                View Company Profile
+              </Link>
             </Button>
           </Card>
         </div>

@@ -479,7 +479,7 @@ export default function EditCompanyForm({ company }: EditCompanyFormProps) {
                 type="button"
                 variant="outline"
                 className="w-full"
-                onClick={() => router.push("/dashboard")}
+                onClick={() => router.push("/company/profile")}
               >
                 Cancel
               </Button>

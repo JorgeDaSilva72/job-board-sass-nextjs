@@ -12,6 +12,7 @@ import { request } from "@arcjet/next";
 import { inngest } from "./utils/inngest/client";
 import { revalidatePath } from "next/cache";
 import type { Availability, JobType } from "@prisma/client";
+import { getUserType } from "@/lib/userUtils";
 
 const aj = arcjet
   .withRule(
@@ -1042,6 +1043,70 @@ export async function updateCompany(data: z.infer<typeof companySchema>) {
     }
     if (error instanceof Error) {
       throw new Error(`Failed to update company profile: ${error.message}`);
+    }
+    throw new Error("An unexpected error occurred");
+  }
+}
+
+export async function submitJobApplication(formData: FormData) {
+  try {
+    // Vérification de l'authentification
+    const user = await requireUser();
+    if (!user) {
+      throw new Error("Unauthorized");
+    }
+
+    // Vérifier que l'utilisateur est un JobSeeker
+    const { type, data } = await getUserType(user?.id!);
+    if (type !== "JOB_SEEKER") {
+      throw new Error("Only job seekers can apply");
+    }
+
+    // Protection Arcjet
+    //Access the request object so Arcjet can analyze it
+    const req = await request();
+    //Call Arcjet protect
+    const decision = await aj.protect(req);
+
+    if (decision.isDenied()) {
+      throw new Error("Forbidden");
+    }
+
+    const jobPostId = formData.get("jobPostId") as string;
+    const coverLetter = formData.get("coverLetter") as string;
+
+    // Vérifier si une candidature existe déjà
+    const existingApplication = await prisma.jobApplication.findFirst({
+      where: {
+        jobPostId,
+        jobSeekerId: data?.id,
+      },
+    });
+
+    if (existingApplication) {
+      throw new Error("You have already applied for this offer");
+    }
+
+    // Créer la candidature
+    await prisma.jobApplication.create({
+      data: {
+        jobPostId,
+        jobSeekerId: data?.id!,
+        coverLetter,
+        status: "PENDING",
+      },
+    });
+
+    return { success: true };
+  } catch (error) {
+    // Log the error for debugging (in a production environment)
+    console.error("Error creating job application:", error);
+    // Gestion des erreurs
+    if (error instanceof z.ZodError) {
+      throw new Error(`Validation error: ${error.message}`);
+    }
+    if (error instanceof Error) {
+      throw new Error(`Failed to createjob application: ${error.message}`);
     }
     throw new Error("An unexpected error occurred");
   }
