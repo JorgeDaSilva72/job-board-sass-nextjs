@@ -4,11 +4,11 @@ import { notFound, redirect } from "next/navigation";
 import { JobApplicationForm } from "@/components/forms/JobApplicationForm";
 import { requireUser } from "@/app/utils/hooks";
 
-type PageProps = {
-  params: { jobId: string };
-};
+interface PageParams {
+  jobId: string;
+}
 
-export default async function ApplyPage({ params }: PageProps) {
+export default async function ApplyPage({ params }: { params: PageParams }) {
   const user = await requireUser();
   if (!user || !user.id) {
     redirect("/login?error=unauthorized");
