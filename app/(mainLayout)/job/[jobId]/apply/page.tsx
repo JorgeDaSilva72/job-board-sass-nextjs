@@ -1,68 +1,66 @@
-// import JobApplicationPage from "@/components/general/JobApplicationPage";
-
-// const ApplyJobPage = () => {
-//   //   const { jobData } = await getJob(params.jobId);
-//   //   return <JobApplicationPage jobData={jobData} />;
-//   return <JobApplicationPage />;
-// };
-
-// export default ApplyJobPage;
-
-import { auth } from "@/app/utils/auth";
 import { getUserType } from "@/lib/userUtils";
 import { prisma } from "@/app/utils/db";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { JobApplicationForm } from "@/components/forms/JobApplicationForm";
+import { requireUser } from "@/app/utils/hooks";
 
 export default async function ApplyPage({
   params,
 }: {
   params: { jobId: string };
 }) {
-  const session = await auth();
-  if (!session?.user?.id) {
-    redirect(
-      "/login?callbackUrl=" + encodeURIComponent(`/job/${params.jobId}/apply`)
-    );
+  const user = await requireUser();
+  if (!user || !user.id) {
+    redirect("/login?error=unauthorized");
   }
 
-  const { type, data } = await getUserType(session.user.id);
-  if (type !== "JOB_SEEKER") {
-    redirect("/find-job");
+  const { type, data } = await getUserType(user.id);
+  if (type !== "JOB_SEEKER" || !data?.id) {
+    redirect("/find-job?error=not_a_job_seeker");
   }
 
-  // Vérifier que jobSeekerId est bien défini
-  if (!data?.id) {
-    redirect("/find-job");
-  }
+  // const jobPost = await prisma.jobPost.findUnique({
+  //   where: { id: params.jobId, status: "ACTIVE" },
+  //   include: { company: { select: { name: true } } },
+  // });
 
   const jobPost = await prisma.jobPost.findUnique({
     where: { id: params.jobId, status: "ACTIVE" },
-    include: { company: { select: { name: true } } },
-  });
-
-  if (!jobPost) {
-    redirect("/find-job");
-  }
-
-  // Vérifier si déjà postulé
-  const existingApplication = await prisma.jobApplication.findFirst({
-    where: {
-      jobPostId: params.jobId,
-      jobSeekerId: data?.id,
+    include: {
+      company: { select: { name: true } },
+      applications: {
+        where: { jobSeekerId: data.id },
+        select: { id: true }, // On récupère juste l'ID pour voir s'il existe
+      },
     },
   });
 
-  if (existingApplication) {
-    redirect(`/dashboard/applications`);
+  // // Vérifier si déjà postulé
+  // const existingApplication = await prisma.jobApplication.findFirst({
+  //   where: {
+  //     jobPostId: params.jobId,
+  //     jobSeekerId: data?.id,
+  //   },
+  // });
+
+  if (!jobPost) {
+    notFound();
+  }
+
+  // if (existingApplication) {
+  //   redirect(`/dashboard/applications?toast=already_applied`);
+  // }
+
+  if (jobPost.applications.length > 0) {
+    redirect(`/dashboard/applications?toast=already_applied`);
   }
 
   return (
     <div className="container mx-auto py-12">
       <h1 className="text-3xl font-bold mb-6">
-        Postuler à: {jobPost.jobTitle}
+        Postuler à: {jobPost?.jobTitle}
       </h1>
-      <p className="mb-8">Entreprise: {jobPost.company.name}</p>
+      <p className="mb-8">Entreprise: {jobPost?.company.name}</p>
 
       <JobApplicationForm
         jobId={params.jobId}

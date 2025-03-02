@@ -129,9 +129,11 @@ async function getJob(jobId: string, userId?: string) {
 const JobIdPage = async ({
   params,
 }: {
-  params: Promise<{ jobId: string }>;
+  // params: Promise<{ jobId: string }>;
+  params: { jobId: string };
 }) => {
-  const { jobId } = await params;
+  // const { jobId } = await params;
+  const { jobId } = params;
   const session = await auth();
   const req = await request();
   const decision = await getClient(!!session).protect(req, { requested: 10 });
@@ -272,26 +274,49 @@ const JobIdPage = async ({
 
         {/* Sidebar */}
         <div className="space-y-6">
-          {type === "JOB_SEEKER" && (
-            <Card className="p-6 bg-primary/5 border-primary/20">
-              <div className="space-y-4">
-                <h3 className="text-xl font-semibold">Apply Now</h3>
+          {session?.user ? (
+            type === "JOB_SEEKER" ? (
+              <Card className="p-6 bg-primary/5 border-primary/20">
+                <div className="space-y-4">
+                  <h3 className="text-xl font-semibold">Apply Now</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Please let {jobData.company.name} know you found this job on
+                    Afrique Avenir. This helps us grow!
+                  </p>
+                  <form className="mt-6">
+                    <input type="hidden" name="jobId" value={jobId} />
+                    {/* <GeneralSubmitButton text="Apply Now" /> */}
+                    <Link href={`/job/${jobId}/apply`} className="w-full">
+                      <Button variant="default" className="w-full mt-4">
+                        Apply Now
+                      </Button>
+                    </Link>
+                  </form>
+                </div>
+              </Card>
+            ) : (
+              <Card className="p-6 bg-muted/5 border-muted/20">
                 <p className="text-sm text-muted-foreground">
-                  Please let {jobData.company.name} know you found this job on
-                  Afrique Avenir. This helps us grow!
+                  Only job seekers can apply for this position.
                 </p>
-                <form className="mt-6">
-                  <input type="hidden" name="jobId" value={jobId} />
-                  {/* <GeneralSubmitButton text="Apply Now" /> */}
-                  <Link href={`/job/${jobId}/apply`} className="w-full">
-                    <Button variant="default" className="w-full mt-4">
-                      Apply Now
-                    </Button>
-                  </Link>
-                </form>
+              </Card>
+            )
+          ) : (
+            <Card className="p-6 bg-warning/10 border-warning/20">
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold">Sign in to Apply</h3>
+                <p className="text-sm text-muted-foreground">
+                  You need to be signed in to apply for this job.
+                </p>
+                <Link href="/login" className="w-full">
+                  <Button variant="default" className="w-full mt-4">
+                    Sign In
+                  </Button>
+                </Link>
               </div>
             </Card>
           )}
+
           <Card className="p-6">
             <h3 className="text-xl font-semibold mb-6">Job Details</h3>
             <div className="space-y-4">
