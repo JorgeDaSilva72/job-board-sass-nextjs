@@ -4,11 +4,9 @@ import { notFound, redirect } from "next/navigation";
 import { JobApplicationForm } from "@/components/forms/JobApplicationForm";
 import { requireUser } from "@/app/utils/hooks";
 
-interface PageParams {
-  jobId: string;
-}
-
-export default async function ApplyPage({ params }: { params: PageParams }) {
+// Désactiver l'erreur ESLint pour cette ligne spécifique
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default async function ApplyPage({ params }: any) {
   const user = await requireUser();
   if (!user || !user.id) {
     redirect("/login?error=unauthorized");

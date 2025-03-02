@@ -129,7 +129,7 @@ interface UserDropdownProps {
   email: string;
   name: string;
   image: string;
-  userType: "COMPANY" | "JOB_SEEKER" | null;
+  userType: string;
 }
 
 export function UserDropdown({

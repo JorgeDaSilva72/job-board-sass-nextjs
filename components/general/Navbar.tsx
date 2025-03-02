@@ -304,7 +304,7 @@ const NavigationLinks = ({
   userType,
 }: {
   className?: string;
-  userType: "COMPANY" | "JOB_SEEKER" | null;
+  userType: string;
 }) => {
   // Common links for all user types
   const commonLinks = (
@@ -380,16 +380,31 @@ const NavigationLinks = ({
 
 export async function Navbar() {
   const session = await auth();
-  let userType: "COMPANY" | "JOB_SEEKER" | null = null;
+  // let userType: "COMPANY" | "JOB_SEEKER" | "UNDEFINED" = "UNDEFINED";
+
+  let userType: string = "UNDEFINED";
 
   try {
     if (session?.user?.id) {
-      userType = await getUserType(session.user.id);
-      console.log("User type:", userType);
+      const userTypeResult = await getUserType(session.user.id);
+      // Vérification que userTypeResult a bien un champ type
+      if (
+        userTypeResult &&
+        typeof userTypeResult === "object" &&
+        "type" in userTypeResult
+      ) {
+        userType = userTypeResult.type;
+        console.log("User type assigned:", userType);
+      } else {
+        console.error(
+          "User type result is not in expected format:",
+          userTypeResult
+        );
+      }
     }
   } catch (error) {
     console.error("Error retrieving user type:", error);
-    userType = null;
+    userType = "UNDEFINED";
   }
 
   // Custom actions based on user type
@@ -496,7 +511,7 @@ export async function Navbar() {
                           ? "Manage your job listings"
                           : userType === "JOB_SEEKER"
                           ? "Find your next opportunity"
-                          : "Discover or post your next opportunity"}
+                          : "Discover your next opportunity or post a new job "}
                       </SheetDescription>
                     </SheetHeader>
 
