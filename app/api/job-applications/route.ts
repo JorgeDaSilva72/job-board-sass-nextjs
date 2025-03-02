@@ -23,6 +23,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Vérifier que jobSeekerId est bien défini
+    if (!data?.id) {
+      throw new Error("jobSeekerId is required");
+    }
+
     const body = await request.json();
     const { jobPostId, coverLetter } = body;
 
@@ -67,7 +72,7 @@ export async function POST(request: NextRequest) {
     const application = await prisma.jobApplication.create({
       data: {
         jobPostId,
-        jobSeekerId: data?.id!,
+        jobSeekerId: data.id!,
         coverLetter,
         status: "PENDING",
       },

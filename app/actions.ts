@@ -1056,10 +1056,20 @@ export async function submitJobApplication(formData: FormData) {
       throw new Error("Unauthorized");
     }
 
+    // Vérifier que jobSeekerId est bien défini
+    if (!user?.id) {
+      throw new Error("userId is required");
+    }
+
     // Vérifier que l'utilisateur est un JobSeeker
-    const { type, data } = await getUserType(user?.id!);
+    const { type, data } = await getUserType(user.id);
     if (type !== "JOB_SEEKER") {
       throw new Error("Only job seekers can apply");
+    }
+
+    // Vérifier que jobSeekerId est bien défini
+    if (!data?.id) {
+      throw new Error("jobSeekerId is required");
     }
 
     // Protection Arcjet
@@ -1079,7 +1089,7 @@ export async function submitJobApplication(formData: FormData) {
     const existingApplication = await prisma.jobApplication.findFirst({
       where: {
         jobPostId,
-        jobSeekerId: data?.id,
+        jobSeekerId: data.id,
       },
     });
 
@@ -1091,7 +1101,7 @@ export async function submitJobApplication(formData: FormData) {
     await prisma.jobApplication.create({
       data: {
         jobPostId,
-        jobSeekerId: data?.id!,
+        jobSeekerId: data.id,
         coverLetter,
         status: "PENDING",
       },

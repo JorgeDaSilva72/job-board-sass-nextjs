@@ -59,6 +59,7 @@ export function JobApplicationForm({
         router.refresh();
       }, 2000);
     } catch (error) {
+      console.log(error);
       toast.error("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);

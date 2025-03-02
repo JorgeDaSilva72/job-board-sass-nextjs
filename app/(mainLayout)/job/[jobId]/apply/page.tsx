@@ -28,7 +28,12 @@ export default async function ApplyPage({
 
   const { type, data } = await getUserType(session.user.id);
   if (type !== "JOB_SEEKER") {
-    redirect("/dashboard");
+    redirect("/find-job");
+  }
+
+  // Vérifier que jobSeekerId est bien défini
+  if (!data?.id) {
+    redirect("/find-job");
   }
 
   const jobPost = await prisma.jobPost.findUnique({
@@ -37,7 +42,7 @@ export default async function ApplyPage({
   });
 
   if (!jobPost) {
-    redirect("/jobs");
+    redirect("/find-job");
   }
 
   // Vérifier si déjà postulé
@@ -61,7 +66,7 @@ export default async function ApplyPage({
 
       <JobApplicationForm
         jobId={params.jobId}
-        jobSeekerId={data?.id!}
+        jobSeekerId={data.id}
         // resumeUrl={data?.resume}
       />
     </div>

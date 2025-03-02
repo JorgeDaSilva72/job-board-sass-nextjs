@@ -143,7 +143,12 @@ const JobIdPage = async ({
   const { jobData, savedJob } = await getJob(jobId, session?.user?.id);
   const locationFlag = getFlagEmoji(jobData.location);
 
-  const { type, data, user } = await getUserType(session?.user?.id!);
+  let type: string | null = null;
+
+  if (session?.user?.id) {
+    const userType = await getUserType(session.user.id);
+    type = userType.type;
+  }
 
   return (
     <div className="container mx-auto py-12 px-4">
