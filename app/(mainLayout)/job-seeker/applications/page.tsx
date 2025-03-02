@@ -24,7 +24,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, PenBoxIcon, User2, XCircle } from "lucide-react";
+import { Eye, MoreHorizontal, PenBoxIcon, User2, XCircle } from "lucide-react";
 import Link from "next/link";
 import { EmptyState } from "@/components/general/EmptyState";
 import { prisma } from "@/app/utils/db";
@@ -142,6 +142,12 @@ const ApplicationsPage = async () => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                          <DropdownMenuItem asChild>
+                            <Link href={`/job/${application.jobPost.id}`}>
+                              <Eye className="size-4" />
+                              View Job
+                            </Link>
+                          </DropdownMenuItem>
                           <DropdownMenuItem asChild>
                             <Link href={`/applications/${application.id}/edit`}>
                               <PenBoxIcon className="size-4" />

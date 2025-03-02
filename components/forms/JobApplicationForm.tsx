@@ -55,7 +55,7 @@ export function JobApplicationForm({
 
       // Redirect after a short delay to show the success message
       setTimeout(() => {
-        router.push("/dashboard/applications");
+        router.push("/job-seeker/applications");
         router.refresh();
       }, 2000);
     } catch (error) {
