@@ -235,7 +235,7 @@ export function UserDropdown({
         {userType === "JOB_SEEKER" && (
           <DropdownMenuGroup>
             <DropdownMenuItem asChild className="flex items-center gap-2 py-2">
-              <Link href="/my-applications">
+              <Link href="/job-seeker/applications">
                 <FileText
                   size={16}
                   className="text-muted-foreground"

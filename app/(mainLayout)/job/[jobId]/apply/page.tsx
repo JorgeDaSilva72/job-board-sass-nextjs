@@ -55,7 +55,7 @@ export default async function ApplyPage({
   // }
 
   if (jobPost.applications.length > 0) {
-    redirect(`/dashboard/applications?toast=already_applied`);
+    redirect(`/job-seeker/applications?toast=already_applied`);
   }
 
   return (
