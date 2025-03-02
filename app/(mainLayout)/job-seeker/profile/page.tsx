@@ -8,6 +8,9 @@ import { toast } from "sonner";
 import ViewJobSeekerForm from "@/components/forms/ViewJobSeekerForm";
 import { JobSeekerProfileData } from "@/app/types/types";
 
+// 🚀 Force Next.js à utiliser le rendu dynamique
+export const dynamic = "force-dynamic";
+
 const JobSeekerProfilePage = () => {
   const [profile, setProfile] = useState<JobSeekerProfileData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
