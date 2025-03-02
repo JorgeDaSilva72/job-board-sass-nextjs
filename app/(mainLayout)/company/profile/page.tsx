@@ -65,6 +65,9 @@ import { Button } from "@/components/ui/button";
 import CompanyProfileView from "@/components/forms/CompanyProfileView";
 import { CompanyProfileData } from "@/app/types/types";
 
+// 🚀 Force Next.js à utiliser le rendu dynamique
+export const dynamic = "force-dynamic";
+
 export default async function CompanyProfilePage() {
   const userData: CompanyProfileData | null = await getCompanyProfile();
 

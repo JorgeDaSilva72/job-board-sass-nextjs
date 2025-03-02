@@ -929,14 +929,14 @@ export async function getCompanyProfile() {
     });
 
     if (!company) {
-      return notFound();
+      return null;
     }
 
     return company;
   } catch (error) {
     // Log the error for debugging (in a production environment)
     console.error("Error fetching  company profile:", error);
-    throw new Error("An unexpected error occurred");
+    return null;
   }
 }
 
