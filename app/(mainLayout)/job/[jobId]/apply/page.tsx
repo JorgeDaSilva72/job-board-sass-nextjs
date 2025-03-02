@@ -6,7 +6,12 @@ import { requireUser } from "@/app/utils/hooks";
 
 // Désactiver l'erreur ESLint pour cette ligne spécifique
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default async function ApplyPage({ params }: any) {
+export default async function ApplyPage({
+  params,
+}: {
+  params: Promise<{ jobId: string }>;
+}) {
+  const { jobId } = await params;
   const user = await requireUser();
   if (!user || !user.id) {
     redirect("/login?error=unauthorized");
@@ -23,7 +28,7 @@ export default async function ApplyPage({ params }: any) {
   // });
 
   const jobPost = await prisma.jobPost.findUnique({
-    where: { id: params.jobId, status: "ACTIVE" },
+    where: { id: jobId, status: "ACTIVE" },
     include: {
       company: { select: { name: true } },
       applications: {
@@ -61,7 +66,7 @@ export default async function ApplyPage({ params }: any) {
       <p className="mb-8">Entreprise: {jobPost?.company.name}</p>
 
       <JobApplicationForm
-        jobId={params.jobId}
+        jobId={jobId}
         jobSeekerId={data.id}
         //  resumeUrl={data?.resume}
       />

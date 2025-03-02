@@ -129,11 +129,11 @@ async function getJob(jobId: string, userId?: string) {
 const JobIdPage = async ({
   params,
 }: {
-  // params: Promise<{ jobId: string }>;
-  params: { jobId: string };
+  params: Promise<{ jobId: string }>;
+  // params: { jobId: string };
 }) => {
-  // const { jobId } = await params;
-  const { jobId } = params;
+  const { jobId } = await params;
+  // const { jobId } = params;
   const session = await auth();
   const req = await request();
   const decision = await getClient(!!session).protect(req, { requested: 10 });
