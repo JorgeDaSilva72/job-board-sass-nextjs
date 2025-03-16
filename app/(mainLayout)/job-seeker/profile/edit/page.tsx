@@ -5,15 +5,15 @@ import { notFound } from "next/navigation";
 import React from "react";
 
 const EditJobPage = async () => {
-  const jobSeeker = await getJobSeekerProfile();
+  const response = await getJobSeekerProfile();
 
-  if (!jobSeeker) {
+  if (!response.success || !response.data) {
     return notFound();
   }
 
   return (
     <>
-      <EditJobSeekerForm jobSeeker={jobSeeker} />
+      <EditJobSeekerForm jobSeeker={response.data} />
     </>
   );
 };
