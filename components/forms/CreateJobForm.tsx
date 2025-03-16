@@ -201,11 +201,12 @@ export function CreateJobForm({
                           {countryList.map((country) => (
                             <SelectItem value={country.name} key={country.code}>
                               <div className="flex flex-row justify-between items-center w-full">
-                                <img
+                                <Image
                                   src={country.flagEmoji}
-                                  className="h-8 w-8"
+                                  width={32}
+                                  height={32}
+                                  alt={country.name}
                                 />
-                                {/* <span>{country.flagEmoji}</span> */}
                                 <span className="pl-2">{country.name}</span>
                               </div>
                             </SelectItem>
@@ -533,11 +534,12 @@ export function CreateJobForm({
                           {countryList.map((country) => (
                             <SelectItem value={country.name} key={country.name}>
                               <div className="flex flex-row justify-between items-center w-full">
-                                <img
+                                <Image
                                   src={country.flagEmoji}
-                                  className="h-8 w-8"
+                                  width={32}
+                                  height={32}
+                                  alt={country.name}
                                 />
-                                {/* <span>{country.flagEmoji}</span> */}
                                 <span className="pl-2">{country.name}</span>
                               </div>
                             </SelectItem>

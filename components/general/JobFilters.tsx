@@ -18,6 +18,7 @@ import { useCallback } from "react";
 import { Checkbox } from "../ui/checkbox";
 import { countryList } from "@/app/utils/countriesList";
 import { Separator } from "../ui/separator";
+import Image from "next/image";
 // import { Input } from "@/components/ui/input";
 
 export function JobFilters() {
@@ -134,9 +135,10 @@ export function JobFilters() {
                 {countryList.map((country) => (
                   <SelectItem value={country.name} key={country.code}>
                     <div className="flex items-center space-x-2">
-                      <img
+                      <Image
                         src={country.flagEmoji}
-                        className="h-6 w-6"
+                        width={32}
+                        height={32}
                         alt={country.name}
                       />
                       <span>{country.name}</span>

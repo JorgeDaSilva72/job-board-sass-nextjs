@@ -96,11 +96,13 @@ export async function createCompany(data: z.infer<typeof companySchema>) {
 
 export async function createJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
   try {
+    const DEBUG = true; // Active/Désactive les logs
+    if (DEBUG) console.log("Début de l'action createJobSeeker", { data });
+
     // Vérification de l'authentification
     const user = await requireUser();
-    if (!user) {
-      throw new Error("Unauthorized");
-    }
+
+    if (!user) return { success: false, error: "Unauthorized" };
 
     // Protection Arcjet
     //Access the request object so Arcjet can analyze it
@@ -109,15 +111,25 @@ export async function createJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
     const decision = await aj.protect(req);
 
     if (decision.isDenied()) {
-      throw new Error("Forbidden");
+      if (DEBUG) console.error("Accès refusé par Arcjet");
+      return { success: false, error: "Forbidden by security rules" };
     }
 
+    // Server-side validation
     const validatedData = jobSeekerSchema.safeParse(data);
 
     if (!validatedData.success) {
-      throw new Error(`Validation failed: ${validatedData.error.message}`);
+      if (DEBUG)
+        console.error("Validation failed:", validatedData.error.format());
+      return { success: false, error: validatedData.error.format() };
     }
 
+    console.log(
+      "Structure du validatedData:",
+      validatedData.success ? validatedData.data : "validatedData error"
+    );
+
+    // Création du job seeker  et mise à jour du user
     const result = await prisma.user.update({
       where: {
         id: user.id,
@@ -152,28 +164,18 @@ export async function createJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
       },
     });
 
-    if (!result) {
-      throw new Error("Failed to create company");
-    }
-    // Revalidate the job seekers page to show updated data
-    // revalidatePath("/job-seekers");
+    if (!result)
+      return { success: false, error: "Failed to create job seeker" };
 
-    // Redirect to a success page or dashboard
-    // redirect("/job-seekers/success");
-    // await new Promise((resolve) => setTimeout(resolve, 500)); //avant la redirection pour laisser le temps au toast d'apparaître.
-    // return redirect("/find-job");
     return { success: true };
   } catch (error) {
     // Log the error for debugging (in a production environment)
     console.error("Error creating job seeker:", error);
     // Gestion des erreurs
-    if (error instanceof z.ZodError) {
-      throw new Error(`Validation error: ${error.message}`);
-    }
-    if (error instanceof Error) {
-      throw new Error(`Failed to create company: ${error.message}`);
-    }
-    throw new Error("An unexpected error occurred");
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
   }
 }
 

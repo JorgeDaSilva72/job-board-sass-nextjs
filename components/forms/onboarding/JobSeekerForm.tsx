@@ -1191,6 +1191,12 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
 
 const JobSeekerForm = () => {
+  const [pending, setPending] = useState(false);
+  const [newSkill, setNewSkill] = useState("");
+  const [newLanguage, setNewLanguage] = useState("");
+
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof jobSeekerSchema>>({
     resolver: zodResolver(jobSeekerSchema),
     defaultValues: {
@@ -1214,12 +1220,6 @@ const JobSeekerForm = () => {
     },
   });
 
-  const [pending, setPending] = useState(false);
-  const [newSkill, setNewSkill] = useState("");
-  const [newLanguage, setNewLanguage] = useState("");
-
-  const router = useRouter();
-
   async function onSubmit(values: z.infer<typeof jobSeekerSchema>) {
     try {
       setPending(true);
@@ -1231,8 +1231,11 @@ const JobSeekerForm = () => {
         setTimeout(() => {
           router.push("/find-job");
         }, 1000);
+      } else {
+        toast.error("Failed to create profile");
       }
     } catch (error) {
+      console.log(error);
       if (error instanceof Error && error.message !== "NEXT_REDIRECT") {
         toast.error("Something went wrong. Please try again.");
       }
@@ -1269,9 +1272,12 @@ const JobSeekerForm = () => {
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
+    <Card className="w-full max-w-5xl mx-auto">
       <CardHeader>
-        <CardTitle>Job Seeker Profile</CardTitle>
+        <CardTitle className="text-xl text-center uppercase">
+          {" "}
+          Create Job Seeker Profile
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>

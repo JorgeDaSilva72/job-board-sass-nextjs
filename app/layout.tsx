@@ -17,7 +17,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Afrique Avenir Emploi",
   description:
-    "Afrique Avenir Emploi connects employers and talents across Africa through an intuitive platform for job posting and searching.",
+    "Afrique Avenir Emploi connects employers and talents across Africa through an intuitive platform for job posting and searching. ",
+  icons: {
+    icon: "/favicon.ico", // Chemin vers ton favicon
+  },
 };
 
 export default function RootLayout({
