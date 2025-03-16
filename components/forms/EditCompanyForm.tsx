@@ -34,6 +34,7 @@ import { useRouter } from "next/navigation";
 import { COMPANY_SIZES, INDUSTRIES } from "@/lib/companyUtils";
 import { EditCompanyFormProps } from "@/app/types/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Skeleton } from "../ui/skeleton";
 
 export default function EditCompanyForm({ company }: EditCompanyFormProps) {
   const [loading, setLoading] = useState(true);
@@ -50,7 +51,7 @@ export default function EditCompanyForm({ company }: EditCompanyFormProps) {
           website: company.Company.website ?? "",
           xAccount: company.Company.xAccount ?? "",
           industry: company.Company.industry ?? "",
-          companySize: company.Company.industry ?? undefined,
+          companySize: company.Company.companySize ?? undefined,
           countryCode: company.Company.countryCode ?? "",
           city: company.Company.city ?? "",
           phoneNumber: company.Company.phoneNumber ?? "",
@@ -61,11 +62,12 @@ export default function EditCompanyForm({ company }: EditCompanyFormProps) {
 
   // Fetch company data when component mounts
   useEffect(() => {
-    async function fetchCompanyData() {
-      if (!company) return;
+    if (!company || !company.Company) return;
 
+    setLoading(true);
+
+    async function fetchCompanyData() {
       try {
-        setLoading(true);
         const companyData = await getCompanyProfile();
 
         if (companyData) {
@@ -100,9 +102,19 @@ export default function EditCompanyForm({ company }: EditCompanyFormProps) {
     fetchCompanyData();
   }, [company, form, router]);
 
+  // const addLanguage = () => {
+  //   if (newLanguage && !form.getValues("languages").includes(newLanguage)) {
+  //     form.setValue("languages", [...form.getValues("languages"), newLanguage]);
+  //     setNewLanguage("");
+  //   }
+  // };
+
   const addLanguage = () => {
-    if (newLanguage && !form.getValues("languages").includes(newLanguage)) {
-      form.setValue("languages", [...form.getValues("languages"), newLanguage]);
+    const currentLanguages = form.getValues("languages") || [];
+    if (newLanguage && !currentLanguages.includes(newLanguage)) {
+      form.setValue("languages", [...currentLanguages, newLanguage], {
+        shouldValidate: true,
+      });
       setNewLanguage("");
     }
   };
@@ -114,6 +126,7 @@ export default function EditCompanyForm({ company }: EditCompanyFormProps) {
 
       if (result.success) {
         toast.success("Company profile updated successfully!");
+        router.refresh(); // Efface le cache et recharge les nouvelles données
         setTimeout(() => {
           router.push("/company/profile/");
         }, 1000);
@@ -130,10 +143,18 @@ export default function EditCompanyForm({ company }: EditCompanyFormProps) {
     }
   }
 
+  // if (loading) {
+  //   return (
+  //     <div className="flex justify-center items-center h-64">
+  //       <div className="text-center">Loading company data...</div>
+  //     </div>
+  //   );
+  // }
+
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="text-center">Loading company data...</div>
+      <div className="flex justify-center items-center h-screen">
+        <Skeleton className="w-full h-full" />
       </div>
     );
   }
@@ -141,7 +162,9 @@ export default function EditCompanyForm({ company }: EditCompanyFormProps) {
   return (
     <Card className="w-full max-w-5xl mx-auto">
       <CardHeader>
-        <CardTitle className="text-center">Edit Company Profile</CardTitle>
+        <CardTitle className="text-xl text-center uppercase">
+          Edit Company Profile
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -278,7 +301,7 @@ export default function EditCompanyForm({ company }: EditCompanyFormProps) {
                 )}
               />
 
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="countryCode"
                 render={({ field }) => (
@@ -294,11 +317,8 @@ export default function EditCompanyForm({ company }: EditCompanyFormProps) {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
-            </div>
+              /> */}
 
-            {/* City and Phone Number */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
                 name="city"
@@ -312,21 +332,10 @@ export default function EditCompanyForm({ company }: EditCompanyFormProps) {
                   </FormItem>
                 )}
               />
-
-              <FormField
-                control={form.control}
-                name="phoneNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Phone Number</FormLabel>
-                    <FormControl>
-                      <Input type="tel" placeholder="+1234567890" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
             </div>
+
+            {/* City and Phone Number */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
 
             {/* Two column layout for website and X account */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -375,6 +384,20 @@ export default function EditCompanyForm({ company }: EditCompanyFormProps) {
                         placeholder="https://linkedin.com/company/..."
                         {...field}
                       />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="phoneNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone Number</FormLabel>
+                    <FormControl>
+                      <Input type="tel" placeholder="+1234567890" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

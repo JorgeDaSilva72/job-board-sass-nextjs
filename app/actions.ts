@@ -576,41 +576,104 @@ export async function updateJobPost(
   data: z.infer<typeof jobSchema>,
   jobId: string
 ) {
-  const user = await requireUser();
+  try {
+    console.log("Début de l'action updateJobPost");
+    console.log("Données reçues:", data);
+    console.log("jobId reçu:", jobId);
 
-  // Access the request object so Arcjet can analyze it
-  const req = await request();
-  // Call Arcjet protect
-  const decision = await aj.protect(req);
+    const user = await requireUser();
 
-  if (decision.isDenied()) {
-    throw new Error("Forbidden");
+    // Vérification du jobId
+
+    if (!jobId) {
+      console.error("jobId is required");
+      // throw new Error("jobId is required");
+      return { success: false, error: "jobId is required" };
+    }
+
+    // Access the request object so Arcjet can analyze it
+    const req = await request();
+    // Call Arcjet protect
+    const decision = await aj.protect(req);
+
+    if (decision.isDenied()) {
+      console.error("Accès refusé par Arcjet");
+      // throw new Error("Forbidden");
+      return { success: false, error: "Forbidden by security rules" };
+    }
+
+    // Server-side validation
+    const validatedData = jobSchema.safeParse(data);
+
+    if (!validatedData.success) {
+      console.error("Validation error:", validatedData.error.format());
+      // throw new Error(`Invalid job data: ${validatedData.error.message}`);
+      return {
+        success: false,
+        error: `Invalid job data: ${validatedData.error.message}`,
+      };
+    }
+
+    console.log(
+      "Structure du validatedData:",
+      validatedData.success ? validatedData.data : "validatedData error"
+    );
+    // Check if the user has this job offer
+    const job = await prisma.jobPost.findUnique({
+      where: { id: jobId },
+      include: { company: true },
+    });
+
+    console.log("Job trouvé:", job);
+
+    if (!job) {
+      console.error("Job non trouvé");
+      // throw new Error("Job not found");
+      return { success: false, error: "Job not found" };
+    }
+
+    if (job.company?.userId !== user.id) {
+      console.error("Utilisateur non autorisé");
+      //
+      return {
+        success: false,
+        error: "Forbidden - You don't have permission to update this job",
+      };
+    }
+
+    if (validatedData.success) {
+      const updateData = {
+        jobTitle: validatedData.data.jobTitle,
+        employmentType: validatedData.data.employmentType,
+        location: validatedData.data.location,
+        salaryFrom: validatedData.data.salaryFrom,
+        salaryTo: validatedData.data.salaryTo,
+        jobDescription: validatedData.data.jobDescription,
+        benefits: validatedData.data.benefits,
+        listingDuration: validatedData.data.listingDuration,
+      };
+
+      console.log("Données envoyées à Prisma:", updateData);
+
+      // Job update
+      await prisma.jobPost.update({
+        where: {
+          id: jobId,
+        },
+        data: updateData,
+      });
+    }
+    // return redirect("/my-jobs");
+    console.log("Job mis à jour avec succès:");
+    return { success: true };
+  } catch (error) {
+    console.error("Error updating job post:", error);
+    // throw new Error("Error updating job post");
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
   }
-
-  // Server-side validation
-
-  const validatedData = jobSchema.parse(data);
-
-  await prisma.jobPost.update({
-    where: {
-      id: jobId,
-      company: {
-        userId: user.id,
-      },
-    },
-    data: {
-      jobDescription: validatedData.jobDescription,
-      jobTitle: validatedData.jobTitle,
-      employmentType: validatedData.employmentType,
-      location: validatedData.location,
-      salaryFrom: validatedData.salaryFrom,
-      salaryTo: validatedData.salaryTo,
-      listingDuration: validatedData.listingDuration,
-      benefits: validatedData.benefits,
-    },
-  });
-
-  return redirect("/my-jobs");
 }
 
 export async function deleteJobPost(jobId: string) {
@@ -955,17 +1018,41 @@ export async function updateCompany(data: z.infer<typeof companySchema>) {
     const decision = await aj.protect(req);
 
     if (decision.isDenied()) {
-      throw new Error("Forbidden");
+      console.error("Accès refusé par Arcjet");
+      // throw new Error("Forbidden");
+      return { success: false, error: "Forbidden by security rules" };
     }
 
+    // Server-side validation
     const validatedData = companySchema.safeParse(data);
 
     if (!validatedData.success) {
-      throw new Error(`Validation failed: ${validatedData.error.message}`);
+      console.error("Validation error:", validatedData.error.format());
+      // throw new Error(`Invalid job data: ${validatedData.error.message}`);
+      return {
+        success: false,
+        error: `Invalid job data: ${validatedData.error.message}`,
+      };
     }
 
-    // Vérifier si le jobSeeker existe déjà
-    const existingCompany = await prisma.company.findFirst({
+    const companyData = {
+      name: validatedData.data.name,
+      location: validatedData.data.location,
+      logo: validatedData.data.logo,
+      about: validatedData.data.about,
+      website: validatedData.data.website,
+      xAccount: validatedData.data.xAccount,
+      industry: validatedData.data.industry,
+      companySize: validatedData.data.companySize,
+      languages: validatedData.data.languages,
+      city: validatedData.data.city,
+      countryCode: validatedData.data.countryCode,
+      phoneNumber: validatedData.data.phoneNumber,
+      linkedinProfile: validatedData.data.linkedinProfile,
+    };
+
+    // Vérifier si company existe déjà
+    const existingCompany = await prisma.company.findUnique({
       where: {
         userId: user.id,
       },
@@ -978,21 +1065,7 @@ export async function updateCompany(data: z.infer<typeof companySchema>) {
         where: {
           userId: user.id,
         },
-        data: {
-          name: validatedData.data.name,
-          location: validatedData.data.location,
-          logo: validatedData.data.logo,
-          about: validatedData.data.about,
-          website: validatedData.data.website,
-          xAccount: validatedData.data.xAccount,
-          industry: validatedData.data.industry,
-          companySize: validatedData.data.companySize,
-          languages: validatedData.data.languages,
-          city: validatedData.data.city,
-          countryCode: validatedData.data.countryCode,
-          phoneNumber: validatedData.data.phoneNumber,
-          linkedinProfile: validatedData.data.linkedinProfile,
-        },
+        data: companyData,
       });
     } else {
       // Création d'un nouveau profil si aucun n'existe
@@ -1003,48 +1076,39 @@ export async function updateCompany(data: z.infer<typeof companySchema>) {
         data: {
           onboardingCompleted: true,
           userType: "COMPANY",
-          Company: {
-            create: {
-              name: validatedData.data.name,
-              location: validatedData.data.location,
-              logo: validatedData.data.logo,
-              about: validatedData.data.about,
-              website: validatedData.data.website,
-              xAccount: validatedData.data.xAccount,
-              industry: validatedData.data.industry,
-              companySize: validatedData.data.companySize,
-              languages: validatedData.data.languages,
-              city: validatedData.data.city,
-              countryCode: validatedData.data.countryCode,
-              phoneNumber: validatedData.data.phoneNumber,
-              linkedinProfile: validatedData.data.linkedinProfile,
-            },
-          },
+          Company: { create: companyData },
         },
       });
     }
     if (!result) {
-      throw new Error("Failed to update company profile");
+      console.error("Failed to update company profile");
+      return {
+        success: false,
+        error: "Failed to update company profile",
+      };
     }
-    // Revalidate the job seekers page to show updated data
-    // revalidatePath("/job-seekers");
 
-    // Redirect to a success page or dashboard
-    // redirect("/job-seekers/success");
-    // await new Promise((resolve) => setTimeout(resolve, 500)); //avant la redirection pour laisser le temps au toast d'apparaître.
-    // return redirect("/find-job");
-    return { success: true };
+    console.log("Company profile mis à jour avec succès:");
+    return { success: true, company: result };
   } catch (error) {
     // Log the error for debugging (in a production environment)
     console.error("Error updating company profile:", error);
     // Gestion des erreurs
     if (error instanceof z.ZodError) {
-      throw new Error(`Validation error: ${error.message}`);
+      // throw new Error(`Validation error: ${error.message}`);
+      return {
+        success: false,
+        error: `Validation error: ${error.message}`,
+      };
     }
-    if (error instanceof Error) {
-      throw new Error(`Failed to update company profile: ${error.message}`);
-    }
-    throw new Error("An unexpected error occurred");
+    // if (error instanceof Error) {
+    //   throw new Error(`Failed to update company profile: ${error.message}`);
+    // }
+    // throw new Error("An unexpected error occurred");
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
   }
 }
 

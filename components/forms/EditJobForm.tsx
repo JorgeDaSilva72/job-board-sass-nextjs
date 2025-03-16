@@ -35,7 +35,8 @@ import { SalaryRangeSelector } from "../general/SalaryRangeSelector";
 import JobDescriptionEditor from "../richTextEditor/JobDescriptionEditor";
 import BenefitsSelector from "../general/BenefitsSelector";
 import { updateJobPost } from "@/app/actions";
-// import { toast } from "sonner";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface iAppProps {
   jobPost: {
@@ -60,6 +61,12 @@ interface iAppProps {
 }
 
 export function EditJobForm({ jobPost }: iAppProps) {
+  // const [pending, setPending] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof jobSchema>>({
     resolver: zodResolver(jobSchema),
     defaultValues: {
@@ -80,26 +87,68 @@ export function EditJobForm({ jobPost }: iAppProps) {
     },
   });
 
-  const [pending, setPending] = useState(false);
   async function onSubmit(values: z.infer<typeof jobSchema>) {
+    console.log("onSubmit called", values);
     try {
-      setPending(true);
+      // Réinitialiser les états d'erreur
+      setSubmitError(null);
+      setIsSubmitting(true);
 
-      await updateJobPost(values, jobPost.id);
-    } catch (error) {
-      if (error instanceof Error && error.message !== "NEXT_REDIRECT") {
-        // toast.error("Something went wrong. Please try again.");
+      // Log les données avant envoi (utile pour le débogage)
+      console.log("Envoi des données au serveur:", values);
+
+      // Appel de l'action serveur
+      const result = await updateJobPost(values, jobPost.id);
+      console.log("Résultat de l'action serveur:", result);
+
+      // Traitement du résultat
+      if (result.success) {
+        toast.success("Job Post updated successfully!");
+
+        // Wait for toast to display before redirecting
+        setTimeout(() => {
+          router.push("/my-jobs");
+        }, 1500);
+      } else {
+        // Afficher l'erreur retournée par le serveur
+        const errorMessage = result.error || "Failed to update job post";
+        setSubmitError(errorMessage);
+        toast.error(errorMessage);
       }
+    } catch (error) {
+      // Capturer toute erreur inattendue
+      console.error("Erreur lors de la soumission:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "An unexpected error occurred";
+
+      setSubmitError(errorMessage);
+      toast.error(errorMessage);
     } finally {
-      setPending(false);
+      setIsSubmitting(false);
     }
   }
+
+  console.log("Form errors:", form.formState.errors);
   return (
     <Form {...form}>
       <form
+        // onSubmit={(e) => {
+        //   e.preventDefault();
+        //   console.log("Form submitted");
+        //   console.log("Form is valid:", form.formState.isValid);
+        //   console.log("Form errors:", form.formState.errors);
+        //   form.handleSubmit(onSubmit)();
+        // }}
         onSubmit={form.handleSubmit(onSubmit)}
         className="col-span-1   lg:col-span-2  flex flex-col gap-8"
       >
+        {/* Afficher les erreurs de soumission en haut du formulaire */}
+        {submitError && (
+          <div className="bg-red-50 border border-red-200 text-red-800 rounded-md p-4">
+            <p className="font-medium">Error submitting form</p>
+            <p>{submitError}</p>
+          </div>
+        )}
         <Card>
           <CardHeader>
             <CardTitle>Job Information</CardTitle>
@@ -428,8 +477,39 @@ export function EditJobForm({ jobPost }: iAppProps) {
         </Card>
  */}
 
-        <Button type="submit" className="w-full" disabled={pending}>
-          {pending ? "Submitting..." : "Edit Job Post"}
+        <Button
+          type="submit"
+          className="w-full"
+          // disabled={isSubmitting || !form.formState.isValid}
+          // disabled={isSubmitting}
+        >
+          {isSubmitting ? (
+            <span className="flex items-center gap-2">
+              <svg
+                className="animate-spin h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              Submitting...
+            </span>
+          ) : (
+            "Save changes"
+          )}
         </Button>
       </form>
     </Form>
