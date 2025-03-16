@@ -833,17 +833,47 @@ export async function updateJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
     const decision = await aj.protect(req);
 
     if (decision.isDenied()) {
-      throw new Error("Forbidden");
+      console.error("Accès refusé par Arcjet");
+      // throw new Error("Forbidden");
+      return { success: false, error: "Forbidden by security rules" };
     }
 
+    // Server-side validation
     const validatedData = jobSeekerSchema.safeParse(data);
 
     if (!validatedData.success) {
-      throw new Error(`Validation failed: ${validatedData.error.message}`);
+      console.error("Validation error:", validatedData.error.format());
+      return {
+        success: false,
+        error: `Invalid jobSeeker data: ${validatedData.error.message}`,
+      };
     }
 
+    const jobSeekerData = {
+      firstName: validatedData.data.firstName,
+      lastName: validatedData.data.lastName,
+      email: validatedData.data.email,
+      about: validatedData.data.about,
+      title: validatedData.data.title,
+      experience: validatedData.data.experience,
+      skills: validatedData.data.skills,
+      languages: validatedData.data.languages,
+      city: validatedData.data.city,
+      countryCode: validatedData.data.countryCode,
+      phoneNumber: validatedData.data.phoneNumber,
+      linkedinProfile: validatedData.data.linkedinProfile,
+      portfolioUrl: validatedData.data.portfolioUrl,
+      availability: validatedData.data
+        .availability as (typeof Availability)[keyof typeof Availability],
+      preferredJobType: validatedData.data.preferredJobType as Array<
+        (typeof JobType)[keyof typeof JobType]
+      >,
+      expectedSalary: validatedData.data.expectedSalary,
+      resume: validatedData.data.resume,
+    };
+
     // Vérifier si le jobSeeker existe déjà
-    const existingJobSeeker = await prisma.jobSeeker.findFirst({
+    const existingJobSeeker = await prisma.jobSeeker.findUnique({
       where: {
         userId: user.id,
       },
@@ -856,28 +886,7 @@ export async function updateJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
         where: {
           userId: user.id,
         },
-        data: {
-          firstName: validatedData.data.firstName,
-          lastName: validatedData.data.lastName,
-          email: validatedData.data.email,
-          about: validatedData.data.about,
-          title: validatedData.data.title,
-          experience: validatedData.data.experience,
-          skills: validatedData.data.skills,
-          languages: validatedData.data.languages,
-          city: validatedData.data.city,
-          countryCode: validatedData.data.countryCode,
-          phoneNumber: validatedData.data.phoneNumber,
-          linkedinProfile: validatedData.data.linkedinProfile,
-          portfolioUrl: validatedData.data.portfolioUrl,
-          availability: validatedData.data
-            .availability as (typeof Availability)[keyof typeof Availability],
-          preferredJobType: validatedData.data.preferredJobType as Array<
-            (typeof JobType)[keyof typeof JobType]
-          >,
-          expectedSalary: validatedData.data.expectedSalary,
-          resume: validatedData.data.resume,
-        },
+        data: jobSeekerData,
       });
     } else {
       // Création d'un nouveau profil si aucun n'existe
@@ -889,54 +898,34 @@ export async function updateJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
           onboardingCompleted: true,
           userType: "JOB_SEEKER",
           JobSeeker: {
-            create: {
-              firstName: validatedData.data.firstName,
-              lastName: validatedData.data.lastName,
-              email: validatedData.data.email,
-              about: validatedData.data.about,
-              title: validatedData.data.title,
-              experience: validatedData.data.experience,
-              skills: validatedData.data.skills,
-              languages: validatedData.data.languages,
-              city: validatedData.data.city,
-              countryCode: validatedData.data.countryCode,
-              phoneNumber: validatedData.data.phoneNumber,
-              linkedinProfile: validatedData.data.linkedinProfile,
-              portfolioUrl: validatedData.data.portfolioUrl,
-              availability: validatedData.data
-                .availability as (typeof Availability)[keyof typeof Availability],
-              preferredJobType: validatedData.data.preferredJobType as Array<
-                (typeof JobType)[keyof typeof JobType]
-              >,
-              expectedSalary: validatedData.data.expectedSalary,
-              resume: validatedData.data.resume,
-            },
+            create: jobSeekerData,
           },
         },
       });
     }
     if (!result) {
-      throw new Error("Failed to update job seeker profile");
+      console.error("Failed to update jobSeeker profile");
+      return {
+        success: false,
+        error: "Failed to update jobSeeker profile",
+      };
     }
-    // Revalidate the job seekers page to show updated data
-    // revalidatePath("/job-seekers");
-
-    // Redirect to a success page or dashboard
-    // redirect("/job-seekers/success");
-    // await new Promise((resolve) => setTimeout(resolve, 500)); //avant la redirection pour laisser le temps au toast d'apparaître.
-    // return redirect("/find-job");
-    return { success: true };
+    console.log("jobSeeker profile mis à jour avec succès:");
+    return { success: true, jobSeeker: result };
   } catch (error) {
     // Log the error for debugging (in a production environment)
-    console.error("Error updating  job seeker:", error);
+    console.error("Error updating  job seeker profile:", error);
     // Gestion des erreurs
     if (error instanceof z.ZodError) {
-      throw new Error(`Validation error: ${error.message}`);
+      return {
+        success: false,
+        error: `Validation error: ${error.message}`,
+      };
     }
-    if (error instanceof Error) {
-      throw new Error(`Failed to update job seeker: ${error.message}`);
-    }
-    throw new Error("An unexpected error occurred");
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
   }
 }
 
@@ -1028,10 +1017,9 @@ export async function updateCompany(data: z.infer<typeof companySchema>) {
 
     if (!validatedData.success) {
       console.error("Validation error:", validatedData.error.format());
-      // throw new Error(`Invalid job data: ${validatedData.error.message}`);
       return {
         success: false,
-        error: `Invalid job data: ${validatedData.error.message}`,
+        error: `Invalid company data: ${validatedData.error.message}`,
       };
     }
 

@@ -63,6 +63,8 @@ const EditJobSeekerForm = ({ jobSeeker }: EditJobSeekerFormProps) => {
   });
 
   useEffect(() => {
+    if (!jobSeeker || !jobSeeker.JobSeeker) return;
+
     const fetchJobSeekerData = async () => {
       try {
         setIsLoading(true);
@@ -105,7 +107,7 @@ const EditJobSeekerForm = ({ jobSeeker }: EditJobSeekerFormProps) => {
     };
 
     fetchJobSeekerData();
-  }, [form, router]);
+  }, [jobSeeker, form, router]);
 
   async function onSubmit(values: z.infer<typeof jobSeekerSchema>) {
     try {
@@ -114,7 +116,7 @@ const EditJobSeekerForm = ({ jobSeeker }: EditJobSeekerFormProps) => {
 
       if (result.success) {
         toast.success("Profile updated successfully!");
-
+        router.refresh(); // Efface le cache et recharge les nouvelles données
         // Wait for toast to display before redirecting
         setTimeout(() => {
           router.push("/job-seeker/profile");
@@ -168,9 +170,11 @@ const EditJobSeekerForm = ({ jobSeeker }: EditJobSeekerFormProps) => {
   }
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
+    <Card className="w-full max-w-5xl mx-auto">
       <CardHeader>
-        <CardTitle>Edit Profile</CardTitle>
+        <CardTitle className="text-xl text-center uppercase">
+          Edit JobSeeker Profile
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>

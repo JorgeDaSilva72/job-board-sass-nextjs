@@ -64,10 +64,9 @@ export default function EditCompanyForm({ company }: EditCompanyFormProps) {
   useEffect(() => {
     if (!company || !company.Company) return;
 
-    setLoading(true);
-
     async function fetchCompanyData() {
       try {
+        setLoading(true);
         const companyData = await getCompanyProfile();
 
         if (companyData) {
