@@ -19,16 +19,17 @@ const JobSeekerProfilePage = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const profileData = await getJobSeekerProfile();
-        if (profileData) {
-          setProfile(profileData);
+        const response = await getJobSeekerProfile();
+        if (response.success && response.data) {
+          setProfile(response.data);
         } else {
-          toast.error("Failed to load profile data");
+          toast.error(response.error || "Failed to load profile data");
           router.push("/find-job");
         }
       } catch (error) {
         console.error("Error fetching profile:", error);
         toast.error("Failed to load profile data");
+        router.push("/find-job");
       } finally {
         setIsLoading(false);
       }

@@ -759,12 +759,13 @@ export async function unsaveJobPost(savedJobPostId: string) {
 
 export async function getJobSeekerProfile() {
   try {
+    const DEBUG = true; // Active/Désactive les logs
+    if (DEBUG) console.log("Début de l'action createJobSeeker");
+
     // Vérification de l'authentification
     const user = await requireUser();
 
-    if (!user) {
-      throw new Error("Unauthorized");
-    }
+    if (!user) return { success: false, error: "Unauthorized" };
 
     // Protection Arcjet
     // Access the request object so Arcjet can analyze it
@@ -773,7 +774,8 @@ export async function getJobSeekerProfile() {
     const decision = await aj.protect(req);
 
     if (decision.isDenied()) {
-      throw new Error("Forbidden");
+      if (DEBUG) console.error("Accès refusé par Arcjet");
+      return { success: false, error: "Forbidden by security rules" };
     }
 
     const jobSeeker = await prisma.user.findUnique({
@@ -811,15 +813,19 @@ export async function getJobSeekerProfile() {
       },
     });
 
-    if (!jobSeeker) {
-      return notFound();
+    // Vérification de l'existence du JobSeeker
+    if (!jobSeeker?.JobSeeker) {
+      return { success: false, error: "Job seeker profile not found" };
     }
 
-    return jobSeeker;
+    return { success: true, data: jobSeeker };
   } catch (error) {
     // Log the error for debugging (in a production environment)
-    console.error("Error fetching  job seeker profile:", error);
-    throw new Error("An unexpected error occurred");
+    console.error("Error fetching job seeker profile:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
   }
 }
 
