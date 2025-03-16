@@ -4,7 +4,7 @@ import { z } from "zod";
 import { requireUser } from "./utils/hooks";
 import { companySchema, jobSchema, jobSeekerSchema } from "./utils/zodSchemas";
 import { prisma } from "./utils/db";
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import { stripe } from "./utils/stripe";
 import { jobListingDurationPricing } from "./utils/pricingTiers";
 import arcjet, { detectBot, shield } from "./utils/arcjet";
