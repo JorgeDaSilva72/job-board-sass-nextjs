@@ -68,34 +68,34 @@ const EditJobSeekerForm = ({ jobSeeker }: EditJobSeekerFormProps) => {
     const fetchJobSeekerData = async () => {
       try {
         setIsLoading(true);
-        const profile = await getJobSeekerProfile();
+        const response = await getJobSeekerProfile();
 
-        if (profile) {
+        if (response.success && response.data) {
           // Update form with existing data
           form.reset({
-            firstName: profile.JobSeeker?.firstName,
-            lastName: profile.JobSeeker?.lastName,
-            email: profile.JobSeeker?.email,
-            about: profile.JobSeeker?.about || "",
-            title: profile.JobSeeker?.title || "",
-            experience: profile.JobSeeker?.experience || 0,
-            skills: profile.JobSeeker?.skills || [],
-            languages: profile.JobSeeker?.languages || [],
-            city: profile.JobSeeker?.city || "",
-            countryCode: profile.JobSeeker?.countryCode || "",
-            phoneNumber: profile.JobSeeker?.phoneNumber || "",
-            linkedinProfile: profile.JobSeeker?.linkedinProfile || "",
-            portfolioUrl: profile.JobSeeker?.portfolioUrl || "",
+            firstName: response.data.JobSeeker?.firstName,
+            lastName: response.data.JobSeeker?.lastName,
+            email: response.data.JobSeeker?.email,
+            about: response.data.JobSeeker?.about || "",
+            title: response.data.JobSeeker?.title || "",
+            experience: response.data.JobSeeker?.experience || 0,
+            skills: response.data.JobSeeker?.skills || [],
+            languages: response.data.JobSeeker?.languages || [],
+            city: response.data.JobSeeker?.city || "",
+            countryCode: response.data.JobSeeker?.countryCode || "",
+            phoneNumber: response.data.JobSeeker?.phoneNumber || "",
+            linkedinProfile: response.data.JobSeeker?.linkedinProfile || "",
+            portfolioUrl: response.data.JobSeeker?.portfolioUrl || "",
             availability:
-              profile.JobSeeker?.availability || Availability.IMMEDIATE,
-            preferredJobType: profile.JobSeeker?.preferredJobType || [
+              response.data.JobSeeker?.availability || Availability.IMMEDIATE,
+            preferredJobType: response.data.JobSeeker?.preferredJobType || [
               JobType.FULL_TIME,
             ],
-            expectedSalary: profile.JobSeeker?.expectedSalary || 0,
-            resume: profile.JobSeeker?.resume || "",
+            expectedSalary: response.data.JobSeeker?.expectedSalary || 0,
+            resume: response.data.JobSeeker?.resume || "",
           });
         } else {
-          toast.error("Failed to load profile data");
+          toast.error(response.error || "Failed to load profile data");
           router.push("/find-job");
         }
       } catch (error) {
