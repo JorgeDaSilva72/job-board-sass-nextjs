@@ -173,7 +173,7 @@ const EditJobSeekerForm = ({ jobSeeker }: EditJobSeekerFormProps) => {
     <Card className="w-full max-w-5xl mx-auto">
       <CardHeader>
         <CardTitle className="text-xl text-center uppercase">
-          Edit JobSeeker Profile
+          Edit Job Seeker Profile
         </CardTitle>
       </CardHeader>
       <CardContent>

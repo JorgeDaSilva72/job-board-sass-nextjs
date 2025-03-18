@@ -942,12 +942,11 @@ export async function updateJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
 
 export async function getCompanyProfile() {
   try {
+    const DEBUG = true; // Active/Désactive les logs
     // Vérification de l'authentification
     const user = await requireUser();
 
-    if (!user) {
-      throw new Error("Unauthorized");
-    }
+    if (!user) return { success: false, error: "Unauthorized" };
 
     // Protection Arcjet
     // Access the request object so Arcjet can analyze it
@@ -956,7 +955,8 @@ export async function getCompanyProfile() {
     const decision = await aj.protect(req);
 
     if (decision.isDenied()) {
-      throw new Error("Forbidden");
+      if (DEBUG) console.error("Accès refusé par Arcjet");
+      return { success: false, error: "Forbidden by security rules" };
     }
 
     const company = await prisma.user.findUnique({
@@ -991,15 +991,19 @@ export async function getCompanyProfile() {
       },
     });
 
-    if (!company) {
-      return null;
+    // Vérification de l'existence de company
+    if (!company?.Company) {
+      return { success: false, error: "Company profile not found" };
     }
 
-    return company;
+    return { success: true, data: company };
   } catch (error) {
     // Log the error for debugging (in a production environment)
-    console.error("Error fetching  company profile:", error);
-    return null;
+    console.error("Error fetching company profile:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
   }
 }
 
