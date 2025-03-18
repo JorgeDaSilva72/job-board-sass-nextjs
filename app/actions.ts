@@ -1008,12 +1008,11 @@ export async function getCompanyProfile() {
 }
 
 export async function updateCompany(data: z.infer<typeof companySchema>) {
+  const DEBUG = true; // Active/Désactive les logs
   try {
     // Vérification de l'authentification
     const user = await requireUser();
-    if (!user) {
-      throw new Error("Unauthorized");
-    }
+    if (!user) return { success: false, error: "Unauthorized" };
 
     // Protection Arcjet
     //Access the request object so Arcjet can analyze it
@@ -1022,8 +1021,7 @@ export async function updateCompany(data: z.infer<typeof companySchema>) {
     const decision = await aj.protect(req);
 
     if (decision.isDenied()) {
-      console.error("Accès refusé par Arcjet");
-      // throw new Error("Forbidden");
+      if (DEBUG) console.error("Accès refusé par Arcjet");
       return { success: false, error: "Forbidden by security rules" };
     }
 
@@ -1031,83 +1029,78 @@ export async function updateCompany(data: z.infer<typeof companySchema>) {
     const validatedData = companySchema.safeParse(data);
 
     if (!validatedData.success) {
-      console.error("Validation error:", validatedData.error.format());
+      if (DEBUG)
+        console.error("Validation error:", validatedData.error.format());
       return {
         success: false,
         error: `Invalid company data: ${validatedData.error.message}`,
       };
     }
 
-    const companyData = {
-      name: validatedData.data.name,
-      location: validatedData.data.location,
-      logo: validatedData.data.logo,
-      about: validatedData.data.about,
-      website: validatedData.data.website,
-      xAccount: validatedData.data.xAccount,
-      industry: validatedData.data.industry,
-      companySize: validatedData.data.companySize,
-      languages: validatedData.data.languages,
-      city: validatedData.data.city,
-      countryCode: validatedData.data.countryCode,
-      phoneNumber: validatedData.data.phoneNumber,
-      linkedinProfile: validatedData.data.linkedinProfile,
-    };
+    // const companyData = {
+    //   name: validatedData.data.name,
+    //   location: validatedData.data.location,
+    //   logo: validatedData.data.logo,
+    //   about: validatedData.data.about,
+    //   website: validatedData.data.website,
+    //   xAccount: validatedData.data.xAccount,
+    //   industry: validatedData.data.industry,
+    //   companySize: validatedData.data.companySize,
+    //   languages: validatedData.data.languages,
+    //   city: validatedData.data.city,
+    //   countryCode: validatedData.data.countryCode,
+    //   phoneNumber: validatedData.data.phoneNumber,
+    //   linkedinProfile: validatedData.data.linkedinProfile,
+    // };
 
-    // Vérifier si company existe déjà
-    const existingCompany = await prisma.company.findUnique({
-      where: {
-        userId: user.id,
-      },
-    });
+    const companyData = validatedData.data;
 
-    let result;
-
-    if (existingCompany) {
-      result = await prisma.company.update({
+    // Vérifier si company existe déjà et mettre à jour avec une transaction
+    return await prisma.$transaction(async (tx) => {
+      const existingCompany = await tx.company.findUnique({
         where: {
           userId: user.id,
         },
-        data: companyData,
       });
-    } else {
-      // Création d'un nouveau profil si aucun n'existe
-      result = await prisma.user.update({
-        where: {
-          id: user.id,
-        },
-        data: {
-          onboardingCompleted: true,
-          userType: "COMPANY",
-          Company: { create: companyData },
-        },
-      });
-    }
-    if (!result) {
-      console.error("Failed to update company profile");
-      return {
-        success: false,
-        error: "Failed to update company profile",
-      };
-    }
 
-    console.log("Company profile mis à jour avec succès:");
-    return { success: true, company: result };
+      let result;
+
+      if (existingCompany) {
+        // Mise à jour de l'entreprise existante
+        const updatedCompany = await tx.company.update({
+          where: {
+            userId: user.id,
+          },
+          data: companyData,
+        });
+        result = { companyDetails: updatedCompany };
+      } else {
+        // Création d'un nouveau profil si aucun n'existe avec mise à jour de l'utilisateur
+        const updatedUser = await tx.user.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            onboardingCompleted: true,
+            userType: "COMPANY",
+            Company: { create: companyData },
+          },
+          include: { Company: true },
+        });
+        result = {
+          userUpdated: true,
+          companyDetails: updatedUser.Company,
+        };
+      }
+
+      if (DEBUG) console.log("Company profile mis à jour avec succès:");
+      return { success: true, data: result };
+    });
   } catch (error) {
     // Log the error for debugging (in a production environment)
-    console.error("Error updating company profile:", error);
+    if (DEBUG) console.error("Error updating company profile:", error);
     // Gestion des erreurs
-    if (error instanceof z.ZodError) {
-      // throw new Error(`Validation error: ${error.message}`);
-      return {
-        success: false,
-        error: `Validation error: ${error.message}`,
-      };
-    }
-    // if (error instanceof Error) {
-    //   throw new Error(`Failed to update company profile: ${error.message}`);
-    // }
-    // throw new Error("An unexpected error occurred");
+
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",

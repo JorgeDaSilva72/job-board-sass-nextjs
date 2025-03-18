@@ -8,15 +8,15 @@ import React from "react";
 export const dynamic = "force-dynamic";
 
 const EditCompanyPage = async () => {
-  const company = await getCompanyProfile();
+  const response = await getCompanyProfile();
 
-  if (!company) {
+  if (!response.success || !response.data) {
     return notFound();
   }
 
   return (
     <>
-      <EditCompanyForm company={company} />
+      <EditCompanyForm company={response.data} />
     </>
   );
 };
