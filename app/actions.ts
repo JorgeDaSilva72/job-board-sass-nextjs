@@ -830,12 +830,11 @@ export async function getJobSeekerProfile() {
 }
 
 export async function updateJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
+  const DEBUG = true; // Active/Désactive les logs
   try {
     // Vérification de l'authentification
     const user = await requireUser();
-    if (!user) {
-      throw new Error("Unauthorized");
-    }
+    if (!user) return { success: false, error: "Unauthorized" };
 
     // Protection Arcjet
     //Access the request object so Arcjet can analyze it
@@ -844,8 +843,7 @@ export async function updateJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
     const decision = await aj.protect(req);
 
     if (decision.isDenied()) {
-      console.error("Accès refusé par Arcjet");
-      // throw new Error("Forbidden");
+      if (DEBUG) console.error("Accès refusé par Arcjet");
       return { success: false, error: "Forbidden by security rules" };
     }
 
@@ -853,7 +851,8 @@ export async function updateJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
     const validatedData = jobSeekerSchema.safeParse(data);
 
     if (!validatedData.success) {
-      console.error("Validation error:", validatedData.error.format());
+      if (DEBUG)
+        console.error("Validation error:", validatedData.error.format());
       return {
         success: false,
         error: `Invalid jobSeeker data: ${validatedData.error.message}`,
@@ -883,56 +882,57 @@ export async function updateJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
       resume: validatedData.data.resume,
     };
 
+    // Utiliser directement les données validées
+    // const jobSeekerData = validatedData.data;
+
+    // Utiliser une transaction pour assurer l'atomicité des opérations
     // Vérifier si le jobSeeker existe déjà
-    const existingJobSeeker = await prisma.jobSeeker.findUnique({
-      where: {
-        userId: user.id,
-      },
-    });
-
-    let result;
-
-    if (existingJobSeeker) {
-      result = await prisma.jobSeeker.update({
+    return await prisma.$transaction(async (tx) => {
+      const existingJobSeeker = await tx.jobSeeker.findUnique({
         where: {
           userId: user.id,
         },
-        data: jobSeekerData,
       });
-    } else {
-      // Création d'un nouveau profil si aucun n'existe
-      result = await prisma.user.update({
-        where: {
-          id: user.id,
-        },
-        data: {
-          onboardingCompleted: true,
-          userType: "JOB_SEEKER",
-          JobSeeker: {
-            create: jobSeekerData,
+
+      let result;
+
+      if (existingJobSeeker) {
+        // Mise à jour du profil existant
+        const updatedJobSeeker = await tx.jobSeeker.update({
+          where: {
+            userId: user.id,
           },
-        },
-      });
-    }
-    if (!result) {
-      console.error("Failed to update jobSeeker profile");
-      return {
-        success: false,
-        error: "Failed to update jobSeeker profile",
-      };
-    }
-    console.log("jobSeeker profile mis à jour avec succès:");
-    return { success: true, jobSeeker: result };
+          data: jobSeekerData,
+        });
+        result = { jobSeekerDetails: updatedJobSeeker };
+      } else {
+        // Création d'un nouveau profil si aucun n'existe avec mise à jour de l'utilisateur
+        const updatedUser = await tx.user.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            onboardingCompleted: true,
+            userType: "JOB_SEEKER",
+            JobSeeker: {
+              create: jobSeekerData,
+            },
+          },
+          include: { JobSeeker: true },
+        });
+        result = {
+          userUpdated: true,
+          jobSeekerDetails: updatedUser.JobSeeker,
+        };
+      }
+      if (DEBUG) console.log("JobSeeker profile mis à jour avec succès");
+      return { success: true, data: result };
+    });
   } catch (error) {
     // Log the error for debugging (in a production environment)
-    console.error("Error updating  job seeker profile:", error);
+    if (DEBUG) console.error("Error updating  job seeker profile:", error);
     // Gestion des erreurs
-    if (error instanceof z.ZodError) {
-      return {
-        success: false,
-        error: `Validation error: ${error.message}`,
-      };
-    }
+    // Retourner une réponse d'erreur standardisée
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",
