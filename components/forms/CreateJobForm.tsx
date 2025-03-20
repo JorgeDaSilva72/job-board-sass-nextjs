@@ -98,13 +98,16 @@ export function CreateJobForm({
     try {
       setPending(true);
       const result = await createJob(values);
+      // if (result.success) {
+      //   toast.success("Job posting created successfully!");
+      // }
       if (result.error) {
         toast.error(result.error);
         return;
       }
-      if (result.redirect) {
+      if (result.redirectUrl) {
         // Rediriger côté client
-        window.location.href = result.redirect;
+        window.location.href = result.redirectUrl;
       }
     } catch (error) {
       console.error("Error:", error);

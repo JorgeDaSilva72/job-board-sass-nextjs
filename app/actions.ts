@@ -353,14 +353,213 @@ export async function createJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
 //   }
 // }
 
+// export async function createJob(data: z.infer<typeof jobSchema>) {
+//   const DEBUG = true; // Active/Désactive les logs
+//   try {
+//     if (DEBUG) console.log("Début de l'action createJob", { data });
+//     // Vérification de l'authentification
+//     const user = await requireUser();
+//     if (!user) {
+//       return { success: false, error: "Unauthorized" };
+//     }
+
+//     // Protection Arcjet
+
+//     // Access the request object so Arcjet can analyze it
+//     const req = await request();
+//     // Call Arcjet protect
+//     const decision = await aj.protect(req);
+
+//     if (decision.isDenied()) {
+//       if (DEBUG) console.error("Accès refusé par Arcjet");
+//       return { success: false, error: "Forbidden by security rules" };
+//     }
+
+//     // sanitization
+//     const sanitizedData = {
+//       ...data,
+//       jobTitle: data.jobTitle?.trim(),
+//       jobDescription: data.jobDescription?.trim(),
+//       location: data.location?.trim(),
+//       benefits: data.benefits?.map((benefit) => benefit.trim()),
+//       // Les champs numériques n'ont pas besoin d'être sanitized car ils seront validés par Zod
+//     };
+
+//     // Server-side validation
+//     const validatedFields = jobSchema.safeParse(sanitizedData);
+//     if (!validatedFields.success) {
+//       return {
+//         success: false,
+//         error: `Validation failed: ${validatedFields.error.message}`,
+//       };
+//     }
+
+//     // Utiliser les données validées
+//     const validatedData = validatedFields.data;
+
+//     // Vérification que salaryFrom est inférieur à salaryTo
+//     if (validatedData.salaryFrom >= validatedData.salaryTo) {
+//       return {
+//         success: false,
+//         error: "Minimum salary must be less than maximum salary",
+//       };
+//     }
+
+//     // Validation des variables d'environnement
+//     if (!process.env.NEXT_PUBLIC_URL) {
+//       return {
+//         success: false,
+//         error: "Missing NEXT_PUBLIC_URL environment variable",
+//       };
+//     }
+
+//     // Exécuter toutes les opérations dans une seule transaction
+//     const result = await prisma.$transaction(async (tx) => {
+//       // Vérification de la compagnie associée à l'utilisateur
+//       const company = await tx.company.findUnique({
+//         where: {
+//           userId: user.id,
+//         },
+//         select: {
+//           id: true,
+//           user: {
+//             select: {
+//               stripeCustomerId: true,
+//             },
+//           },
+//         },
+//       });
+
+//       if (!company?.id) {
+//         return {
+//           success: false,
+//           error: "Company profile not found",
+//           redirect: "/",
+//         };
+//       }
+
+//       let stripeCustomerId = company.user.stripeCustomerId;
+
+//       // Si pas de stripeCustomerId, créer le customer
+//       if (!stripeCustomerId) {
+//         const customer = await stripe.customers.create({
+//           email: user.email!,
+//           name: user.name || undefined,
+//         });
+
+//         stripeCustomerId = customer.id;
+
+//         // Mettre à jour l'utilisateur avec le Stripe customer ID
+//         await tx.user.update({
+//           where: { id: user.id },
+//           data: { stripeCustomerId: customer.id },
+//         });
+//       }
+
+//       // Créer l'offre d'emploi
+//       const jobPost = await tx.jobPost.create({
+//         data: {
+//           companyId: company.id,
+//           jobDescription: validatedData.jobDescription,
+//           jobTitle: validatedData.jobTitle,
+//           employmentType: validatedData.employmentType,
+//           location: validatedData.location,
+//           salaryFrom: validatedData.salaryFrom,
+//           salaryTo: validatedData.salaryTo,
+//           listingDuration: validatedData.listingDuration,
+//           benefits: validatedData.benefits,
+//         },
+//       });
+
+//       // Get price from pricing tiers based on duration
+//       const pricingTier = jobListingDurationPricing.find(
+//         (tier) => tier.days === validatedData.listingDuration
+//       );
+
+//       if (!pricingTier) {
+//         return { success: false, error: "Invalid listing duration selected" };
+//       }
+
+//       // MISE EN PAUSE POUR LE DEVELOPPEMENT
+//       // Trigger the job expiration function
+//       // await inngest.send({
+//       //   name: "job/created",
+//       //   data: {
+//       //     jobId: jobPost.id,
+//       //     expirationDays: validatedData.listingDuration,
+//       //   },
+//       // });
+
+//       // Créer la session Stripe
+//       const session = await stripe.checkout.sessions.create({
+//         customer: stripeCustomerId!,
+//         line_items: [
+//           {
+//             price_data: {
+//               product_data: {
+//                 name: `Job Posting - ${pricingTier.days} Days`,
+//                 description: pricingTier.description,
+//                 images: [
+//                   "https://pve1u6tfz1.ufs.sh/f/Ae8VfpRqE7c0gFltIEOxhiBIFftvV4DTM8a13LU5EyzGb2SQ",
+//                 ],
+//               },
+//               currency: "USD",
+//               unit_amount: pricingTier.price * 100, // Convert to cents for Stripe
+//             },
+//             quantity: 1,
+//           },
+//         ],
+//         mode: "payment",
+//         metadata: {
+//           jobId: jobPost.id,
+//         },
+//         success_url: `${process.env.NEXT_PUBLIC_URL}/payment/success`,
+//         cancel_url: `${process.env.NEXT_PUBLIC_URL}/payment/cancel`,
+//       });
+//       return {
+//         success: true,
+//         data: { jobPost, session },
+//       };
+//     });
+
+//     // Gérer le redirection spéciale si nécessaire
+//     if (result.redirect) {
+//       return { success: false, error: result.error, redirect: result.redirect };
+//     }
+
+//     // Gérer les erreurs
+//     if (!result.success) {
+//       return { success: false, error: result.error };
+//     }
+//     // Retourner l'URL de redirection vers Stripe
+//     return {
+//       success: true,
+//       data: result?.data?.jobPost,
+//       redirectUrl: result?.data?.session.url,
+//     };
+//   } catch (error) {
+//     console.error("Error creating job post:", error);
+//     if (error instanceof z.ZodError) {
+//       return {
+//         success: false,
+//         error: "Invalid input data",
+//         details: error.errors,
+//       };
+//     }
+//     return {
+//       success: false,
+//       error:
+//         error instanceof Error ? error.message : "An unexpected error occurred",
+//     };
+//   }
+// }
+
 export async function createJob(data: z.infer<typeof jobSchema>) {
-  const DEBUG = true; // Active/Désactive les logs
   try {
-    if (DEBUG) console.log("Début de l'action createJob", { data });
     // Vérification de l'authentification
     const user = await requireUser();
     if (!user) {
-      return { success: false, error: "Unauthorized" };
+      throw new Error("Unauthorized");
     }
 
     // Protection Arcjet
@@ -371,8 +570,7 @@ export async function createJob(data: z.infer<typeof jobSchema>) {
     const decision = await aj.protect(req);
 
     if (decision.isDenied()) {
-      if (DEBUG) console.error("Accès refusé par Arcjet");
-      return { success: false, error: "Forbidden by security rules" };
+      throw new Error("Forbidden");
     }
 
     // sanitization
@@ -388,10 +586,7 @@ export async function createJob(data: z.infer<typeof jobSchema>) {
     // Server-side validation
     const validatedFields = jobSchema.safeParse(sanitizedData);
     if (!validatedFields.success) {
-      return {
-        success: false,
-        error: `Validation failed: ${validatedFields.error.message}`,
-      };
+      throw new Error(`Validation failed: ${validatedFields.error.message}`);
     }
 
     // Utiliser les données validées
@@ -399,48 +594,44 @@ export async function createJob(data: z.infer<typeof jobSchema>) {
 
     // Vérification que salaryFrom est inférieur à salaryTo
     if (validatedData.salaryFrom >= validatedData.salaryTo) {
-      return {
-        success: false,
-        error: "Minimum salary must be less than maximum salary",
-      };
+      throw new Error("Minimum salary must be less than maximum salary");
     }
 
-    // Validation des variables d'environnement
-    if (!process.env.NEXT_PUBLIC_URL) {
-      return {
-        success: false,
-        error: "Missing NEXT_PUBLIC_URL environment variable",
-      };
-    }
-
-    // Exécuter toutes les opérations dans une seule transaction
-    const result = await prisma.$transaction(async (tx) => {
-      // Vérification de la compagnie associée à l'utilisateur
-      const company = await tx.company.findUnique({
-        where: {
-          userId: user.id,
-        },
-        select: {
-          id: true,
-          user: {
-            select: {
-              stripeCustomerId: true,
-            },
+    const company = await prisma.company.findUnique({
+      where: {
+        userId: user.id,
+      },
+      select: {
+        id: true,
+        user: {
+          select: {
+            stripeCustomerId: true,
           },
         },
-      });
+      },
+    });
 
-      if (!company?.id) {
-        return {
-          success: false,
-          error: "Company profile not found",
-          redirect: "/",
-        };
-      }
+    if (!company?.id) {
+      // return redirect("/");
 
-      let stripeCustomerId = company.user.stripeCustomerId;
+      // return Response.redirect(new URL("/", process.env.NEXT_PUBLIC_URL!), 303);
 
-      // Si pas de stripeCustomerId, créer le customer
+      // Pour les redirections internes, utiliser redirect de next/navigation
+      redirect("/");
+    }
+
+    let stripeCustomerId = company.user.stripeCustomerId;
+
+    // validation for required environment variables
+    if (!process.env.NEXT_PUBLIC_URL) {
+      throw new Error("Missing NEXT_PUBLIC_URL environment variable");
+    }
+
+    // Wrapper les opérations de base de données dans une transaction
+    const [jobPost] = await prisma.$transaction(async (tx) => {
+      let userUpdate = null;
+
+      // Si pas de stripeCustomerId, créer le customer et mettre à jour l'utilisateur
       if (!stripeCustomerId) {
         const customer = await stripe.customers.create({
           email: user.email!,
@@ -449,15 +640,15 @@ export async function createJob(data: z.infer<typeof jobSchema>) {
 
         stripeCustomerId = customer.id;
 
-        // Mettre à jour l'utilisateur avec le Stripe customer ID
-        await tx.user.update({
+        userUpdate = await tx.user.update({
           where: { id: user.id },
           data: { stripeCustomerId: customer.id },
         });
+        console.log("userUpdate:", userUpdate);
       }
 
-      // Créer l'offre d'emploi
-      const jobPost = await tx.jobPost.create({
+      // Créer le job post
+      const job = await tx.jobPost.create({
         data: {
           companyId: company.id,
           jobDescription: validatedData.jobDescription,
@@ -471,86 +662,116 @@ export async function createJob(data: z.infer<typeof jobSchema>) {
         },
       });
 
-      // Get price from pricing tiers based on duration
-      const pricingTier = jobListingDurationPricing.find(
-        (tier) => tier.days === validatedData.listingDuration
-      );
-
-      if (!pricingTier) {
-        return { success: false, error: "Invalid listing duration selected" };
+      if (!job) {
+        throw new Error("Failed to create job post");
       }
 
-      // MISE EN PAUSE POUR LE DEVELOPPEMENT
-      // Trigger the job expiration function
-      // await inngest.send({
-      //   name: "job/created",
-      //   data: {
-      //     jobId: jobPost.id,
-      //     expirationDays: validatedData.listingDuration,
-      //   },
-      // });
-
-      // Créer la session Stripe
-      const session = await stripe.checkout.sessions.create({
-        customer: stripeCustomerId!,
-        line_items: [
-          {
-            price_data: {
-              product_data: {
-                name: `Job Posting - ${pricingTier.days} Days`,
-                description: pricingTier.description,
-                images: [
-                  "https://pve1u6tfz1.ufs.sh/f/Ae8VfpRqE7c0gFltIEOxhiBIFftvV4DTM8a13LU5EyzGb2SQ",
-                ],
-              },
-              currency: "USD",
-              unit_amount: pricingTier.price * 100, // Convert to cents for Stripe
-            },
-            quantity: 1,
-          },
-        ],
-        mode: "payment",
-        metadata: {
-          jobId: jobPost.id,
-        },
-        success_url: `${process.env.NEXT_PUBLIC_URL}/payment/success`,
-        cancel_url: `${process.env.NEXT_PUBLIC_URL}/payment/cancel`,
-      });
-      return {
-        success: true,
-        data: { jobPost, session },
-      };
+      return [job];
     });
 
-    // Gérer le redirection spéciale si nécessaire
-    if (result.redirect) {
-      return { success: false, error: result.error, redirect: result.redirect };
+    // let stripeCustomerId = company.user.stripeCustomerId;
+
+    // if (!stripeCustomerId) {
+    //   const customer = await stripe.customers.create({
+    //     email: user.email!,
+    //     name: user.name || undefined,
+    //   });
+
+    //   stripeCustomerId = customer.id;
+
+    //   // Update user with Stripe customer ID
+    //   await prisma.user.update({
+    //     where: { id: user.id },
+    //     data: { stripeCustomerId: customer.id },
+    //   });
+    // }
+
+    // const jobPost = await prisma.jobPost.create({
+    //   data: {
+    //     companyId: company.id,
+    //     jobDescription: validatedData.jobDescription,
+    //     jobTitle: validatedData.jobTitle,
+    //     employmentType: validatedData.employmentType,
+    //     location: validatedData.location,
+    //     salaryFrom: validatedData.salaryFrom,
+    //     salaryTo: validatedData.salaryTo,
+    //     listingDuration: validatedData.listingDuration,
+    //     benefits: validatedData.benefits,
+    //   },
+    // });
+
+    // if (!jobPost) {
+    //   throw new Error("Failed to create job post");
+    // }
+
+    // MISE EN PAUSE POUR LE DEVELOPPEMENT
+    // Trigger the job expiration function
+    // await inngest.send({
+    //   name: "job/created",
+    //   data: {
+    //     jobId: jobPost.id,
+    //     expirationDays: validatedData.listingDuration,
+    //   },
+    // });
+
+    // Get price from pricing tiers based on duration
+    const pricingTier = jobListingDurationPricing.find(
+      (tier) => tier.days === validatedData.listingDuration
+    );
+
+    if (!pricingTier) {
+      throw new Error("Invalid listing duration selected");
     }
 
-    // Gérer les erreurs
-    if (!result.success) {
-      return { success: false, error: result.error };
-    }
-    // Retourner l'URL de redirection vers Stripe
-    return {
-      success: true,
-      data: result?.data?.jobPost,
-      redirectUrl: result?.data?.session.url,
-    };
+    const session = await stripe.checkout.sessions.create({
+      customer: stripeCustomerId!,
+      line_items: [
+        {
+          price_data: {
+            product_data: {
+              name: `Job Posting - ${pricingTier.days} Days`,
+              description: pricingTier.description,
+              images: [
+                "https://pve1u6tfz1.ufs.sh/f/Ae8VfpRqE7c0gFltIEOxhiBIFftvV4DTM8a13LU5EyzGb2SQ",
+              ],
+            },
+            currency: "USD",
+            unit_amount: pricingTier.price * 100, // Convert to cents for Stripe
+          },
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      metadata: {
+        jobId: jobPost.id,
+      },
+      success_url: `${process.env.NEXT_PUBLIC_URL}/payment/success`,
+      cancel_url: `${process.env.NEXT_PUBLIC_URL}/payment/cancel`,
+    });
+
+    // if (!session?.url) {
+    //   throw new Error("Failed to create Stripe checkout session");
+    // }
+
+    // return redirect(session.url as string);
+    // Pour les redirections externes (comme Stripe), utiliser temporaryRedirect
+    // return temporaryRedirect(session.url);
+    // Retourner juste l'URL en tant que string
+    return { redirectUrl: session.url };
   } catch (error) {
-    console.error("Error creating job post:", error);
+    // Gestion des erreurs
+    //   if (error instanceof Error) {
+    //     throw error; // Relancer l'erreur pour qu'elle soit gérée par le gestionnaire d'erreurs de Next.js
+    //   }
+    //   throw new Error("An unexpected error occurred");
+    //
     if (error instanceof z.ZodError) {
-      return {
-        success: false,
-        error: "Invalid input data",
-        details: error.errors,
-      };
+      return { error: "Invalid input data", details: error.errors };
     }
-    return {
-      success: false,
-      error:
-        error instanceof Error ? error.message : "An unexpected error occurred",
-    };
+    if (error instanceof Error) {
+      return { error: error.message };
+    }
+    return { error: "An unexpected error occurred" };
   }
 }
 
