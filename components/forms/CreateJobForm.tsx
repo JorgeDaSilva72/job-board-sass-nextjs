@@ -56,6 +56,14 @@ interface CreateJobFormProps {
   companyWebsite: string;
 }
 
+interface CreateJobActionResultProps {
+  success: boolean;
+  error?: string;
+  data?: {
+    redirectUrl: string;
+  };
+}
+
 export function CreateJobForm({
   companyAbout,
   companyLocation,
@@ -97,7 +105,7 @@ export function CreateJobForm({
   async function onSubmit(values: z.infer<typeof jobSchema>) {
     try {
       setPending(true);
-      const result = await createJob(values);
+      const result = (await createJob(values)) as CreateJobActionResultProps;
       if (result.success) {
         toast.success("Job posting created successfully!");
       }
@@ -105,8 +113,10 @@ export function CreateJobForm({
         toast.error(result.error || "An error occured");
         return;
       }
+
       if (result.data?.redirectUrl) {
         // Rediriger côté client
+
         window.location.href = result.data.redirectUrl;
       }
     } catch (error) {

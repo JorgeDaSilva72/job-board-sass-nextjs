@@ -299,7 +299,7 @@ function formatError(error: unknown) {
       error instanceof Error ? error.message : "An unexpected error occurred",
   };
 }
-
+// server actions :
 export async function createCompany(data: z.infer<typeof companySchema>) {
   try {
     console.log("Début de l'action createCompany");
@@ -827,6 +827,82 @@ export async function createJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
 //   }
 // }
 
+// export async function createJob(data: z.infer<typeof jobSchema>) {
+//   // Mode debug lié à une variable d'environnement
+//   const DEBUG = process.env.DEBUG_MODE === 'true';
+
+//   try {
+//     if (DEBUG) console.log("Début de l'action createJob", { data });
+
+//     // Vérification de l'authentification
+//     const authResult = await checkAuthentication();
+//     if (!authResult.success) {
+//       return authResult;
+//     }
+//     const user = authResult.user;
+
+//     // Protection Arcjet
+//     const securityResult = await checkSecurity();
+//     if (!securityResult.success) {
+//       return securityResult;
+//     }
+
+//     // Sanitization et validation
+//     const validationResult = await validateJobData(data);
+//     if (!validationResult.success) {
+//       return validationResult;
+//     }
+//     const validatedData = validationResult.data;
+
+//     // Vérification des variables d'environnement
+//     const envCheckResult = checkRequiredEnvironmentVariables();
+//     if (!envCheckResult.success) {
+//       return envCheckResult;
+//     }
+
+//     // Récupération ou création de la company
+//     const companyResult = await getOrCreateCompany(user.id);
+//     if (!companyResult.success) {
+//       return companyResult;
+//     }
+//     const { company, stripeCustomerId } = companyResult.data;
+
+//     // Création du job et mise à jour du customer si nécessaire
+//     const jobResult = await createJobInDatabase(company.id, validatedData, user, stripeCustomerId);
+//     if (!jobResult.success) {
+//       return jobResult;
+//     }
+//     const jobPost = jobResult.data;
+
+//     // Activation du job expiration (décommenté)
+//     await triggerJobExpiration(jobPost.id, validatedData.listingDuration);
+
+//     // Création de la session de paiement Stripe
+//     const paymentResult = await createStripeCheckoutSession(
+//       stripeCustomerId,
+//       validatedData.listingDuration,
+//       jobPost.id
+//     );
+
+//     if (!paymentResult.success) {
+//       return paymentResult;
+//     }
+
+//     // Retour standardisé
+//     return {
+//       success: true,
+//       data: {
+//         redirectUrl: paymentResult.data.url
+//       }
+//     };
+
+//   } catch (error) {
+//     // Gestion des erreurs
+//     if (DEBUG) console.error("Error creating job post:", error);
+//     return formatError(error);
+//   }
+// }
+
 export async function createJob(data: z.infer<typeof jobSchema>) {
   const DEBUG = process.env.DEBUG_MODE === "true"; // Active/Désactive les logs
   try {
@@ -1038,9 +1114,9 @@ export async function createJob(data: z.infer<typeof jobSchema>) {
     return {
       success: true,
       // data: result?.data?.jobPost,
-      // redirectUrl: result?.data?.session.url,
+      //redirectUrl: result?.data?.session.url,
       data: {
-        data: result?.data?.jobPost,
+        // data: result?.data?.jobPost,
         redirectUrl: result?.data?.session.url,
       },
     };
