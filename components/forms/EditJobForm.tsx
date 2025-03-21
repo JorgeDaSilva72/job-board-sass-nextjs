@@ -20,12 +20,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-// import { Textarea } from "../ui/textarea";
-// import { XIcon } from "lucide-react";
+import { Textarea } from "../ui/textarea";
+import { XIcon } from "lucide-react";
 import { Button } from "../ui/button";
-// import Image from "next/image";
-// import { toast } from "sonner";
-// import { UploadDropzone } from "../general/UploadThingReExport";
+import Image from "next/image";
+import { toast } from "sonner";
+import { UploadDropzone } from "../general/UploadThingReExport";
 import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -34,10 +34,7 @@ import { jobSchema } from "@/app/utils/zodSchemas";
 import { SalaryRangeSelector } from "../general/SalaryRangeSelector";
 import JobDescriptionEditor from "../richTextEditor/JobDescriptionEditor";
 import BenefitsSelector from "../general/BenefitsSelector";
-import { updateJobPost } from "@/app/actions";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 
 interface iAppProps {
   jobPost: {
@@ -50,18 +47,21 @@ interface iAppProps {
     jobDescription: string;
     benefits: string[];
     listingDuration: number;
-    // company: {
-    //   location: string;
-    //   name: string;
-    //   logo: string;
-    //   website: string;
-    //   xAccount: string | null;
-    //   about: string;
-    // };
+    company: {
+      location: string;
+      name: string;
+      logo: string;
+      website: string;
+      xAccount: string | null;
+      about: string;
+    };
   };
 }
 
+const DEBUG = process.env.DEBUG_MODE === "true";
+
 export function EditJobForm({ jobPost }: iAppProps) {
+  if (DEBUG) console.log("EditJobForm component rendered");
   // const [pending, setPending] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -72,35 +72,39 @@ export function EditJobForm({ jobPost }: iAppProps) {
     resolver: zodResolver(jobSchema),
     defaultValues: {
       benefits: jobPost.benefits,
-      // companyDescription: jobPost.company.about,
-      // companyLocation: jobPost.company.location,
-      // companyName: jobPost.company.name,
-      // companyWebsite: jobPost.company.website,
-      // companyXAccount: jobPost.company.xAccount || "",
+      companyDescription: jobPost.company.about,
+      companyLocation: jobPost.company.location,
+      companyLogo: jobPost.company.logo,
+      companyName: jobPost.company.name,
+      companyWebsite: jobPost.company.website,
+      companyXAccount: jobPost.company.xAccount || "",
       employmentType: jobPost.employmentType,
       jobDescription: jobPost.jobDescription,
       jobTitle: jobPost.jobTitle,
       location: jobPost.location,
       salaryFrom: jobPost.salaryFrom,
       salaryTo: jobPost.salaryTo,
-      // companyLogo: jobPost.company.logo,
       listingDuration: jobPost.listingDuration,
     },
   });
 
   async function onSubmit(values: z.infer<typeof jobSchema>) {
-    console.log("onSubmit called", values);
+    if (DEBUG) console.log("onSubmit called", values);
     try {
       // Réinitialiser les états d'erreur
       setSubmitError(null);
       setIsSubmitting(true);
 
       // Log les données avant envoi (utile pour le débogage)
-      console.log("Envoi des données au serveur:", values);
+      if (DEBUG) console.log("Envoi des données au serveur:", values);
+
+      // Import dynamique de l'action serveur
+      // Cela permet d'éviter les problèmes de "server component importing client component"
+      const { updateJobPost } = await import("@/app/actions");
 
       // Appel de l'action serveur
       const result = await updateJobPost(values, jobPost.id);
-      console.log("Résultat de l'action serveur:", result);
+      if (DEBUG) console.log("Résultat de l'action serveur:", result);
 
       // Traitement du résultat
       if (result.success) {
@@ -111,14 +115,16 @@ export function EditJobForm({ jobPost }: iAppProps) {
           router.push("/my-jobs");
         }, 1500);
       } else {
-        // Afficher l'erreur retournée par le serveur
-        const errorMessage = result.error || "Failed to update job post";
-        setSubmitError(errorMessage);
-        toast.error(errorMessage);
+        if (result?.error) {
+          // Afficher l'erreur retournée par le serveur
+          const errorMessage = result.error || "Failed to update job post";
+          setSubmitError(errorMessage);
+          toast.error(errorMessage);
+        }
       }
     } catch (error) {
       // Capturer toute erreur inattendue
-      console.error("Erreur lors de la soumission:", error);
+      if (DEBUG) console.error("Erreur lors de la soumission:", error);
       const errorMessage =
         error instanceof Error ? error.message : "An unexpected error occurred";
 
@@ -129,18 +135,22 @@ export function EditJobForm({ jobPost }: iAppProps) {
     }
   }
 
-  console.log("Form errors:", form.formState.errors);
+  if (DEBUG) console.log("Form errors:", form.formState.errors);
   return (
     <Form {...form}>
       <form
-        // onSubmit={(e) => {
-        //   e.preventDefault();
-        //   console.log("Form submitted");
-        //   console.log("Form is valid:", form.formState.isValid);
-        //   console.log("Form errors:", form.formState.errors);
-        //   form.handleSubmit(onSubmit)();
-        // }}
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (DEBUG) console.log("Form submitted");
+          if (DEBUG) console.log("Form is valid:", form.formState.isValid);
+          if (DEBUG) console.log("Form errors:", form.formState.errors);
+          form.handleSubmit(onSubmit)();
+        }}
+        // onSubmit={form.handleSubmit(onSubmit)}
+        // onSubmit={form.handleSubmit((values) => {
+        //   console.log("Form validation passed, submitting...");
+        //   onSubmit(values);
+        // })}
         className="col-span-1   lg:col-span-2  flex flex-col gap-8"
       >
         {/* Afficher les erreurs de soumission en haut du formulaire */}
@@ -295,7 +305,6 @@ export function EditJobForm({ jobPost }: iAppProps) {
           </CardContent>
         </Card>
 
-        {/* 
         <Card>
           <CardHeader>
             <CardTitle>Company Information</CardTitle>
@@ -309,7 +318,7 @@ export function EditJobForm({ jobPost }: iAppProps) {
                   <FormItem>
                     <FormLabel>Company Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Company Name" {...field} />
+                      <Input placeholder="Company Name" {...field} disabled />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -325,6 +334,7 @@ export function EditJobForm({ jobPost }: iAppProps) {
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
+                      disabled
                     >
                       <FormControl>
                         <SelectTrigger>
@@ -378,6 +388,7 @@ export function EditJobForm({ jobPost }: iAppProps) {
                           {...field}
                           placeholder="Company Website"
                           className="rounded-l-none"
+                          disabled
                         />
                       </div>
                     </FormControl>
@@ -399,6 +410,7 @@ export function EditJobForm({ jobPost }: iAppProps) {
                         </span>
                         <Input
                           {...field}
+                          disabled
                           placeholder="Company X Account"
                           className="rounded-l-none"
                         />
@@ -421,6 +433,7 @@ export function EditJobForm({ jobPost }: iAppProps) {
                       placeholder="Company Description"
                       className="min-h-[120px]"
                       {...field}
+                      disabled
                     />
                   </FormControl>
                   <FormMessage />
@@ -450,6 +463,7 @@ export function EditJobForm({ jobPost }: iAppProps) {
                             variant="destructive"
                             size="icon"
                             className="absolute -top-2 -right-2 "
+                            disabled
                             onClick={() => field.onChange("")}
                           >
                             <XIcon className="h-4 w-4" />
@@ -477,7 +491,6 @@ export function EditJobForm({ jobPost }: iAppProps) {
             />
           </CardContent>
         </Card>
- */}
 
         <Button
           type="submit"

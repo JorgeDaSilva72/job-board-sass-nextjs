@@ -13,6 +13,9 @@ import { inngest } from "./utils/inngest/client";
 import { revalidatePath } from "next/cache";
 import type { Availability, JobType } from "@prisma/client";
 import { getUserType } from "@/lib/userUtils";
+import { ActionUpdateJobPostResultTypes } from "./types/types";
+
+const DEBUG = process.env.DEBUG_MODE === "true";
 
 const aj = arcjet
   .withRule(
@@ -31,7 +34,8 @@ const aj = arcjet
 async function checkAuthentication() {
   const user = await requireUser();
   if (!user) {
-    return { success: false, error: "Unauthorized" };
+    if (DEBUG) console.log("Unauthorized");
+    return { success: false, error: "Unauthorized", details: undefined };
   }
   return { success: true, user };
 }
@@ -42,10 +46,12 @@ async function checkSecurity() {
     const decision = await aj.protect(req);
 
     if (decision.isDenied()) {
+      if (DEBUG) console.log("Forbidden by security rules");
       return { success: false, error: "Forbidden by security rules" };
     }
     return { success: true };
   } catch {
+    if (DEBUG) console.log("Security check failed");
     return { success: false, error: "Security check failed" };
   }
 }
@@ -82,6 +88,8 @@ async function validateJobData(data: z.infer<typeof jobSchema>) {
   // Server-side validation avec Zod
   const validatedFields = jobSchema.safeParse(sanitizedData);
   if (!validatedFields.success) {
+    if (DEBUG)
+      console.error("Validation error:", validatedFields.error.format());
     return {
       success: false,
       error: `Validation failed: ${validatedFields.error.message}`,
@@ -93,6 +101,7 @@ async function validateJobData(data: z.infer<typeof jobSchema>) {
 
   // Vérification que salaryFrom est inférieur à salaryTo
   if (validatedData.salaryFrom >= validatedData.salaryTo) {
+    if (DEBUG) console.error("Minimum salary must be less than maximum salary");
     return {
       success: false,
       error: "Minimum salary must be less than maximum salary",
@@ -299,6 +308,75 @@ function formatError(error: unknown) {
       error instanceof Error ? error.message : "An unexpected error occurred",
   };
 }
+
+async function checkJobOwnership(jobId: string, userId: string) {
+  const job = await prisma.jobPost.findUnique({
+    where: { id: jobId },
+    include: { company: true },
+  });
+
+  const DEBUG = process.env.DEBUG_MODE === "true";
+  if (DEBUG) console.log("Job trouvé:", job);
+
+  if (!job) {
+    if (DEBUG) console.error("Job non trouvé");
+    return { success: false, error: "Job not found" };
+  }
+
+  if (job.company?.userId !== userId) {
+    if (DEBUG) console.error("Utilisateur non autorisé");
+    return {
+      success: false,
+      error: "Forbidden - You don't have permission to update this job",
+    };
+  }
+
+  return { success: true, data: job };
+}
+
+async function updateJobInDatabase(
+  jobId: string,
+  validatedData: z.infer<typeof jobSchema>
+) {
+  try {
+    const updateData = {
+      jobTitle: validatedData.jobTitle,
+      employmentType: validatedData.employmentType,
+      location: validatedData.location,
+      salaryFrom: validatedData.salaryFrom,
+      salaryTo: validatedData.salaryTo,
+      jobDescription: validatedData.jobDescription,
+      benefits: validatedData.benefits,
+      listingDuration: validatedData.listingDuration,
+    };
+
+    if (DEBUG) console.log("Données envoyées à Prisma:", updateData);
+
+    // Job update
+    const updatedJob = await prisma.jobPost.update({
+      where: {
+        id: jobId,
+      },
+      data: updateData,
+    });
+
+    return {
+      success: true,
+      data: updatedJob,
+    };
+  } catch (error) {
+    if (DEBUG) console.error("Failed to update job in database:", error);
+
+    return {
+      success: false,
+      error:
+        error instanceof Error
+          ? error.message
+          : "Failed to update job in database",
+    };
+  }
+}
+
 // server actions :
 export async function createCompany(data: z.infer<typeof companySchema>) {
   try {
@@ -914,7 +992,6 @@ export async function createJob(data: z.infer<typeof jobSchema>) {
     // }
     const authResult = await checkAuthentication();
     if (!authResult.success) {
-      if (DEBUG) console.log("Unauthorized");
       return authResult;
     }
     const user = authResult.user!;
@@ -932,7 +1009,6 @@ export async function createJob(data: z.infer<typeof jobSchema>) {
 
     const securityResult = await checkSecurity();
     if (!securityResult.success) {
-      if (DEBUG) console.log("Forbidden by security rules");
       return securityResult;
     }
 
@@ -1126,106 +1202,180 @@ export async function createJob(data: z.infer<typeof jobSchema>) {
   }
 }
 
+// export async function updateJobPost(
+//   data: z.infer<typeof jobSchema>,
+//   jobId: string
+// ) {
+//   try {
+//     console.log("Début de l'action updateJobPost");
+//     console.log("Données reçues:", data);
+//     console.log("jobId reçu:", jobId);
+
+//     // Vérification de l'authentification
+//     const user = await requireUser();
+
+//     if (!user) return { success: false, error: "Unauthorized" };
+
+//     // Vérification du jobId
+
+//     if (!jobId) {
+//       console.error("jobId is required");
+//       // throw new Error("jobId is required");
+//       return { success: false, error: "jobId is required" };
+//     }
+
+//     // Access the request object so Arcjet can analyze it
+//     const req = await request();
+//     // Call Arcjet protect
+//     const decision = await aj.protect(req);
+
+//     if (decision.isDenied()) {
+//       console.error("Accès refusé par Arcjet");
+//       // throw new Error("Forbidden");
+//       return { success: false, error: "Forbidden by security rules" };
+//     }
+
+//     // Server-side validation
+//     const validatedData = jobSchema.safeParse(data);
+
+//     if (!validatedData.success) {
+//       console.error("Validation error:", validatedData.error.format());
+//       // throw new Error(`Invalid job data: ${validatedData.error.message}`);
+//       return {
+//         success: false,
+//         error: `Invalid job data: ${validatedData.error.message}`,
+//       };
+//     }
+
+//     console.log(
+//       "Structure du validatedData:",
+//       validatedData.success ? validatedData.data : "validatedData error"
+//     );
+//     // Check if the user has this job offer
+//     const job = await prisma.jobPost.findUnique({
+//       where: { id: jobId },
+//       include: { company: true },
+//     });
+
+//     console.log("Job trouvé:", job);
+
+//     if (!job) {
+//       console.error("Job non trouvé");
+//       // throw new Error("Job not found");
+//       return { success: false, error: "Job not found" };
+//     }
+
+//     if (job.company?.userId !== user.id) {
+//       console.error("Utilisateur non autorisé");
+//       //
+//       return {
+//         success: false,
+//         error: "Forbidden - You don't have permission to update this job",
+//       };
+//     }
+
+//     if (validatedData.success) {
+//       const updateData = {
+//         jobTitle: validatedData.data.jobTitle,
+//         employmentType: validatedData.data.employmentType,
+//         location: validatedData.data.location,
+//         salaryFrom: validatedData.data.salaryFrom,
+//         salaryTo: validatedData.data.salaryTo,
+//         jobDescription: validatedData.data.jobDescription,
+//         benefits: validatedData.data.benefits,
+//         listingDuration: validatedData.data.listingDuration,
+//       };
+
+//       console.log("Données envoyées à Prisma:", updateData);
+
+//       // Job update
+//       await prisma.jobPost.update({
+//         where: {
+//           id: jobId,
+//         },
+//         data: updateData,
+//       });
+//     }
+//     // return redirect("/my-jobs");
+//     console.log("Job mis à jour avec succès:");
+//     return { success: true };
+//   } catch (error) {
+//     console.error("Error updating job post:", error);
+//     // throw new Error("Error updating job post");
+//     return {
+//       success: false,
+//       error: error instanceof Error ? error.message : "Unknown error",
+//     };
+//   }
+// }
+
 export async function updateJobPost(
   data: z.infer<typeof jobSchema>,
   jobId: string
-) {
+): Promise<ActionUpdateJobPostResultTypes> {
+  const DEBUG = process.env.DEBUG_MODE === "true";
+
   try {
-    console.log("Début de l'action updateJobPost");
-    console.log("Données reçues:", data);
-    console.log("jobId reçu:", jobId);
+    if (DEBUG) {
+      console.log("Début de l'action updateJobPost");
+      console.log("Données reçues:", data);
+      console.log("jobId reçu:", jobId);
+    }
 
     // Vérification de l'authentification
-    const user = await requireUser();
+    const authResult = await checkAuthentication();
+    if (!authResult.success) {
+      return authResult;
+    }
+    const user = authResult.user;
 
-    if (!user) return { success: false, error: "Unauthorized" };
+    if (!user || !user.id) {
+      if (DEBUG) console.error("User ID is required");
+      return { success: false, error: "User ID is required" };
+    }
 
     // Vérification du jobId
-
     if (!jobId) {
-      console.error("jobId is required");
-      // throw new Error("jobId is required");
+      if (DEBUG) console.error("jobId is required");
       return { success: false, error: "jobId is required" };
     }
 
-    // Access the request object so Arcjet can analyze it
-    const req = await request();
-    // Call Arcjet protect
-    const decision = await aj.protect(req);
-
-    if (decision.isDenied()) {
-      console.error("Accès refusé par Arcjet");
-      // throw new Error("Forbidden");
-      return { success: false, error: "Forbidden by security rules" };
+    // Protection Arcjet
+    const securityResult = await checkSecurity();
+    if (!securityResult.success) {
+      return securityResult;
     }
 
-    // Server-side validation
-    const validatedData = jobSchema.safeParse(data);
+    // Validation des données
+    const validationResult = await validateJobData(data);
+    if (!validationResult.success) {
+      return validationResult;
+    }
+    const validatedData = validationResult.data;
 
-    if (!validatedData.success) {
-      console.error("Validation error:", validatedData.error.format());
-      // throw new Error(`Invalid job data: ${validatedData.error.message}`);
-      return {
-        success: false,
-        error: `Invalid job data: ${validatedData.error.message}`,
-      };
+    // Vérification des permissions
+    const permissionResult = await checkJobOwnership(jobId, user.id);
+    if (!permissionResult.success) {
+      return permissionResult;
+    }
+    const job = permissionResult.data; // eslint-disable-line @typescript-eslint/no-unused-vars
+
+    // Mise à jour du job
+    const updateResult = await updateJobInDatabase(jobId, validatedData!);
+    if (!updateResult.success) {
+      return updateResult;
     }
 
-    console.log(
-      "Structure du validatedData:",
-      validatedData.success ? validatedData.data : "validatedData error"
-    );
-    // Check if the user has this job offer
-    const job = await prisma.jobPost.findUnique({
-      where: { id: jobId },
-      include: { company: true },
-    });
-
-    console.log("Job trouvé:", job);
-
-    if (!job) {
-      console.error("Job non trouvé");
-      // throw new Error("Job not found");
-      return { success: false, error: "Job not found" };
-    }
-
-    if (job.company?.userId !== user.id) {
-      console.error("Utilisateur non autorisé");
-      //
-      return {
-        success: false,
-        error: "Forbidden - You don't have permission to update this job",
-      };
-    }
-
-    if (validatedData.success) {
-      const updateData = {
-        jobTitle: validatedData.data.jobTitle,
-        employmentType: validatedData.data.employmentType,
-        location: validatedData.data.location,
-        salaryFrom: validatedData.data.salaryFrom,
-        salaryTo: validatedData.data.salaryTo,
-        jobDescription: validatedData.data.jobDescription,
-        benefits: validatedData.data.benefits,
-        listingDuration: validatedData.data.listingDuration,
-      };
-
-      console.log("Données envoyées à Prisma:", updateData);
-
-      // Job update
-      await prisma.jobPost.update({
-        where: {
-          id: jobId,
-        },
-        data: updateData,
-      });
-    }
-    // return redirect("/my-jobs");
-    console.log("Job mis à jour avec succès:");
-    return { success: true };
+    if (DEBUG) console.log("Job mis à jour avec succès");
+    return {
+      success: true,
+      data: {
+        job: updateResult.data,
+      },
+    };
   } catch (error) {
-    console.error("Error updating job post:", error);
-    // throw new Error("Error updating job post");
+    if (DEBUG) console.error("Error updating job post:", error);
+
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",

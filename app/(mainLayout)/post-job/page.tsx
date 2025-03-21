@@ -87,7 +87,7 @@ const PostJobPage = async () => {
         companyWebsite={data.website ?? ""}
       />
 
-      <div className="col-span-1">
+      <div className="hidden lg:block col-span-1">
         <Card className="lg:sticky lg:top-4">
           <CardHeader>
             <CardTitle className="text-xl">

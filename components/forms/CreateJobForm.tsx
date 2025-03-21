@@ -106,9 +106,9 @@ export function CreateJobForm({
     try {
       setPending(true);
       const result = (await createJob(values)) as CreateJobActionResultProps;
-      if (result.success) {
-        toast.success("Job posting created successfully!");
-      }
+      // if (result.success) {
+      //   toast.success("Job posting created successfully!");
+      // }
       if (!result.success) {
         toast.error(result.error || "An error occured");
         return;

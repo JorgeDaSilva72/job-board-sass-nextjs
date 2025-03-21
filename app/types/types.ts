@@ -56,3 +56,49 @@ export type CompanyProfileData = {
 export type EditCompanyFormProps = {
   company: CompanyProfileData;
 };
+
+// type explicite pour tous les retours possibles du server action updateJobPost
+// export type ActionUpdateJobPostResultTypes =
+//   | {
+//       success: true;
+//       data: { job: any };
+//       user?: undefined;
+//       error?: undefined;
+//       details?: undefined;
+//     }
+//   | {
+//       success: true;
+//       data: any;
+//       user?: undefined;
+//       error?: undefined;
+//       details?: undefined;
+//     }
+//   | {
+//       success: true;
+//       user: any;
+//       data?: undefined;
+//       error?: undefined;
+//       details?: undefined;
+//     }
+//   | {
+//       success: false;
+//       error: string;
+//       user?: undefined;
+//       data?: undefined;
+//       details?: undefined;
+//     }
+//   | {
+//       success: false;
+//       error: string;
+//       details?: any;
+//       user?: undefined;
+//       data?: undefined;
+//     };
+
+export type ActionUpdateJobPostResultTypes = {
+  success: boolean;
+  error?: string;
+  details?: any; //eslint-disable-line @typescript-eslint/no-explicit-any
+  user?: any; //eslint-disable-line @typescript-eslint/no-explicit-any
+  data?: any; //eslint-disable-line @typescript-eslint/no-explicit-any
+};
