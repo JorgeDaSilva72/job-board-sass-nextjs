@@ -105,7 +105,7 @@ const updateApplicationSchema = z.object({
 // Fonction pour gérer les requêtes PUT
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { applicationId: string } }
+  context: { params: { applicationId: string } }
 ) {
   try {
     // Vérifier l'authentification
@@ -118,7 +118,7 @@ export async function PUT(
     }
 
     // Récupérer l'ID de l'application
-    const applicationId = params.applicationId;
+    const applicationId = context.params.applicationId;
     if (!applicationId) {
       return NextResponse.json(
         { message: "Missing application ID" },
