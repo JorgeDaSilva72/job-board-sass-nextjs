@@ -27,42 +27,9 @@ import { Button } from "@/components/ui/button";
 import { Eye, MoreHorizontal, PenBoxIcon, User2, XCircle } from "lucide-react";
 import Link from "next/link";
 import { EmptyState } from "@/components/general/EmptyState";
-import { prisma } from "@/app/utils/db";
 import { requireUser } from "@/app/utils/hooks";
 import { CopyLinkMenuItem } from "@/components/general/CopyLink";
-
-async function getApplications(userId: string) {
-  const data = await prisma.jobApplication.findMany({
-    where: {
-      jobSeeker: {
-        userId: userId,
-      },
-    },
-    select: {
-      id: true,
-      status: true,
-      createdAt: true,
-      jobPost: {
-        select: {
-          id: true,
-          jobTitle: true,
-          company: {
-            select: {
-              id: true,
-              name: true,
-              logo: true,
-            },
-          },
-        },
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-
-  return data;
-}
+import { getApplications } from "@/lib/queries/application";
 
 const ApplicationsPage = async () => {
   const session = await requireUser();
@@ -80,8 +47,10 @@ const ApplicationsPage = async () => {
       ) : (
         <Card>
           <CardHeader>
-            <CardTitle>My Applications</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-center text-2xl">
+              My Applications
+            </CardTitle>
+            <CardDescription className="text-center ">
               Manage your job applications here.
             </CardDescription>
           </CardHeader>
@@ -149,7 +118,9 @@ const ApplicationsPage = async () => {
                             </Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem asChild>
-                            <Link href={`/applications/${application.id}/edit`}>
+                            <Link
+                              href={`/job-seeker/applications/${application.id}/edit`}
+                            >
                               <PenBoxIcon className="size-4" />
                               Edit Application
                             </Link>
