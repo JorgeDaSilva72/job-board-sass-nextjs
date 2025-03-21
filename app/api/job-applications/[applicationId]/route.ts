@@ -105,11 +105,7 @@ const updateApplicationSchema = z.object({
 // Fonction pour gérer les requêtes PUT
 export async function PUT(
   request: NextRequest,
-  context: {
-    params: {
-      applicationId: string;
-    };
-  }
+  { params }: { params: { applicationId: string } }
 ) {
   try {
     // Vérifier l'authentification
@@ -122,7 +118,7 @@ export async function PUT(
     }
 
     // Récupérer l'ID de l'application
-    const { applicationId } = context.params;
+    const { applicationId } = params;
     if (!applicationId) {
       return NextResponse.json(
         { message: "Missing application ID" },
@@ -152,24 +148,25 @@ export async function PUT(
       where: {
         id: applicationId,
       },
+      select: { id: true, jobSeekerId: true },
     });
 
     if (!existingApplication) {
       return NextResponse.json(
-        { message: "Application not found ou accès non autorisé" },
+        { message: "Application not found" },
         { status: 404 }
       );
     }
     // Vérifier que l'application  appartient à l'utilisateur actuel
     const jobSeeker = await prisma.jobSeeker.findUnique({
-      where: { userId: session?.user?.id },
+      where: { userId: session.user.id },
       select: { id: true },
     });
 
     if (!jobSeeker || jobSeeker.id !== existingApplication.jobSeekerId) {
       return NextResponse.json(
         { message: " Unauthorized access" },
-        { status: 404 }
+        { status: 403 }
       );
     }
 
