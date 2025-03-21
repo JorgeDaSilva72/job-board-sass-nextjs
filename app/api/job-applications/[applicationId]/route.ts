@@ -102,11 +102,14 @@ const updateApplicationSchema = z.object({
   coverLetter: z.string().optional().nullable(),
 });
 
+type RouteParams = {
+  params: {
+    applicationId: string;
+  };
+};
+
 // Fonction pour gérer les requêtes PUT
-export async function PUT(
-  request: NextRequest,
-  context: { params: { applicationId: string } }
-) {
+export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
     // Vérifier l'authentification
     const session = await auth();
@@ -118,7 +121,7 @@ export async function PUT(
     }
 
     // Récupérer l'ID de l'application
-    const applicationId = context.params.applicationId;
+    const applicationId = params.applicationId;
     if (!applicationId) {
       return NextResponse.json(
         { message: "Missing application ID" },
