@@ -25,40 +25,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, PenBoxIcon, User2, XCircle } from "lucide-react";
+import { Eye, MoreHorizontal, PenBoxIcon, User2, XCircle } from "lucide-react";
 import Link from "next/link";
 
 import { EmptyState } from "@/components/general/EmptyState";
-import { prisma } from "@/app/utils/db";
 import { requireUser } from "@/app/utils/hooks";
 import { CopyLinkMenuItem } from "@/components/general/CopyLink";
-
-async function getJobs(userId: string) {
-  const data = await prisma.jobPost.findMany({
-    where: {
-      company: {
-        userId: userId,
-      },
-    },
-    select: {
-      id: true,
-      jobTitle: true,
-      status: true,
-      createdAt: true,
-      company: {
-        select: {
-          name: true,
-          logo: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-
-  return data;
-}
+import { getJobs } from "@/lib/queries/jobs";
 
 const MyJobs = async () => {
   const session = await requireUser();
@@ -76,9 +49,9 @@ const MyJobs = async () => {
       ) : (
         <Card>
           <CardHeader>
-            <CardTitle>My Jobs</CardTitle>
-            <CardDescription>
-              Manage your job listings and applications here.
+            <CardTitle className="text-center text-2xl">My Jobs</CardTitle>
+            <CardDescription className="text-center ">
+              Manage your job listings here.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -138,17 +111,32 @@ const MyJobs = async () => {
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
                           <DropdownMenuItem asChild>
-                            <Link href={`/my-jobs/${listing.id}/edit`}>
+                            <Link href={`/job/${listing.id}`} role="menuitem">
+                              <Eye className="size-4" />
+                              View Job
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem asChild>
+                            <Link
+                              href={`/my-jobs/${listing.id}/edit `}
+                              role="menuitem"
+                            >
                               <PenBoxIcon className="size-4" />
                               Edit Job
                             </Link>
                           </DropdownMenuItem>
                           <CopyLinkMenuItem
-                            jobUrl={`${process.env.NEXT_PUBLIC_URL}/job/${listing.id}`}
+                            jobUrl={`${
+                              process.env.NEXT_PUBLIC_URL ??
+                              "https://job-board-sass-nextjs.vercel.app"
+                            }/job/${listing.id}`}
                           />
                           <DropdownMenuSeparator />
                           <DropdownMenuItem asChild>
-                            <Link href={`/my-jobs/${listing.id}/delete`}>
+                            <Link
+                              href={`/my-jobs/${listing.id}/delete`}
+                              role="menuitem"
+                            >
                               <XCircle className="h-4 w-4" />
                               Delete Job
                             </Link>
