@@ -601,7 +601,7 @@ export default function ApplicationDetailsPage() {
       const data = await response.json();
       setApplication(data.application);
     } catch (error) {
-      console.error("Error fetching application details:", error);
+      console.error("Error fetching application details :", error);
       toast.error("Failed to load application details");
     } finally {
       setIsLoading(false);
