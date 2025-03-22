@@ -138,7 +138,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
+  //   { params }: { params: { id: string } }
 ) {
   try {
     const session = await auth();
@@ -164,6 +165,8 @@ export async function PATCH(
     }
 
     const companyId = user.Company.id;
+    // Récupérer l'ID de l'application
+    const params = await context.params;
     const applicationId = params.id;
     const { status } = await request.json();
 
@@ -227,7 +230,8 @@ export async function PATCH(
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
+  //   { params }: { params: { id: string } }
 ) {
   try {
     const session = await auth();
@@ -253,6 +257,9 @@ export async function GET(
     }
 
     const companyId = user.Company.id;
+
+    // Récupérer l'ID de l'application
+    const params = await context.params;
     const applicationId = params.id;
 
     // Récupérer les détails de la candidature
