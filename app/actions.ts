@@ -1883,3 +1883,58 @@ export async function submitJobApplication(formData: FormData) {
     throw new Error("An unexpected error occurred");
   }
 }
+
+export async function deleteApplicationPost(applicationId: string) {
+  try {
+    if (DEBUG)
+      console.log("Début de l'action deleteApplicationPost", { applicationId });
+
+    // Vérification de l'authentification
+    const authResult = await checkAuthentication();
+    if (!authResult.success) {
+      return authResult;
+    }
+    const user = authResult.user!;
+
+    // Protection Arcjet
+    const securityResult = await checkSecurity();
+    if (!securityResult.success) {
+      return securityResult;
+    }
+
+    // Vérification que la candidature existe avant de la supprimer
+    const existingApplication = await prisma.jobApplication.findFirst({
+      where: {
+        id: applicationId,
+        jobSeeker: {
+          userId: user.id,
+        },
+      },
+    });
+
+    if (!existingApplication) {
+      return {
+        success: false,
+        error:
+          "Application not found or you do not have the rights to delete it",
+        code: "NOT_FOUND",
+      };
+    }
+
+    await prisma.jobApplication.delete({
+      where: {
+        id: applicationId,
+        jobSeeker: {
+          userId: user.id,
+        },
+      },
+    });
+
+    return {
+      success: true,
+    };
+  } catch (error) {
+    if (DEBUG) console.error("Error deleting application post:", error);
+    return formatError(error);
+  }
+}

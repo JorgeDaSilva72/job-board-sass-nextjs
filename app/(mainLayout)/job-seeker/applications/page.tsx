@@ -112,7 +112,10 @@ const ApplicationsPage = async () => {
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
                           <DropdownMenuItem asChild>
-                            <Link href={`/job/${application.jobPost.id}`}>
+                            <Link
+                              href={`/job/${application.jobPost.id}`}
+                              role="menuitem"
+                            >
                               <Eye className="size-4" />
                               View Job
                             </Link>
@@ -120,6 +123,7 @@ const ApplicationsPage = async () => {
                           <DropdownMenuItem asChild>
                             <Link
                               href={`/job-seeker/applications/${application.id}/edit`}
+                              role="menuitem"
                             >
                               <PenBoxIcon className="size-4" />
                               Edit Application
@@ -131,7 +135,8 @@ const ApplicationsPage = async () => {
                           <DropdownMenuSeparator />
                           <DropdownMenuItem asChild>
                             <Link
-                              href={`/applications/${application.id}/delete`}
+                              href={`/job-seeker/applications/${application.id}/delete`}
+                              role="menuitem"
                             >
                               <XCircle className="h-4 w-4" />
                               Delete Application

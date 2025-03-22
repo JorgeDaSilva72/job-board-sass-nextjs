@@ -1,4 +1,4 @@
-import "server-only";
+// import "server-only";
 import { redirect } from "next/navigation";
 import { auth } from "@/app/utils/auth";
 import { prisma } from "./db";
