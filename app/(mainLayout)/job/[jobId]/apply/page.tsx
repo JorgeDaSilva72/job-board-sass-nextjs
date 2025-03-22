@@ -2,7 +2,6 @@ import { getUserType } from "@/lib/userUtils";
 import { prisma } from "@/app/utils/db";
 import { notFound, redirect } from "next/navigation";
 import { JobApplicationForm } from "@/components/forms/JobApplicationForm";
-import { requireUser } from "@/app/utils/hooks";
 import { auth } from "@/app/utils/auth";
 
 // Désactiver l'erreur ESLint pour cette ligne spécifique
