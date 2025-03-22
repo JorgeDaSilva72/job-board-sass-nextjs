@@ -3,6 +3,7 @@ import { prisma } from "@/app/utils/db";
 import { notFound, redirect } from "next/navigation";
 import { JobApplicationForm } from "@/components/forms/JobApplicationForm";
 import { requireUser } from "@/app/utils/hooks";
+import { auth } from "@/app/utils/auth";
 
 // Désactiver l'erreur ESLint pour cette ligne spécifique
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -12,12 +13,18 @@ export default async function ApplyPage({
   params: Promise<{ jobId: string }>;
 }) {
   const { jobId } = await params;
-  const user = await requireUser();
-  if (!user || !user.id) {
+  // const user = await requireUser();
+  // if (!user || !user.id) {
+  //   redirect("/login?error=unauthorized");
+  // }
+
+  const session = await auth();
+  if (!session?.user || !session.user.id) {
     redirect("/login?error=unauthorized");
   }
+  const user = session.user;
 
-  const { type, data } = await getUserType(user.id);
+  const { type, data } = await getUserType(user.id!);
   if (type !== "JOB_SEEKER" || !data?.id) {
     redirect("/find-job?error=not_a_job_seeker");
   }
@@ -60,10 +67,8 @@ export default async function ApplyPage({
 
   return (
     <div className="container mx-auto py-12">
-      <h1 className="text-3xl font-bold mb-6">
-        Postuler à: {jobPost?.jobTitle}
-      </h1>
-      <p className="mb-8">Entreprise: {jobPost?.company.name}</p>
+      <h1 className="text-3xl font-bold mb-6">Apply to: {jobPost?.jobTitle}</h1>
+      <p className="mb-8">Company: {jobPost?.company.name}</p>
 
       <JobApplicationForm
         jobId={jobId}
