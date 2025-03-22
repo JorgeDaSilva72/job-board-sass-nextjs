@@ -1,6 +1,5 @@
 import { auth } from "@/app/utils/auth";
 import { prisma } from "@/app/utils/db";
-import { getUserType } from "@/lib/userUtils";
 import { NextRequest, NextResponse } from "next/server";
 
 // export async function PATCH(
@@ -208,7 +207,8 @@ export async function PATCH(
         id: applicationId,
       },
       data: {
-        status: status as any,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        status: status,
       },
     });
 

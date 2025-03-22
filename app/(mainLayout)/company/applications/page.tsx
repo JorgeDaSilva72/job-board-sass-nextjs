@@ -525,6 +525,7 @@ export default function ReceivedApplicationsPage() {
       // Update application in state
       setApplications((prev) =>
         prev.map((app) =>
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           app.id === applicationId ? { ...app, status: newStatus as any } : app
         )
       );
