@@ -6,9 +6,11 @@ import { prisma } from "@/app/utils/db";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { jobId: string; applicationId: string } }
+  //   { params }: { params: { jobId: string; applicationId: string } }
+  context: { params: Promise<{ jobId: string; applicationId: string }> }
 ) {
   try {
+    const params = await context.params;
     const { jobId, applicationId } = params;
 
     if (!jobId || !applicationId) {
@@ -90,9 +92,12 @@ export async function GET(
 // Mettre à jour le statut d'une candidature
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { jobId: string; applicationId: string } }
+  //   { params }: { params: { jobId: string; applicationId: string } }
+  context: { params: Promise<{ jobId: string; applicationId: string }> }
 ) {
   try {
+    const params = await context.params;
+
     const { jobId, applicationId } = params;
 
     if (!jobId || !applicationId) {
