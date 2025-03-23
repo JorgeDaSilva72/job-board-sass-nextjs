@@ -1,0 +1,612 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Filter, Save, Search, X } from "lucide-react";
+import { Availability, JobType, EducationLevel } from "@prisma/client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@radix-ui/react-checkbox";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+// Types
+type Candidate = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  title: string;
+  experience: number;
+  skills: string[];
+  languages: string[];
+  availability: Availability;
+  preferredJobType: JobType[];
+  countryCode?: string;
+  city?: string;
+};
+
+type Pagination = {
+  total: number;
+  pages: number;
+  current: number;
+  limit: number;
+};
+
+type FilterState = {
+  skills: string[];
+  languages: string[];
+  experienceMin?: number;
+  experienceMax?: number;
+  availability: Availability[];
+  jobTypes: JobType[];
+  location?: string;
+};
+
+export default function CandidatesPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // État pour les filtres
+  const [filters, setFilters] = useState<FilterState>({
+    skills: [],
+    languages: [],
+    experienceMin: undefined,
+    experienceMax: undefined,
+    availability: [],
+    jobTypes: [],
+    location: undefined,
+  });
+
+  // État pour la liste des candidats
+  const [candidates, setCandidates] = useState<Candidate[]>([]);
+  const [pagination, setPagination] = useState<Pagination>({
+    total: 0,
+    pages: 0,
+    current: 1,
+    limit: 10,
+  });
+
+  // État pour les filtres sauvegardés
+  const [savedFilters, setSavedFilters] = useState<any[]>([]);
+  const [newFilterName, setNewFilterName] = useState("");
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+
+  // État pour l'input de compétence et langue
+  const [skillInput, setSkillInput] = useState("");
+  const [languageInput, setLanguageInput] = useState("");
+
+  // Charger les candidats
+  const loadCandidates = async () => {
+    try {
+      // Construire l'URL avec les filtres
+      let url = `/api/candidates?page=${pagination.current}&limit=${pagination.limit}`;
+
+      if (filters.skills.length > 0)
+        url += `&skills=${filters.skills.join(",")}`;
+      if (filters.languages.length > 0)
+        url += `&languages=${filters.languages.join(",")}`;
+      if (filters.experienceMin !== undefined)
+        url += `&experienceMin=${filters.experienceMin}`;
+      if (filters.experienceMax !== undefined)
+        url += `&experienceMax=${filters.experienceMax}`;
+      if (filters.availability.length > 0)
+        url += `&availability=${filters.availability.join(",")}`;
+      if (filters.jobTypes.length > 0)
+        url += `&jobTypes=${filters.jobTypes.join(",")}`;
+      if (filters.location) url += `&location=${filters.location}`;
+
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (response.ok) {
+        setCandidates(data.candidates);
+        setPagination(data.pagination);
+      } else {
+        console.error("Erreur lors du chargement des candidats:", data.error);
+      }
+    } catch (error) {
+      console.error("Erreur lors du chargement des candidats:", error);
+    }
+  };
+
+  // Charger les filtres sauvegardés
+  const loadSavedFilters = async () => {
+    try {
+      const response = await fetch("/api/candidates/filters");
+      const data = await response.json();
+
+      if (response.ok) {
+        setSavedFilters(data);
+      } else {
+        console.error("Erreur lors du chargement des filtres:", data.error);
+      }
+    } catch (error) {
+      console.error("Erreur lors du chargement des filtres:", error);
+    }
+  };
+
+  // Sauvegarder un filtre
+  const saveFilter = async () => {
+    try {
+      if (!newFilterName.trim()) {
+        alert("Veuillez saisir un nom pour le filtre");
+        return;
+      }
+
+      const response = await fetch("/api/candidates", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: newFilterName,
+          ...filters,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setNewFilterName("");
+        loadSavedFilters();
+      } else {
+        console.error("Erreur lors de la sauvegarde du filtre:", data.error);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la sauvegarde du filtre:", error);
+    }
+  };
+
+  // Appliquer un filtre sauvegardé
+  const applyFilter = (filter: any) => {
+    setFilters({
+      skills: filter.skills || [],
+      languages: filter.languages || [],
+      experienceMin: filter.experienceMin,
+      experienceMax: filter.experienceMax,
+      availability: filter.availability || [],
+      jobTypes: filter.jobTypes || [],
+      location: filter.location,
+    });
+  };
+
+  // Ajouter une compétence
+  const addSkill = () => {
+    if (skillInput.trim() && !filters.skills.includes(skillInput.trim())) {
+      setFilters({
+        ...filters,
+        skills: [...filters.skills, skillInput.trim()],
+      });
+      setSkillInput("");
+    }
+  };
+
+  // Ajouter une langue
+  const addLanguage = () => {
+    if (
+      languageInput.trim() &&
+      !filters.languages.includes(languageInput.trim())
+    ) {
+      setFilters({
+        ...filters,
+        languages: [...filters.languages, languageInput.trim()],
+      });
+      setLanguageInput("");
+    }
+  };
+
+  // Supprimer une compétence
+  const removeSkill = (skill: string) => {
+    setFilters({
+      ...filters,
+      skills: filters.skills.filter((s) => s !== skill),
+    });
+  };
+
+  // Supprimer une langue
+  const removeLanguage = (language: string) => {
+    setFilters({
+      ...filters,
+      languages: filters.languages.filter((l) => l !== language),
+    });
+  };
+
+  // Voir un profil de candidat
+  const viewCandidateProfile = async (candidateId: string) => {
+    try {
+      // Enregistrer la vue
+      await fetch("/api/candidates", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          jobSeekerId: candidateId,
+        }),
+      });
+
+      // Rediriger vers le profil du candidat
+      router.push(`/dashboard/candidates/${candidateId}`);
+    } catch (error) {
+      console.error("Erreur lors de l'enregistrement de la vue:", error);
+    }
+  };
+
+  // Charger les candidats quand les filtres ou la pagination changent
+  useEffect(() => {
+    loadCandidates();
+  }, [filters, pagination.current, pagination.limit]);
+
+  // Charger les filtres sauvegardés au chargement de la page
+  useEffect(() => {
+    loadSavedFilters();
+  }, []);
+
+  return (
+    <div className="container mx-auto py-8">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Search for candidates</h1>
+        <Button
+          variant="outline"
+          onClick={() => setIsFiltersOpen(!isFiltersOpen)}
+        >
+          <Filter className="mr-2 h-4 w-4" />
+          Filters
+        </Button>
+      </div>
+
+      {isFiltersOpen && (
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>Filter candidates</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* Filtrage par compétences */}
+              <div className="space-y-2">
+                <label className="font-medium">Skills</label>
+                <div className="flex">
+                  <Input
+                    value={skillInput}
+                    onChange={(e) => setSkillInput(e.target.value)}
+                    placeholder="Add a skill"
+                    className="mr-2"
+                  />
+                  <Button onClick={addSkill} size="sm">
+                    +
+                  </Button>
+                </div>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {filters.skills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm flex items-center"
+                    >
+                      {skill}
+                      <X
+                        className="ml-1 h-3 w-3 cursor-pointer"
+                        onClick={() => removeSkill(skill)}
+                      />
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Filtrage par langues */}
+              <div className="space-y-2">
+                <label className="font-medium">Languages</label>
+                <div className="flex">
+                  <Input
+                    value={languageInput}
+                    onChange={(e) => setLanguageInput(e.target.value)}
+                    placeholder="Add a language"
+                    className="mr-2"
+                  />
+                  <Button onClick={addLanguage} size="sm">
+                    +
+                  </Button>
+                </div>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {filters.languages.map((language) => (
+                    <span
+                      key={language}
+                      className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-sm flex items-center"
+                    >
+                      {language}
+                      <X
+                        className="ml-1 h-3 w-3 cursor-pointer"
+                        onClick={() => removeLanguage(language)}
+                      />
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Filtrage par expérience */}
+              <div className="space-y-2">
+                <label className="font-medium">Experience (years)</label>
+                <div className="flex items-center space-x-2">
+                  <Input
+                    type="number"
+                    value={filters.experienceMin || ""}
+                    onChange={(e) =>
+                      setFilters({
+                        ...filters,
+                        experienceMin: e.target.value
+                          ? parseInt(e.target.value)
+                          : undefined,
+                      })
+                    }
+                    placeholder="Min"
+                  />
+                  <span>à</span>
+                  <Input
+                    type="number"
+                    value={filters.experienceMax || ""}
+                    onChange={(e) =>
+                      setFilters({
+                        ...filters,
+                        experienceMax: e.target.value
+                          ? parseInt(e.target.value)
+                          : undefined,
+                      })
+                    }
+                    placeholder="Max"
+                  />
+                </div>
+              </div>
+
+              {/* Filtrage par disponibilité */}
+              <div className="space-y-2">
+                <label className="font-medium">Availability</label>
+                <div className="space-y-1">
+                  {Object.values(Availability).map((availability) => (
+                    <div key={availability} className="flex items-center">
+                      <Checkbox
+                        id={`availability-${availability}`}
+                        checked={filters.availability.includes(availability)}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            setFilters({
+                              ...filters,
+                              availability: [
+                                ...filters.availability,
+                                availability,
+                              ],
+                            });
+                          } else {
+                            setFilters({
+                              ...filters,
+                              availability: filters.availability.filter(
+                                (a) => a !== availability
+                              ),
+                            });
+                          }
+                        }}
+                      />
+                      <label
+                        htmlFor={`availability-${availability}`}
+                        className="ml-2 text-sm"
+                      >
+                        {availability.replace("_", " ")}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Filtrage par type d'emploi */}
+              <div className="space-y-2">
+                <label className="font-medium">Type of employment</label>
+                <div className="space-y-1">
+                  {Object.values(JobType).map((jobType) => (
+                    <div key={jobType} className="flex items-center">
+                      <Checkbox
+                        id={`jobType-${jobType}`}
+                        checked={filters.jobTypes.includes(jobType)}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            setFilters({
+                              ...filters,
+                              jobTypes: [...filters.jobTypes, jobType],
+                            });
+                          } else {
+                            setFilters({
+                              ...filters,
+                              jobTypes: filters.jobTypes.filter(
+                                (jt) => jt !== jobType
+                              ),
+                            });
+                          }
+                        }}
+                      />
+                      <label
+                        htmlFor={`jobType-${jobType}`}
+                        className="ml-2 text-sm"
+                      >
+                        {jobType.replace("_", " ")}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Filtrage par localisation */}
+              <div className="space-y-2">
+                <label className="font-medium">Location</label>
+                <Input
+                  value={filters.location || ""}
+                  onChange={(e) =>
+                    setFilters({
+                      ...filters,
+                      location: e.target.value || undefined,
+                    })
+                  }
+                  placeholder="City or country"
+                />
+              </div>
+            </div>
+
+            {/* Sauvegarder le filtre */}
+            <div className="mt-6 border-t pt-4">
+              <div className="flex items-center">
+                <Input
+                  value={newFilterName}
+                  onChange={(e) => setNewFilterName(e.target.value)}
+                  placeholder="Filter name"
+                  className="mr-2"
+                />
+                <Button onClick={saveFilter}>
+                  <Save className="mr-2 h-4 w-4" />
+                  Save this filter
+                </Button>
+              </div>
+
+              {/* Filtres sauvegardés */}
+              {savedFilters.length > 0 && (
+                <div className="mt-4">
+                  <h3 className="font-medium mb-2">Filtres sauvegardés</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {savedFilters.map((filter) => (
+                      <Button
+                        key={filter.id}
+                        variant="outline"
+                        size="sm"
+                        onClick={() => applyFilter(filter)}
+                      >
+                        {filter.name}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Liste des candidats */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {candidates.map((candidate) => (
+          <Card
+            key={candidate.id}
+            className="cursor-pointer hover:shadow-md transition-shadow duration-200"
+            onClick={() => viewCandidateProfile(candidate.id)}
+          >
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg">
+                {candidate.firstName} {candidate.lastName}
+              </CardTitle>
+              <p className="text-sm text-gray-500">{candidate.title}</p>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm mb-2">
+                {candidate.experience}{" "}
+                {candidate.experience > 1 ? "years" : "year"} of experience
+              </p>
+
+              {candidate.skills.length > 0 && (
+                <div className="mb-2">
+                  <p className="text-xs font-medium text-gray-500 mb-1">
+                    Skills
+                  </p>
+                  <div className="flex flex-wrap gap-1">
+                    {candidate.skills.slice(0, 3).map((skill) => (
+                      <span
+                        key={skill}
+                        className="bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full text-xs"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                    {candidate.skills.length > 3 && (
+                      <span className="text-xs text-gray-500">
+                        +{candidate.skills.length - 3}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {candidate.languages.length > 0 && (
+                <div className="mb-2">
+                  <p className="text-xs font-medium text-gray-500 mb-1">
+                    Languages
+                  </p>
+                  <div className="flex flex-wrap gap-1">
+                    {candidate.languages.map((language) => (
+                      <span
+                        key={language}
+                        className="bg-green-100 text-green-800 px-2 py-0.5 rounded-full text-xs"
+                      >
+                        {language}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="flex justify-between text-xs text-gray-500 mt-4">
+                <span>{candidate.availability.replace("_", " ")}</span>
+                {candidate.city && candidate.countryCode && (
+                  <span>
+                    {candidate.city}, {candidate.countryCode}
+                  </span>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Pagination */}
+      {pagination.pages > 1 && (
+        <div className="flex justify-center mt-6">
+          <div className="flex space-x-1">
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={pagination.current === 1}
+              onClick={() =>
+                setPagination({
+                  ...pagination,
+                  current: pagination.current - 1,
+                })
+              }
+            >
+              Previous
+            </Button>
+
+            {Array.from({ length: pagination.pages }, (_, i) => i + 1).map(
+              (page) => (
+                <Button
+                  key={page}
+                  variant={pagination.current === page ? "default" : "outline"}
+                  size="sm"
+                  onClick={() =>
+                    setPagination({ ...pagination, current: page })
+                  }
+                >
+                  {page}
+                </Button>
+              )
+            )}
+
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={pagination.current === pagination.pages}
+              onClick={() =>
+                setPagination({
+                  ...pagination,
+                  current: pagination.current + 1,
+                })
+              }
+            >
+              Next
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

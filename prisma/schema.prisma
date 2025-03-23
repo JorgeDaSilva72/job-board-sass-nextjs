@@ -96,6 +96,10 @@ model Company {
   linkedinProfile String?
   languages       String[] // Langues de travail
 
+  // Ajout des nouvelles relations
+  savedFilters    CandidateFilter[]
+  viewedCandidates ViewedCandidate[]
+
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   JobPost   JobPost[]
@@ -133,6 +137,8 @@ model JobSeeker {
   availability    Availability  // IMMEDIATE, ONE_MONTH, etc.
   preferredJobType JobType[]   // FULL_TIME, PART_TIME, etc.
   
+// Ajout de la nouvelle relation
+  viewedBy        ViewedCandidate[]
 
   jobApplications JobApplication[]
 
@@ -234,6 +240,39 @@ model JobApplication {
   coverLetter String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+}
+
+// Ajout du modèle pour les filtres de candidats
+model CandidateFilter {
+  id         String   @id @default(uuid())
+  companyId  String
+  company    Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  name       String   // Nom du filtre sauvegardé
+  
+  // Critères de filtrage
+  skills          String[]
+  experienceMin   Int?
+  experienceMax   Int?
+  availability    Availability[]
+  jobTypes        JobType[]
+  languages       String[]
+  location        String?
+  educationLevel  EducationLevel?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Modèle pour suivre les candidats consultés
+model ViewedCandidate {
+  id         String   @id @default(uuid())
+  companyId  String
+  company    Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  jobSeekerId String
+  jobSeeker  JobSeeker @relation(fields: [jobSeekerId], references: [id], onDelete: Cascade)
+  viewedAt   DateTime @default(now())
+  
+  @@unique([companyId, jobSeekerId])
 }
 
 enum ApplicationStatus {
