@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from "next/server";
 // import { getServerSession } from 'next-auth/next';
 // import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 // import prisma from '@/lib/prisma';
-import { UserType } from "@prisma/client";
 import { auth } from "@/app/utils/auth";
 import { prisma } from "@/app/utils/db";
 
@@ -48,6 +47,7 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get("limit") || "10");
 
     // Construire la requête avec les filtres
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const whereClause: any = {};
 
     if (skills.length > 0) {
@@ -110,7 +110,7 @@ export async function GET(request: NextRequest) {
     });
 
     // Enregistrer les vues des candidats
-    const companyId = user.Company.id;
+    // const companyId = user.Company.id;
 
     return NextResponse.json({
       candidates,

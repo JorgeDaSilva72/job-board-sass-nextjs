@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Filter, Save, Search, X } from "lucide-react";
-import { Availability, JobType, EducationLevel } from "@prisma/client";
+import { useRouter } from "next/navigation";
+import { Filter, Save, X } from "lucide-react";
+import { Availability, JobType } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@radix-ui/react-checkbox";
@@ -43,7 +43,7 @@ type FilterState = {
 
 export default function CandidatesPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  //   const searchParams = useSearchParams();
 
   // État pour les filtres
   const [filters, setFilters] = useState<FilterState>({
@@ -66,6 +66,7 @@ export default function CandidatesPage() {
   });
 
   // État pour les filtres sauvegardés
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [savedFilters, setSavedFilters] = useState<any[]>([]);
   const [newFilterName, setNewFilterName] = useState("");
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
@@ -157,6 +158,7 @@ export default function CandidatesPage() {
   };
 
   // Appliquer un filtre sauvegardé
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const applyFilter = (filter: any) => {
     setFilters({
       skills: filter.skills || [],
