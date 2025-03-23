@@ -22,6 +22,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { toast } from "sonner";
 
 // Types
 type JobSeeker = {
@@ -170,7 +171,7 @@ const CandidateDetailPage = () => {
         const response = await fetch(`/api/candidates/${candidateId}`);
 
         if (!response.ok) {
-          throw new Error("Impossible de récupérer les données du candidat");
+          throw new Error("Unable to retrieve candidate data");
         }
 
         const data = await response.json();
@@ -218,15 +219,15 @@ const CandidateDetailPage = () => {
     return (
       <div className="container mx-auto py-8">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-red-600 mb-4">Erreur</h2>
-          <p>{error || "Candidat non trouvé"}</p>
+          <h2 className="text-2xl font-bold text-red-600 mb-4">Error</h2>
+          <p>{error || "Candidate not found"}</p>
           <Button
             variant="outline"
             className="mt-4"
-            onClick={() => router.push("/dashboard/candidates")}
+            onClick={() => router.push("/company/candidates")}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Retour à la liste des candidats
+            Back to the list of candidates
           </Button>
         </div>
       </div>
