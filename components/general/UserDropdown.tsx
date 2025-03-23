@@ -122,6 +122,7 @@ import {
   Building,
   FileText,
   MessageSquare,
+  UserSearch,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -216,6 +217,17 @@ export function UserDropdown({
                   aria-hidden="true"
                 />
                 <span>Applications Received</span>
+              </Link>
+            </DropdownMenuItem>
+
+            <DropdownMenuItem asChild className="flex items-center gap-2 py-2">
+              <Link href="/company/candidates">
+                <UserSearch
+                  size={16}
+                  className="text-muted-foreground"
+                  aria-hidden="true"
+                />
+                <span>Candidates database</span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild className="flex items-center gap-2 py-2">
