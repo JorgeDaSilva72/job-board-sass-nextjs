@@ -4,9 +4,12 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  //   { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Récupérer l'ID du candidat
+    const params = await context.params;
     const candidateId = params.id;
 
     if (!candidateId) {
