@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@radix-ui/react-checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { toast } from "sonner";
 
 // Types
 type Candidate = {
@@ -102,10 +103,12 @@ export default function CandidatesPage() {
         setCandidates(data.candidates);
         setPagination(data.pagination);
       } else {
-        console.error("Erreur lors du chargement des candidats:", data.error);
+        console.error("Error loading candidates:", data.error);
+        toast.error("Error loading candidates", data.error);
       }
     } catch (error) {
-      console.error("Erreur lors du chargement des candidats:", error);
+      console.error("Error loading candidates:", error);
+      toast.error("Error loading candidates");
     }
   };
 
@@ -118,10 +121,12 @@ export default function CandidatesPage() {
       if (response.ok) {
         setSavedFilters(data);
       } else {
-        console.error("Erreur lors du chargement des filtres:", data.error);
+        console.error("Error loading filters :", data.error);
+        toast.error("Error loading filters :", data.error);
       }
     } catch (error) {
-      console.error("Erreur lors du chargement des filtres:", error);
+      console.error("Error loading filters :", error);
+      toast.error("Error loading filters. ");
     }
   };
 
@@ -129,7 +134,7 @@ export default function CandidatesPage() {
   const saveFilter = async () => {
     try {
       if (!newFilterName.trim()) {
-        alert("Veuillez saisir un nom pour le filtre");
+        toast("Please enter a name for the filter");
         return;
       }
 
@@ -150,10 +155,12 @@ export default function CandidatesPage() {
         setNewFilterName("");
         loadSavedFilters();
       } else {
-        console.error("Erreur lors de la sauvegarde du filtre:", data.error);
+        console.error("Error saving filter:", data.error);
+        toast.error("Error saving filter:", data.error);
       }
     } catch (error) {
-      console.error("Erreur lors de la sauvegarde du filtre:", error);
+      console.error("Error saving filter:", error);
+      toast.error("Error saving filter");
     }
   };
 
@@ -229,7 +236,8 @@ export default function CandidatesPage() {
       // Rediriger vers le profil du candidat
       router.push(`/company/candidates/${candidateId}`);
     } catch (error) {
-      console.error("Erreur lors de l'enregistrement de la vue:", error);
+      console.error("Error saving view:", error);
+      toast.error("Error saving view");
     }
   };
 
