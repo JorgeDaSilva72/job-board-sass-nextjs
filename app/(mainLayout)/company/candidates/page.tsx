@@ -227,7 +227,7 @@ export default function CandidatesPage() {
       });
 
       // Rediriger vers le profil du candidat
-      router.push(`/dashboard/candidates/${candidateId}`);
+      router.push(`/company/candidates/${candidateId}`);
     } catch (error) {
       console.error("Erreur lors de l'enregistrement de la vue:", error);
     }
