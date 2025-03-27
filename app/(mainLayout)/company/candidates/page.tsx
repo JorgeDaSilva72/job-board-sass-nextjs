@@ -1548,12 +1548,12 @@ export default function CandidatesPage() {
           <div className="flex flex-col items-center justify-center py-12">
             <p className="text-lg  mb-4">No candidates found</p>
             <Button
-              variant="outline"
+              variant="destructive"
               onClick={clearAllFilters}
               disabled={isLoading}
             >
               <RefreshCw className="mr-2 h-4 w-4" />
-              Clear filters
+              Clear all filters
             </Button>
           </div>
         )}

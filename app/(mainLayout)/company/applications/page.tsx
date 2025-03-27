@@ -1300,7 +1300,7 @@ export default function ReceivedApplicationsPage() {
                           </div>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon">
+                              <Button size="icon">
                                 <MoreVertical className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>
@@ -1409,7 +1409,6 @@ export default function ReceivedApplicationsPage() {
 
                             <div className="mt-4">
                               <Button
-                                variant="outline"
                                 size="sm"
                                 className="w-full"
                                 onClick={() =>
@@ -1467,6 +1466,21 @@ export default function ReceivedApplicationsPage() {
                               >
                                 <FileText className="h-4 w-4 mr-2" />
                                 View Resume
+                              </Button>
+                            </div>
+
+                            <div className="mt-4">
+                              <Button
+                                size="sm"
+                                className="w-full"
+                                onClick={() =>
+                                  router.push(
+                                    `/company/candidates/${application.jobSeeker.id}`
+                                  )
+                                }
+                              >
+                                <ExternalLink className="h-4 w-4 mr-2" />
+                                View Complete Candidate Information.
                               </Button>
                             </div>
                           </div>
