@@ -648,13 +648,19 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Filter, Save, X, RefreshCw } from "lucide-react";
+import { Filter, Save, X, RefreshCw, HelpCircle } from "lucide-react";
 import { Availability, JobType } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 // Types
 type Candidate = {
@@ -696,8 +702,8 @@ export default function CandidatesPage() {
   const [filters, setFilters] = useState<FilterState>({
     skills: [],
     languages: [],
-    experienceMin: undefined,
-    experienceMax: undefined,
+    experienceMin: 0,
+    experienceMax: 99,
     availability: [],
     jobTypes: [],
     location: undefined,
@@ -727,8 +733,8 @@ export default function CandidatesPage() {
     setFilters({
       skills: [],
       languages: [],
-      experienceMin: undefined,
-      experienceMax: undefined,
+      experienceMin: 0,
+      experienceMax: 99,
       availability: [],
       jobTypes: [],
       location: undefined,
@@ -739,27 +745,34 @@ export default function CandidatesPage() {
   // Charger les candidats
   const loadCandidates = async () => {
     try {
+      console.log("Loading candidates with filters:", filters);
       // Construire l'URL avec les filtres
       let url = `/api/candidates?page=${pagination.current}&limit=${pagination.limit}`;
 
-      if (filters.skills.length > 0)
+      if (filters.skills && filters.skills.length > 0)
         url += `&skills=${filters.skills.join(",")}`;
-      if (filters.languages.length > 0)
+      if (filters.languages && filters.languages.length > 0)
         url += `&languages=${filters.languages.join(",")}`;
-      if (filters.experienceMin !== undefined)
+
+      // Only add experience filters if they have valid values
+      if (filters.experienceMin !== undefined && filters.experienceMin !== null)
         url += `&experienceMin=${filters.experienceMin}`;
-      if (filters.experienceMax !== undefined)
+      if (filters.experienceMax !== undefined && filters.experienceMax !== null)
         url += `&experienceMax=${filters.experienceMax}`;
-      if (filters.availability.length > 0)
+
+      if (filters.availability && filters.availability.length > 0)
         url += `&availability=${filters.availability.join(",")}`;
-      if (filters.jobTypes.length > 0)
+      if (filters.jobTypes && filters.jobTypes.length > 0)
         url += `&jobTypes=${filters.jobTypes.join(",")}`;
       if (filters.location) url += `&location=${filters.location}`;
+
+      console.log("Request URL:", url);
 
       const response = await fetch(url);
       const data = await response.json();
 
       if (response.ok) {
+        console.log("Received candidates:", data.candidates);
         setCandidates(data.candidates);
         setPagination(data.pagination);
       } else {
@@ -775,10 +788,13 @@ export default function CandidatesPage() {
   // Charger les filtres sauvegardés
   const loadSavedFilters = async () => {
     try {
+      console.log("Fetching saved filters...");
       const response = await fetch("/api/candidates/filters");
       const data = await response.json();
+      console.log("API response:", data);
 
       if (response.ok) {
+        console.log("Setting saved filters:", data);
         setSavedFilters(data);
       } else {
         console.error("Error loading filters :", data.error);
@@ -827,15 +843,43 @@ export default function CandidatesPage() {
   // Appliquer un filtre sauvegardé
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const applyFilter = (filter: any) => {
-    setFilters({
-      skills: filter.skills || [],
-      languages: filter.languages || [],
-      experienceMin: filter.experienceMin,
-      experienceMax: filter.experienceMax,
-      availability: filter.availability || [],
-      jobTypes: filter.jobTypes || [],
-      location: filter.location,
-    });
+    console.log("Applying filter:", filter);
+
+    // Ensure arrays are properly handled
+    const processedFilter = {
+      skills: Array.isArray(filter.skills)
+        ? filter.skills
+        : filter.skills
+        ? filter.skills.split(",")
+        : [],
+      languages: Array.isArray(filter.languages)
+        ? filter.languages
+        : filter.languages
+        ? filter.languages.split(",")
+        : [],
+      experienceMin:
+        filter.experienceMin !== undefined
+          ? Number(filter.experienceMin)
+          : undefined,
+      experienceMax:
+        filter.experienceMax !== undefined
+          ? Number(filter.experienceMax)
+          : undefined,
+      availability: Array.isArray(filter.availability)
+        ? filter.availability
+        : filter.availability
+        ? filter.availability.split(",")
+        : [],
+      jobTypes: Array.isArray(filter.jobTypes)
+        ? filter.jobTypes
+        : filter.jobTypes
+        ? filter.jobTypes.split(",")
+        : [],
+      location: filter.location || undefined,
+    };
+    console.log("Processed filter data:", processedFilter);
+    //
+    setFilters(processedFilter);
   };
 
   // Ajouter une compétence
@@ -906,6 +950,31 @@ export default function CandidatesPage() {
     loadCandidates();
   }, [filters, pagination.current, pagination.limit]);
 
+  // Validation des filtres d'expérience
+  const setExperienceFilter = (type: "min" | "max", value: string) => {
+    // Convertir en nombre et gérer les valeurs négatives
+    const numValue = value ? Math.max(0, parseInt(value)) : undefined;
+
+    setFilters((prev) => {
+      const newMin = type === "min" ? numValue : prev.experienceMin;
+      const newMax = type === "max" ? numValue : prev.experienceMax;
+
+      // Validation: min ne doit pas être supérieur à max
+      if (newMin !== undefined && newMax !== undefined && newMin > newMax) {
+        toast.error(
+          "Minimum experience cannot be greater than maximum experience"
+        );
+        return prev;
+      }
+
+      return {
+        ...prev,
+        experienceMin: newMin ?? 0,
+        experienceMax: newMax ?? 99,
+      };
+    });
+  };
+
   // Charger les filtres sauvegardés au chargement de la page
   useEffect(() => {
     loadSavedFilters();
@@ -913,381 +982,438 @@ export default function CandidatesPage() {
 
   return (
     <div className="container mx-auto py-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Search for candidates</h1>
-        <Button
-          variant="outline"
-          onClick={() => setIsFiltersOpen(!isFiltersOpen)}
-        >
-          <Filter className="mr-2 h-4 w-4" />
-          Filters
-        </Button>
-      </div>
-
-      {isFiltersOpen && (
-        <Card className="mb-6">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle>Filter candidates</CardTitle>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={clearAllFilters}
-              className="flex items-center"
-            >
-              <RefreshCw className="mr-2 h-4 w-4" />
-              Clear all filters
-            </Button>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {/* Filtrage par compétences */}
-              <div className="space-y-2">
-                <label className="font-medium">Skills</label>
-                <div className="flex">
-                  <Input
-                    value={skillInput}
-                    onChange={(e) => setSkillInput(e.target.value)}
-                    placeholder="Add a skill"
-                    className="mr-2"
-                  />
-                  <Button onClick={addSkill} size="sm">
-                    +
-                  </Button>
-                </div>
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {filters.skills.map((skill) => (
-                    <span
-                      key={skill}
-                      className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm flex items-center"
-                    >
-                      {skill}
-                      <X
-                        className="ml-1 h-3 w-3 cursor-pointer"
-                        onClick={() => removeSkill(skill)}
-                      />
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Filtrage par langues */}
-              <div className="space-y-2">
-                <label className="font-medium">Languages</label>
-                <div className="flex">
-                  <Input
-                    value={languageInput}
-                    onChange={(e) => setLanguageInput(e.target.value)}
-                    placeholder="Add a language"
-                    className="mr-2"
-                  />
-                  <Button onClick={addLanguage} size="sm">
-                    +
-                  </Button>
-                </div>
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {filters.languages.map((language) => (
-                    <span
-                      key={language}
-                      className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-sm flex items-center"
-                    >
-                      {language}
-                      <X
-                        className="ml-1 h-3 w-3 cursor-pointer"
-                        onClick={() => removeLanguage(language)}
-                      />
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Filtrage par expérience */}
-              <div className="space-y-2">
-                <label className="font-medium">Experience (years)</label>
-                <div className="flex items-center space-x-2">
-                  <Input
-                    type="number"
-                    value={filters.experienceMin || ""}
-                    onChange={(e) =>
-                      setFilters({
-                        ...filters,
-                        experienceMin: e.target.value
-                          ? parseInt(e.target.value)
-                          : undefined,
-                      })
-                    }
-                    placeholder="Min"
-                  />
-                  <span>à</span>
-                  <Input
-                    type="number"
-                    value={filters.experienceMax || ""}
-                    onChange={(e) =>
-                      setFilters({
-                        ...filters,
-                        experienceMax: e.target.value
-                          ? parseInt(e.target.value)
-                          : undefined,
-                      })
-                    }
-                    placeholder="Max"
-                  />
-                </div>
-              </div>
-
-              {/* Filtrage par disponibilité */}
-              <div className="space-y-2">
-                <label className="font-medium">Availability</label>
-                <div className="space-y-2 p-2 border rounded-md">
-                  {Object.values(Availability).map((availability) => (
-                    <div key={availability} className="flex items-center">
-                      <Checkbox
-                        id={`availability-${availability}`}
-                        checked={filters.availability.includes(availability)}
-                        onCheckedChange={(checked) => {
-                          if (checked) {
-                            setFilters({
-                              ...filters,
-                              availability: [
-                                ...filters.availability,
-                                availability,
-                              ],
-                            });
-                          } else {
-                            setFilters({
-                              ...filters,
-                              availability: filters.availability.filter(
-                                (a) => a !== availability
-                              ),
-                            });
-                          }
-                        }}
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <label
-                        htmlFor={`availability-${availability}`}
-                        className="ml-2 text-sm font-medium"
-                      >
-                        {availability.replace("_", " ")}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Filtrage par type d'emploi */}
-              <div className="space-y-2">
-                <label className="font-medium">Type of employment</label>
-                <div className="space-y-2 p-2 border rounded-md">
-                  {Object.values(JobType).map((jobType) => (
-                    <div key={jobType} className="flex items-center">
-                      <Checkbox
-                        id={`jobType-${jobType}`}
-                        checked={filters.jobTypes.includes(jobType)}
-                        onCheckedChange={(checked) => {
-                          if (checked) {
-                            setFilters({
-                              ...filters,
-                              jobTypes: [...filters.jobTypes, jobType],
-                            });
-                          } else {
-                            setFilters({
-                              ...filters,
-                              jobTypes: filters.jobTypes.filter(
-                                (jt) => jt !== jobType
-                              ),
-                            });
-                          }
-                        }}
-                        className="h-4 w-4 text-blue-600"
-                      />
-                      <label
-                        htmlFor={`jobType-${jobType}`}
-                        className="ml-2 text-sm font-medium"
-                      >
-                        {jobType.replace("_", " ")}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Filtrage par localisation */}
-              <div className="space-y-2">
-                <label className="font-medium">Location</label>
-                <Input
-                  value={filters.location || ""}
-                  onChange={(e) =>
-                    setFilters({
-                      ...filters,
-                      location: e.target.value || undefined,
-                    })
-                  }
-                  placeholder="City or country"
-                />
-              </div>
-            </div>
-
-            {/* Sauvegarder le filtre */}
-            <div className="mt-6 border-t pt-4">
-              <div className="flex items-center">
-                <Input
-                  value={newFilterName}
-                  onChange={(e) => setNewFilterName(e.target.value)}
-                  placeholder="Filter name"
-                  className="mr-2"
-                />
-                <Button onClick={saveFilter}>
-                  <Save className="mr-2 h-4 w-4" />
-                  Save this filter
-                </Button>
-              </div>
-
-              {/* Filtres sauvegardés */}
-              {savedFilters.length > 0 && (
-                <div className="mt-4">
-                  <h3 className="font-medium mb-2">Filtres sauvegardés</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {savedFilters.map((filter) => (
-                      <Button
-                        key={filter.id}
-                        variant="outline"
-                        size="sm"
-                        onClick={() => applyFilter(filter)}
-                      >
-                        {filter.name}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Liste des candidats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {candidates.map((candidate) => (
-          <Card
-            key={candidate.id}
-            className="cursor-pointer hover:shadow-md transition-shadow duration-200"
-            onClick={() => viewCandidateProfile(candidate.id)}
+      <TooltipProvider>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">Search for candidates</h1>
+          <Button
+            variant="outline"
+            onClick={() => setIsFiltersOpen(!isFiltersOpen)}
           >
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg">
-                {candidate.firstName} {candidate.lastName}
-              </CardTitle>
-              <p className="text-sm text-gray-500">{candidate.title}</p>
+            <Filter className="mr-2 h-4 w-4" />
+            Filters
+          </Button>
+        </div>
+
+        {isFiltersOpen && (
+          <Card className="mb-6">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle>Filter candidates</CardTitle>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={clearAllFilters}
+                className="flex items-center"
+              >
+                <RefreshCw className="mr-2 h-4 w-4" />
+                Clear all filters
+              </Button>
             </CardHeader>
             <CardContent>
-              <p className="text-sm mb-2">
-                {candidate.experience}{" "}
-                {candidate.experience > 1 ? "years" : "year"} of experience
-              </p>
-
-              {candidate.skills.length > 0 && (
-                <div className="mb-2">
-                  <p className="text-xs font-medium text-gray-500 mb-1">
-                    Skills
-                  </p>
-                  <div className="flex flex-wrap gap-1">
-                    {candidate.skills.slice(0, 3).map((skill) => (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {/* Filtrage par compétences */}
+                <div className="space-y-2">
+                  <label className="font-medium">Skills</label>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <HelpCircle className="h-4 w-4 text-gray-500" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>
+                        Add skills relevant to the job. Multiple skills can be
+                        added.
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                  <div className="flex">
+                    <Input
+                      value={skillInput}
+                      onChange={(e) => setSkillInput(e.target.value)}
+                      placeholder="Add a skill"
+                      className="mr-2"
+                    />
+                    <Button onClick={addSkill} size="sm">
+                      +
+                    </Button>
+                  </div>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {filters.skills.map((skill) => (
                       <span
                         key={skill}
-                        className="bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full text-xs"
+                        className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm flex items-center"
                       >
                         {skill}
+                        <X
+                          className="ml-1 h-3 w-3 cursor-pointer"
+                          onClick={() => removeSkill(skill)}
+                        />
                       </span>
                     ))}
-                    {candidate.skills.length > 3 && (
-                      <span className="text-xs text-gray-500">
-                        +{candidate.skills.length - 3}
-                      </span>
-                    )}
                   </div>
                 </div>
-              )}
 
-              {candidate.languages.length > 0 && (
-                <div className="mb-2">
-                  <p className="text-xs font-medium text-gray-500 mb-1">
-                    Languages
-                  </p>
-                  <div className="flex flex-wrap gap-1">
-                    {candidate.languages.map((language) => (
+                {/* Filtrage par langues */}
+                <div className="space-y-2">
+                  <label className="font-medium">Languages</label>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <HelpCircle className="h-4 w-4 text-gray-500" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>
+                        Add languages relevant to the job. Multiple languages
+                        can be added.
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                  <div className="flex">
+                    <Input
+                      value={languageInput}
+                      onChange={(e) => setLanguageInput(e.target.value)}
+                      placeholder="Add a language"
+                      className="mr-2"
+                    />
+                    <Button onClick={addLanguage} size="sm">
+                      +
+                    </Button>
+                  </div>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {filters.languages.map((language) => (
                       <span
                         key={language}
-                        className="bg-green-100 text-green-800 px-2 py-0.5 rounded-full text-xs"
+                        className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-sm flex items-center"
                       >
                         {language}
+                        <X
+                          className="ml-1 h-3 w-3 cursor-pointer"
+                          onClick={() => removeLanguage(language)}
+                        />
                       </span>
                     ))}
                   </div>
                 </div>
-              )}
 
-              <div className="flex justify-between text-xs text-gray-500 mt-4">
-                <span>{candidate.availability.replace("_", " ")}</span>
-                {candidate.city && candidate.countryCode && (
-                  <span>
-                    {candidate.city}, {candidate.countryCode}
-                  </span>
+                {/* Filtrage par expérience */}
+                <div className="space-y-2">
+                  <label className="font-medium">Experience (years)</label>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <HelpCircle className="h-4 w-4 text-gray-500" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Filter candidates by their total work experience.</p>
+                      <p>Minimum: 0 years (entry-level)</p>
+                      <p>Maximum: No upper limit by default</p>
+                    </TooltipContent>
+                  </Tooltip>
+                  <div className="flex items-center space-x-2">
+                    <Input
+                      type="number"
+                      min={0}
+                      value={filters.experienceMin || 0}
+                      //
+                      onChange={(e) =>
+                        setExperienceFilter("min", e.target.value)
+                      }
+                      placeholder="Min"
+                    />
+                    <span>à</span>
+                    <Input
+                      type="number"
+                      min={1}
+                      value={filters.experienceMax || 99}
+                      //
+                      onChange={(e) =>
+                        setExperienceFilter("max", e.target.value)
+                      }
+                      placeholder="Max"
+                    />
+                  </div>
+                </div>
+
+                {/* Filtrage par disponibilité */}
+                <div className="space-y-2">
+                  <label className="font-medium">Availability</label>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <HelpCircle className="h-4 w-4 text-gray-500" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Select the availability status of candidates.</p>
+                      <p>Choose one or multiple options.</p>
+                    </TooltipContent>
+                  </Tooltip>
+                  <div className="space-y-2 p-2 border rounded-md">
+                    {Object.values(Availability).map((availability) => (
+                      <div key={availability} className="flex items-center">
+                        <Checkbox
+                          id={`availability-${availability}`}
+                          checked={filters.availability.includes(availability)}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              setFilters({
+                                ...filters,
+                                availability: [
+                                  ...filters.availability,
+                                  availability,
+                                ],
+                              });
+                            } else {
+                              setFilters({
+                                ...filters,
+                                availability: filters.availability.filter(
+                                  (a) => a !== availability
+                                ),
+                              });
+                            }
+                          }}
+                          className="h-4 w-4 text-blue-600"
+                        />
+                        <label
+                          htmlFor={`availability-${availability}`}
+                          className="ml-2 text-sm font-medium"
+                        >
+                          {availability.replace("_", " ")}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Filtrage par type d'emploi */}
+                <div className="space-y-2">
+                  <label className="font-medium">Type of employment</label>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <HelpCircle className="h-4 w-4 text-gray-500" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Filter candidates by their preferred job types.</p>
+                      <p>Select one or multiple employment types.</p>
+                    </TooltipContent>
+                  </Tooltip>
+                  <div className="space-y-2 p-2 border rounded-md">
+                    {Object.values(JobType).map((jobType) => (
+                      <div key={jobType} className="flex items-center">
+                        <Checkbox
+                          id={`jobType-${jobType}`}
+                          checked={filters.jobTypes.includes(jobType)}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              setFilters({
+                                ...filters,
+                                jobTypes: [...filters.jobTypes, jobType],
+                              });
+                            } else {
+                              setFilters({
+                                ...filters,
+                                jobTypes: filters.jobTypes.filter(
+                                  (jt) => jt !== jobType
+                                ),
+                              });
+                            }
+                          }}
+                          className="h-4 w-4 text-blue-600"
+                        />
+                        <label
+                          htmlFor={`jobType-${jobType}`}
+                          className="ml-2 text-sm font-medium"
+                        >
+                          {jobType.replace("_", " ")}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Filtrage par localisation */}
+                <div className="space-y-2">
+                  <label className="font-medium">Location</label>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <HelpCircle className="h-4 w-4 text-gray-500" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Search candidates by city or country.</p>
+                      <p>Partial matches are supported.</p>
+                    </TooltipContent>
+                  </Tooltip>
+                  <Input
+                    value={filters.location || ""}
+                    onChange={(e) =>
+                      setFilters({
+                        ...filters,
+                        location: e.target.value || undefined,
+                      })
+                    }
+                    placeholder="City or country"
+                  />
+                </div>
+              </div>
+
+              {/* Sauvegarder le filtre */}
+              <div className="mt-6 border-t pt-4">
+                <div className="flex items-center">
+                  <Input
+                    value={newFilterName}
+                    onChange={(e) => setNewFilterName(e.target.value)}
+                    placeholder="Filter name"
+                    className="mr-2"
+                  />
+                  <Button onClick={saveFilter}>
+                    <Save className="mr-2 h-4 w-4" />
+                    Save this filter
+                  </Button>
+                </div>
+
+                {/* Filtres sauvegardés */}
+                {savedFilters.length > 0 && (
+                  <div className="mt-4">
+                    <h3 className="font-medium mb-2">Saved filters</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {savedFilters.map((filter) => (
+                        <Button
+                          key={filter.id}
+                          variant="outline"
+                          size="sm"
+                          onClick={() => applyFilter(filter)}
+                        >
+                          {filter.name}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
                 )}
               </div>
             </CardContent>
           </Card>
-        ))}
-      </div>
+        )}
 
-      {/* Pagination */}
-      {pagination.pages > 1 && (
-        <div className="flex justify-center mt-6">
-          <div className="flex space-x-1">
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={pagination.current === 1}
-              onClick={() =>
-                setPagination({
-                  ...pagination,
-                  current: pagination.current - 1,
-                })
-              }
+        {/* Liste des candidats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {candidates.map((candidate) => (
+            <Card
+              key={candidate.id}
+              className="cursor-pointer hover:shadow-md transition-shadow duration-200"
+              onClick={() => viewCandidateProfile(candidate.id)}
             >
-              Previous
-            </Button>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">
+                  {candidate.firstName} {candidate.lastName}
+                </CardTitle>
+                <p className="text-sm text-gray-500">{candidate.title}</p>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm mb-2">
+                  {candidate.experience}{" "}
+                  {candidate.experience > 1 ? "years" : "year"} of experience
+                </p>
 
-            {Array.from({ length: pagination.pages }, (_, i) => i + 1).map(
-              (page) => (
-                <Button
-                  key={page}
-                  variant={pagination.current === page ? "default" : "outline"}
-                  size="sm"
-                  onClick={() =>
-                    setPagination({ ...pagination, current: page })
-                  }
-                >
-                  {page}
-                </Button>
-              )
-            )}
+                {candidate.skills.length > 0 && (
+                  <div className="mb-2">
+                    <p className="text-xs font-medium text-gray-500 mb-1">
+                      Skills
+                    </p>
+                    <div className="flex flex-wrap gap-1">
+                      {candidate.skills.slice(0, 3).map((skill) => (
+                        <span
+                          key={skill}
+                          className="bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full text-xs"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                      {candidate.skills.length > 3 && (
+                        <span className="text-xs text-gray-500">
+                          +{candidate.skills.length - 3}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
 
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={pagination.current === pagination.pages}
-              onClick={() =>
-                setPagination({
-                  ...pagination,
-                  current: pagination.current + 1,
-                })
-              }
-            >
-              Next
-            </Button>
-          </div>
+                {candidate.languages.length > 0 && (
+                  <div className="mb-2">
+                    <p className="text-xs font-medium text-gray-500 mb-1">
+                      Languages
+                    </p>
+                    <div className="flex flex-wrap gap-1">
+                      {candidate.languages.map((language) => (
+                        <span
+                          key={language}
+                          className="bg-green-100 text-green-800 px-2 py-0.5 rounded-full text-xs"
+                        >
+                          {language}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex justify-between text-xs text-gray-500 mt-4">
+                  <span>{candidate.availability.replace("_", " ")}</span>
+                  {candidate.city && candidate.countryCode && (
+                    <span>
+                      {candidate.city}, {candidate.countryCode}
+                    </span>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
-      )}
+
+        {/* Pagination */}
+        {pagination.pages > 1 && (
+          <div className="flex justify-center mt-6">
+            <div className="flex space-x-1">
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={pagination.current === 1}
+                onClick={() =>
+                  setPagination({
+                    ...pagination,
+                    current: pagination.current - 1,
+                  })
+                }
+              >
+                Previous
+              </Button>
+
+              {Array.from({ length: pagination.pages }, (_, i) => i + 1).map(
+                (page) => (
+                  <Button
+                    key={page}
+                    variant={
+                      pagination.current === page ? "default" : "outline"
+                    }
+                    size="sm"
+                    onClick={() =>
+                      setPagination({ ...pagination, current: page })
+                    }
+                  >
+                    {page}
+                  </Button>
+                )
+              )}
+
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={pagination.current === pagination.pages}
+                onClick={() =>
+                  setPagination({
+                    ...pagination,
+                    current: pagination.current + 1,
+                  })
+                }
+              >
+                Next
+              </Button>
+            </div>
+          </div>
+        )}
+      </TooltipProvider>
     </div>
   );
 }

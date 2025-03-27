@@ -34,12 +34,29 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const skills = searchParams.get("skills")?.split(",") || [];
     const languages = searchParams.get("languages")?.split(",") || [];
-    const experienceMin = searchParams.get("experienceMin")
-      ? parseInt(searchParams.get("experienceMin") as string)
-      : undefined;
-    const experienceMax = searchParams.get("experienceMax")
-      ? parseInt(searchParams.get("experienceMax") as string)
-      : undefined;
+
+    // Correction: Vérifier si la valeur est présente ET non vide avant de parser
+    const experienceMinParam = searchParams.get("experienceMin");
+    const experienceMaxParam = searchParams.get("experienceMax");
+
+    // const experienceMin = searchParams.get("experienceMin")
+    //   ? parseInt(searchParams.get("experienceMin") as string)
+    //   : undefined;
+
+    // Utiliser null si le paramètre est absent ou vide
+    const experienceMin =
+      experienceMinParam && experienceMinParam.trim() !== ""
+        ? parseInt(experienceMinParam)
+        : null;
+
+    // const experienceMax = searchParams.get("experienceMax")
+    //   ? parseInt(searchParams.get("experienceMax") as string)
+    //   : undefined;
+
+    const experienceMax =
+      experienceMaxParam && experienceMaxParam.trim() !== ""
+        ? parseInt(experienceMaxParam)
+        : null;
     const availability = searchParams.get("availability")?.split(",") || [];
     const jobTypes = searchParams.get("jobTypes")?.split(",") || [];
     const location = searchParams.get("location") || undefined;
@@ -58,13 +75,24 @@ export async function GET(request: NextRequest) {
       whereClause.languages = { hasSome: languages };
     }
 
-    if (experienceMin !== undefined || experienceMax !== undefined) {
+    // Correction: N'ajouter de condition d'expérience que si au moins une des valeurs est non nulle
+    if (experienceMin !== null || experienceMax !== null) {
       whereClause.experience = {};
-      if (experienceMin !== undefined)
+      if (experienceMin !== null) {
         whereClause.experience.gte = experienceMin;
-      if (experienceMax !== undefined)
+      }
+      if (experienceMax !== null) {
         whereClause.experience.lte = experienceMax;
+      }
     }
+
+    // if (experienceMin !== undefined || experienceMax !== undefined) {
+    //   whereClause.experience = {};
+    //   if (experienceMin !== undefined)
+    //     whereClause.experience.gte = experienceMin;
+    //   if (experienceMax !== undefined)
+    //     whereClause.experience.lte = experienceMax;
+    // }
 
     if (availability.length > 0) {
       whereClause.availability = { in: availability };
@@ -132,7 +160,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// Route pour enregistrer les filtres
+// POST endpoint for saving filters
 export async function POST(request: NextRequest) {
   try {
     const session = await auth();

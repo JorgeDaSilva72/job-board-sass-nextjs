@@ -1,61 +1,49 @@
-import { NextRequest, NextResponse } from "next/server";
+// app/api/candidates/filters/route.ts
 import { auth } from "@/app/utils/auth";
 import { prisma } from "@/app/utils/db";
+import { NextResponse } from "next/server";
 
-// Route pour enregistrer les filtres
-export async function POST(request: NextRequest) {
+export async function GET() {
   try {
+    // Get the current user session
     const session = await auth();
 
+    // Check if user is authenticated
     if (!session?.user?.id) {
       return NextResponse.json(
-        { error: "You must be logged in" },
+        { error: "You must be logged in to access saved filters" },
         { status: 401 }
       );
     }
 
+    // Get the company profile associated with the current user
     const user = await prisma.user.findUnique({
-      where: { email: session.user.email as string },
+      where: { id: session.user.id },
       include: { Company: true },
     });
 
-    if (!user || user.userType !== "COMPANY" || !user.Company) {
+    if (!user?.Company?.id) {
       return NextResponse.json(
-        { error: "Only recruiters can access this resource" },
-        { status: 403 }
+        { error: "No company profile found for this user" },
+        { status: 404 }
       );
     }
 
-    const data = await request.json();
-
-    // Valider les données
-    if (!data.name) {
-      return NextResponse.json(
-        { error: "Filter name is required" },
-        { status: 400 }
-      );
-    }
-
-    // Créer le filtre
-    const filter = await prisma.candidateFilter.create({
-      data: {
-        name: data.name,
+    // Fetch all saved filters for this company
+    const savedFilters = await prisma.candidateFilter.findMany({
+      where: {
         companyId: user.Company.id,
-        skills: data.skills || [],
-        languages: data.languages || [],
-        experienceMin: data.experienceMin,
-        experienceMax: data.experienceMax,
-        availability: data.availability || [],
-        jobTypes: data.jobTypes || [],
-        location: data.location,
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
 
-    return NextResponse.json(filter);
+    return NextResponse.json(savedFilters);
   } catch (error) {
-    console.error("Error saving filter:", error);
+    console.error("Error fetching saved filters:", error);
     return NextResponse.json(
-      { error: "An error occurred while saving the filter" },
+      { error: "Failed to load saved filters" },
       { status: 500 }
     );
   }
