@@ -703,7 +703,7 @@ export default function CandidatesPage() {
     skills: [],
     languages: [],
     experienceMin: 0,
-    experienceMax: 99,
+    experienceMax: 40,
     availability: [],
     jobTypes: [],
     location: undefined,
@@ -734,7 +734,7 @@ export default function CandidatesPage() {
       skills: [],
       languages: [],
       experienceMin: 0,
-      experienceMax: 99,
+      experienceMax: 40,
       availability: [],
       jobTypes: [],
       location: undefined,
@@ -953,14 +953,15 @@ export default function CandidatesPage() {
   // Validation des filtres d'expérience
   const setExperienceFilter = (type: "min" | "max", value: string) => {
     // Convertir en nombre et gérer les valeurs négatives
-    const numValue = value ? Math.max(0, parseInt(value)) : undefined;
-
+    // const numValue = value ? Math.max(0, parseInt(value)) : undefined;
+    const numValue = Math.max(0, Math.min(40, parseInt(value)));
     setFilters((prev) => {
-      const newMin = type === "min" ? numValue : prev.experienceMin;
-      const newMax = type === "max" ? numValue : prev.experienceMax;
+      const newMin = type === "min" ? numValue : prev.experienceMin || 0;
+      const newMax = type === "max" ? numValue : prev.experienceMax || 40;
 
       // Validation: min ne doit pas être supérieur à max
-      if (newMin !== undefined && newMax !== undefined && newMin > newMax) {
+      //
+      if (newMin > newMax) {
         toast.error(
           "Minimum experience cannot be greater than maximum experience"
         );
@@ -970,7 +971,7 @@ export default function CandidatesPage() {
       return {
         ...prev,
         experienceMin: newMin ?? 0,
-        experienceMax: newMax ?? 99,
+        experienceMax: newMax ?? 40,
       };
     });
   };
@@ -1093,7 +1094,7 @@ export default function CandidatesPage() {
                 </div>
 
                 {/* Filtrage par expérience */}
-                <div className="space-y-2">
+                {/* <div className="space-y-2">
                   <label className="font-medium">Experience (years)</label>
                   <Tooltip>
                     <TooltipTrigger>
@@ -1127,6 +1128,64 @@ export default function CandidatesPage() {
                       }
                       placeholder="Max"
                     />
+                  </div>
+                </div> */}
+
+                <div className="space-y-2">
+                  <div className="flex items-center">
+                    <label className="font-medium mr-2">
+                      Experience (years)
+                    </label>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <HelpCircle className="h-4 w-4 text-gray-500" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Filter candidates by their total work experience.</p>
+                        <p>Use sliders to select experience range.</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                  <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
+                    <div className="w-full md:w-1/2">
+                      <label className="text-sm mb-1 block">
+                        Minimum Experience
+                      </label>
+                      <Input
+                        type="range"
+                        min={0}
+                        max={40}
+                        value={filters.experienceMin || 0}
+                        onChange={(e) =>
+                          setExperienceFilter("min", e.target.value)
+                        }
+                        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                      />
+                      <div className="text-center text-sm mt-1">
+                        {filters.experienceMin || 0} years
+                      </div>
+                    </div>
+
+                    <div className="w-full md:w-1/2">
+                      <label className="text-sm mb-1 block">
+                        Maximum Experience
+                      </label>
+                      <Input
+                        type="range"
+                        min={0}
+                        max={40}
+                        value={filters.experienceMax || 40}
+                        onChange={(e) =>
+                          setExperienceFilter("max", e.target.value)
+                        }
+                        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                      />
+                      <div className="text-center text-sm mt-1">
+                        {filters.experienceMax === 40
+                          ? "40+ years"
+                          : `${filters.experienceMax} years`}
+                      </div>
+                    </div>
                   </div>
                 </div>
 
