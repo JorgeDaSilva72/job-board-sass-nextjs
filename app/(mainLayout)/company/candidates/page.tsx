@@ -983,7 +983,11 @@ export default function CandidatesPage() {
 
   return (
     <div className="container mx-auto py-8">
-      <TooltipProvider>
+      <TooltipProvider
+        delayDuration={300}
+        skipDelayDuration={0}
+        disableHoverableContent
+      >
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Search for candidates</h1>
           <Button
@@ -1015,8 +1019,10 @@ export default function CandidatesPage() {
                 <div className="space-y-2">
                   <label className="font-medium">Skills</label>
                   <Tooltip>
-                    <TooltipTrigger>
-                      <HelpCircle className="h-4 w-4 text-gray-500" />
+                    <TooltipTrigger asChild>
+                      <button>
+                        <HelpCircle className="h-4 w-4 text-gray-500" />
+                      </button>
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>
