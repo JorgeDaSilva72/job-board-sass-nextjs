@@ -1239,8 +1239,8 @@ export default function ReceivedApplicationsPage() {
         </CardHeader>
 
         <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
-          <div className="px-6">
-            <TabsList className="grid grid-cols-6 mb-4">
+          {/* <div className="px-6">
+            <TabsList className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 mb-4">
               <TabsTrigger value="all">All</TabsTrigger>
               <TabsTrigger value="pending">Pending</TabsTrigger>
               <TabsTrigger value="reviewed">Reviewed</TabsTrigger>
@@ -1248,7 +1248,180 @@ export default function ReceivedApplicationsPage() {
               <TabsTrigger value="interviewed">Interviewed</TabsTrigger>
               <TabsTrigger value="accepted">Accepted</TabsTrigger>
             </TabsList>
-          </div>
+          </div> */}
+
+          {/* <div className="px-4 sm:px-6">
+            <TabsList className="flex overflow-x-auto  pb-2 mb-4 gap-1 md:grid md:grid-cols-6">
+              <TabsTrigger
+                value="all"
+                className="text-xs px-2 py-1 min-w-[60px] md:text-sm md:px-3 md:py-2"
+              >
+                All
+              </TabsTrigger>
+              <TabsTrigger
+                value="pending"
+                className="text-xs px-2 py-1 min-w-[70px] md:text-sm md:px-3 md:py-2"
+              >
+                Pending
+              </TabsTrigger>
+              <TabsTrigger
+                value="reviewed"
+                className="text-xs px-2 py-1 min-w-[75px] md:text-sm md:px-3 md:py-2"
+              >
+                Reviewed
+              </TabsTrigger>
+              <TabsTrigger
+                value="shortlisted"
+                className="text-xs px-2 py-1 min-w-[85px] md:text-sm md:px-3 md:py-2"
+              >
+                Shortlisted
+              </TabsTrigger>
+              <TabsTrigger
+                value="interviewed"
+                className="text-xs px-2 py-1 min-w-[90px] md:text-sm md:px-3 md:py-2"
+              >
+                Interviewed
+              </TabsTrigger>
+              <TabsTrigger
+                value="accepted"
+                className="text-xs px-2 py-1 min-w-[75px] md:text-sm md:px-3 md:py-2"
+              >
+                Accepted
+              </TabsTrigger>
+            </TabsList>
+          </div> */}
+
+          {/* <div className="px-4 sm:px-6">
+            <TabsList className="grid grid-cols-2 gap-1 mb-4 sm:grid-cols-6 sm:gap-2">
+              <TabsTrigger
+                value="all"
+                className="text-xs py-1 truncate sm:text-sm"
+              >
+                All
+              </TabsTrigger>
+              <TabsTrigger
+                value="pending"
+                className="text-xs py-1 truncate sm:text-sm"
+              >
+                Pending
+              </TabsTrigger>
+              <TabsTrigger
+                value="reviewed"
+                className="text-xs py-1 truncate sm:text-sm"
+              >
+                Reviewed
+              </TabsTrigger>
+              <TabsTrigger
+                value="shortlisted"
+                className="text-xs py-1 truncate sm:text-sm"
+              >
+                Shortlisted
+              </TabsTrigger>
+              <TabsTrigger
+                value="interviewed"
+                className="text-xs py-1 truncate sm:text-sm"
+              >
+                Interviewed
+              </TabsTrigger>
+              <TabsTrigger
+                value="accepted"
+                className="text-xs py-1 truncate sm:text-sm"
+              >
+                Accepted
+              </TabsTrigger>
+            </TabsList>
+          </div> */}
+
+          {/* <div className="px-4 sm:px-6">
+            <TabsList className="flex flex-col space-y-2 mb-4 sm:flex-row sm:space-y-0 sm:space-x-2 sm:grid sm:grid-cols-6">
+              <TabsTrigger
+                value="all"
+                className="justify-start text-left py-2 sm:justify-center sm:text-center"
+              >
+                All
+              </TabsTrigger>
+              <TabsTrigger
+                value="pending"
+                className="justify-start text-left py-2 sm:justify-center sm:text-center"
+              >
+                Pending
+              </TabsTrigger>
+              <TabsTrigger
+                value="reviewed"
+                className="justify-start text-left py-2 sm:justify-center sm:text-center"
+              >
+                Reviewed
+              </TabsTrigger>
+              <TabsTrigger
+                value="shortlisted"
+                className="justify-start text-left py-2 sm:justify-center sm:text-center"
+              >
+                Shortlisted
+              </TabsTrigger>
+              <TabsTrigger
+                value="interviewed"
+                className="justify-start text-left py-2 sm:justify-center sm:text-center"
+              >
+                Interviewed
+              </TabsTrigger>
+              <TabsTrigger
+                value="accepted"
+                className="justify-start text-left py-2 sm:justify-center sm:text-center"
+              >
+                Accepted
+              </TabsTrigger>
+            </TabsList>
+          </div> */}
+
+          {/* <TabsList className="grid grid-cols-1 md:grid-cols-6 mb-4 gap-2">
+            <TabsTrigger value="all">All</TabsTrigger>
+            <TabsTrigger value="pending">Pending</TabsTrigger>
+            <TabsTrigger value="reviewed">Reviewed</TabsTrigger>
+            <TabsTrigger value="shortlisted">Shortlisted</TabsTrigger>
+            <TabsTrigger value="interviewed">Interviewed</TabsTrigger>
+            <TabsTrigger value="accepted">Accepted</TabsTrigger>
+          </TabsList> */}
+
+          <TabsList className="w-full overflow-x-auto">
+            <div className="flex w-full">
+              <TabsTrigger
+                value="all"
+                className="flex-1 min-w-[80px] md:min-w-0 text-center"
+              >
+                All
+              </TabsTrigger>
+              <TabsTrigger
+                value="pending"
+                className="flex-1 min-w-[80px] md:min-w-0 text-center"
+              >
+                Pending
+              </TabsTrigger>
+              <TabsTrigger
+                value="reviewed"
+                className="flex-1 min-w-[80px] md:min-w-0 text-center"
+              >
+                Reviewed
+              </TabsTrigger>
+              <TabsTrigger
+                value="shortlisted"
+                className="flex-1 min-w-[80px] md:min-w-0 text-center"
+              >
+                Shortlisted
+              </TabsTrigger>
+              <TabsTrigger
+                value="interviewed"
+                className="flex-1 min-w-[80px] md:min-w-0 text-center"
+              >
+                Interviewed
+              </TabsTrigger>
+              <TabsTrigger
+                value="accepted"
+                className="flex-1 min-w-[80px] md:min-w-0 text-center"
+              >
+                Accepted
+              </TabsTrigger>
+            </div>
+          </TabsList>
 
           <Separator />
 
