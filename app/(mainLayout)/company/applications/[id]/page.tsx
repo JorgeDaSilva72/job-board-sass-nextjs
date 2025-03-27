@@ -1266,6 +1266,7 @@ export default function ApplicationDetailsPage() {
       if (!response.ok) throw new Error("Failed to update application status");
 
       setApplication((prev) =>
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         prev ? { ...prev, status: newStatus as any } : null
       );
 
@@ -1294,6 +1295,7 @@ export default function ApplicationDetailsPage() {
   };
 
   const viewResume = (resumeUrl?: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     resumeUrl
       ? window.open(resumeUrl, "_blank")
       : toast.error("No resume available");
