@@ -728,6 +728,8 @@ export default function CandidatesPage() {
   const [skillInput, setSkillInput] = useState("");
   const [languageInput, setLanguageInput] = useState("");
 
+  const [isLoading, setIsLoading] = useState(false);
+
   // Fonction pour réinitialiser tous les filtres
   const clearAllFilters = () => {
     setFilters({
@@ -744,6 +746,7 @@ export default function CandidatesPage() {
 
   // Charger les candidats
   const loadCandidates = async () => {
+    setIsLoading(true);
     try {
       console.log("Loading candidates with filters:", filters);
       // Construire l'URL avec les filtres
@@ -780,14 +783,19 @@ export default function CandidatesPage() {
         toast.error("Error loading candidates", data.error);
       }
     } catch (error) {
-      console.error("Error loading candidates:", error);
-      toast.error("Error loading candidates");
+      console.error("Error:", error);
+      toast.error(
+        error instanceof Error ? error.message : "An unexpected error occurred"
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
   // Charger les filtres sauvegardés
   const loadSavedFilters = async () => {
     try {
+      setIsLoading(true);
       console.log("Fetching saved filters...");
       const response = await fetch("/api/candidates/filters");
       const data = await response.json();
@@ -801,8 +809,12 @@ export default function CandidatesPage() {
         toast.error("Error loading filters :", data.error);
       }
     } catch (error) {
-      console.error("Error loading filters :", error);
-      toast.error("Error loading filters. ");
+      console.error("Error:", error);
+      toast.error(
+        error instanceof Error ? error.message : "An unexpected error occurred"
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -945,9 +957,12 @@ export default function CandidatesPage() {
     }
   };
 
-  // Charger les candidats quand les filtres ou la pagination changent
+  // Charger les candidats quand les filtres ou la pagination changent avec un debounce
   useEffect(() => {
-    loadCandidates();
+    const handler = setTimeout(() => {
+      loadCandidates();
+    }, 500); // 500ms de délai
+    return () => clearTimeout(handler);
   }, [filters, pagination.current, pagination.limit]);
 
   // Validation des filtres d'expérience
@@ -991,11 +1006,15 @@ export default function CandidatesPage() {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Search for candidates</h1>
           <Button
-            variant="outline"
+            // variant="outline"
+            disabled={isLoading}
             onClick={() => setIsFiltersOpen(!isFiltersOpen)}
           >
             <Filter className="mr-2 h-4 w-4" />
             Filters
+            {isLoading && (
+              <span className="ml-2 h-4 w-4 border-2 border-t-transparent rounded-full animate-spin"></span>
+            )}
           </Button>
         </div>
 
@@ -1005,6 +1024,7 @@ export default function CandidatesPage() {
               <CardTitle>Filter candidates</CardTitle>
               <Button
                 variant="destructive"
+                disabled={isLoading}
                 size="sm"
                 onClick={clearAllFilters}
                 className="flex items-center"
@@ -1037,8 +1057,9 @@ export default function CandidatesPage() {
                       onChange={(e) => setSkillInput(e.target.value)}
                       placeholder="Add a skill"
                       className="mr-2"
+                      disabled={isLoading}
                     />
-                    <Button onClick={addSkill} size="sm">
+                    <Button onClick={addSkill} size="sm" disabled={isLoading}>
                       +
                     </Button>
                   </div>
@@ -1051,7 +1072,7 @@ export default function CandidatesPage() {
                         {skill}
                         <X
                           className="ml-1 h-3 w-3 cursor-pointer"
-                          onClick={() => removeSkill(skill)}
+                          onClick={() => !isLoading && removeSkill(skill)}
                         />
                       </span>
                     ))}
@@ -1078,8 +1099,13 @@ export default function CandidatesPage() {
                       onChange={(e) => setLanguageInput(e.target.value)}
                       placeholder="Add a language"
                       className="mr-2"
+                      disabled={isLoading}
                     />
-                    <Button onClick={addLanguage} size="sm">
+                    <Button
+                      onClick={addLanguage}
+                      size="sm"
+                      disabled={isLoading}
+                    >
                       +
                     </Button>
                   </div>
@@ -1092,7 +1118,7 @@ export default function CandidatesPage() {
                         {language}
                         <X
                           className="ml-1 h-3 w-3 cursor-pointer"
-                          onClick={() => removeLanguage(language)}
+                          onClick={() => !isLoading && removeLanguage(language)}
                         />
                       </span>
                     ))}
@@ -1166,6 +1192,7 @@ export default function CandidatesPage() {
                           setExperienceFilter("min", e.target.value)
                         }
                         className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                        disabled={isLoading}
                       />
                       <div className="text-center text-sm mt-1">
                         {filters.experienceMin || 0} years
@@ -1185,6 +1212,7 @@ export default function CandidatesPage() {
                           setExperienceFilter("max", e.target.value)
                         }
                         className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                        disabled={isLoading}
                       />
                       <div className="text-center text-sm mt-1">
                         {filters.experienceMax === 40
@@ -1214,24 +1242,27 @@ export default function CandidatesPage() {
                           id={`availability-${availability}`}
                           checked={filters.availability.includes(availability)}
                           onCheckedChange={(checked) => {
-                            if (checked) {
-                              setFilters({
-                                ...filters,
-                                availability: [
-                                  ...filters.availability,
-                                  availability,
-                                ],
-                              });
-                            } else {
-                              setFilters({
-                                ...filters,
-                                availability: filters.availability.filter(
-                                  (a) => a !== availability
-                                ),
-                              });
+                            if (!isLoading) {
+                              if (checked) {
+                                setFilters({
+                                  ...filters,
+                                  availability: [
+                                    ...filters.availability,
+                                    availability,
+                                  ],
+                                });
+                              } else {
+                                setFilters({
+                                  ...filters,
+                                  availability: filters.availability.filter(
+                                    (a) => a !== availability
+                                  ),
+                                });
+                              }
                             }
                           }}
                           className="h-4 w-4 text-blue-600"
+                          disabled={isLoading}
                         />
                         <label
                           htmlFor={`availability-${availability}`}
@@ -1263,21 +1294,24 @@ export default function CandidatesPage() {
                           id={`jobType-${jobType}`}
                           checked={filters.jobTypes.includes(jobType)}
                           onCheckedChange={(checked) => {
-                            if (checked) {
-                              setFilters({
-                                ...filters,
-                                jobTypes: [...filters.jobTypes, jobType],
-                              });
-                            } else {
-                              setFilters({
-                                ...filters,
-                                jobTypes: filters.jobTypes.filter(
-                                  (jt) => jt !== jobType
-                                ),
-                              });
+                            if (!isLoading) {
+                              if (checked) {
+                                setFilters({
+                                  ...filters,
+                                  jobTypes: [...filters.jobTypes, jobType],
+                                });
+                              } else {
+                                setFilters({
+                                  ...filters,
+                                  jobTypes: filters.jobTypes.filter(
+                                    (jt) => jt !== jobType
+                                  ),
+                                });
+                              }
                             }
                           }}
                           className="h-4 w-4 text-blue-600"
+                          disabled={isLoading}
                         />
                         <label
                           htmlFor={`jobType-${jobType}`}
@@ -1311,6 +1345,7 @@ export default function CandidatesPage() {
                       })
                     }
                     placeholder="City or country"
+                    disabled={isLoading}
                   />
                 </div>
               </div>
@@ -1323,10 +1358,14 @@ export default function CandidatesPage() {
                     onChange={(e) => setNewFilterName(e.target.value)}
                     placeholder="Filter name"
                     className="mr-2"
+                    disabled={isLoading}
                   />
-                  <Button onClick={saveFilter}>
+                  <Button disabled={isLoading} onClick={saveFilter}>
                     <Save className="mr-2 h-4 w-4" />
-                    Save this filter
+                    {isLoading ? "Saving..." : "Save this filter"}
+                    {isLoading && (
+                      <span className="ml-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                    )}
                   </Button>
                 </div>
 
@@ -1341,6 +1380,7 @@ export default function CandidatesPage() {
                           variant="outline"
                           size="sm"
                           onClick={() => applyFilter(filter)}
+                          disabled={isLoading}
                         >
                           {filter.name}
                         </Button>
@@ -1354,7 +1394,7 @@ export default function CandidatesPage() {
         )}
 
         {/* Liste des candidats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {candidates.map((candidate) => (
             <Card
               key={candidate.id}
@@ -1425,10 +1465,101 @@ export default function CandidatesPage() {
               </CardContent>
             </Card>
           ))}
-        </div>
+        </div> */}
+
+        {isLoading ? (
+          <div className="flex justify-center items-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+          </div>
+        ) : candidates.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {candidates.map((candidate) => (
+              <Card
+                key={candidate.id}
+                className="cursor-pointer hover:shadow-md transition-shadow duration-200"
+                onClick={() => !isLoading && viewCandidateProfile(candidate.id)}
+              >
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg">
+                    {candidate.firstName} {candidate.lastName}
+                  </CardTitle>
+                  <p className="text-sm text-gray-500">{candidate.title}</p>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm mb-2">
+                    {candidate.experience}{" "}
+                    {candidate.experience > 1 ? "years" : "year"} of experience
+                  </p>
+
+                  {candidate.skills.length > 0 && (
+                    <div className="mb-2">
+                      <p className="text-xs font-medium text-gray-500 mb-1">
+                        Skills
+                      </p>
+                      <div className="flex flex-wrap gap-1">
+                        {candidate.skills.slice(0, 3).map((skill) => (
+                          <span
+                            key={skill}
+                            className="bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full text-xs"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                        {candidate.skills.length > 3 && (
+                          <span className="text-xs text-gray-500">
+                            +{candidate.skills.length - 3}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {candidate.languages.length > 0 && (
+                    <div className="mb-2">
+                      <p className="text-xs font-medium text-gray-500 mb-1">
+                        Languages
+                      </p>
+                      <div className="flex flex-wrap gap-1">
+                        {candidate.languages.map((language) => (
+                          <span
+                            key={language}
+                            className="bg-green-100 text-green-800 px-2 py-0.5 rounded-full text-xs"
+                          >
+                            {language}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex justify-between text-xs text-gray-500 mt-4">
+                    <span>{candidate.availability.replace("_", " ")}</span>
+                    {candidate.city && candidate.countryCode && (
+                      <span>
+                        {candidate.city}, {candidate.countryCode}
+                      </span>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-12">
+            <p className="text-lg  mb-4">No candidates found</p>
+            <Button
+              variant="outline"
+              onClick={clearAllFilters}
+              disabled={isLoading}
+            >
+              <RefreshCw className="mr-2 h-4 w-4" />
+              Clear filters
+            </Button>
+          </div>
+        )}
 
         {/* Pagination */}
-        {pagination.pages > 1 && (
+        {/* {pagination.pages > 1 && (
           <div className="flex justify-center mt-6">
             <div className="flex space-x-1">
               <Button
@@ -1466,6 +1597,58 @@ export default function CandidatesPage() {
                 variant="outline"
                 size="sm"
                 disabled={pagination.current === pagination.pages}
+                onClick={() =>
+                  setPagination({
+                    ...pagination,
+                    current: pagination.current + 1,
+                  })
+                }
+              >
+                Next
+              </Button>
+            </div>
+          </div>
+        )} */}
+
+        {!isLoading && pagination.pages > 1 && (
+          <div className="flex justify-center mt-6">
+            <div className="flex space-x-1">
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={pagination.current === 1 || isLoading}
+                onClick={() =>
+                  setPagination({
+                    ...pagination,
+                    current: pagination.current - 1,
+                  })
+                }
+              >
+                Previous
+              </Button>
+
+              {Array.from({ length: pagination.pages }, (_, i) => i + 1).map(
+                (page) => (
+                  <Button
+                    key={page}
+                    variant={
+                      pagination.current === page ? "default" : "outline"
+                    }
+                    size="sm"
+                    onClick={() =>
+                      setPagination({ ...pagination, current: page })
+                    }
+                    disabled={isLoading}
+                  >
+                    {page}
+                  </Button>
+                )
+              )}
+
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={pagination.current === pagination.pages || isLoading}
                 onClick={() =>
                   setPagination({
                     ...pagination,
