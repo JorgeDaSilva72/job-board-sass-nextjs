@@ -764,6 +764,249 @@
 //   );
 // }
 
+// "use client";
+
+// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+// import { useEffect, useState } from "react";
+// import { Button } from "@/components/ui/button";
+// import { Badge } from "@/components/ui/badge";
+// import { Skeleton } from "@/components/ui/skeleton";
+
+// interface DashboardStats {
+//   totalJobs: number;
+//   jobStatusCounts: {
+//     DRAFT: number;
+//     ACTIVE: number;
+//     EXPIRED: number;
+//   };
+//   totalApplications: number;
+//   applicationStatusCounts: {
+//     PENDING: number;
+//     REVIEWED: number;
+//     SHORTLISTED: number;
+//     INTERVIEWED: number;
+//     ACCEPTED: number;
+//     REJECTED: number;
+//   };
+//   viewedCandidates: number;
+// }
+
+// export default function RecruiterDashboard() {
+//   const [stats, setStats] = useState<DashboardStats | null>(null);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState<string | null>(null);
+
+//   useEffect(() => {
+//     async function fetchDashboardData() {
+//       try {
+//         setError(null);
+//         const statsResponse = await fetch("/api/recruiter/stats");
+
+//         if (!statsResponse.ok) {
+//           throw new Error("Failed to fetch dashboard data");
+//         }
+
+//         const statsData = await statsResponse.json();
+//         setStats(statsData);
+//       } catch (error) {
+//         console.error("Error fetching dashboard data:", error);
+//         setError("Failed to load dashboard data. Please try again later.");
+//       } finally {
+//         setLoading(false);
+//       }
+//     }
+
+//     fetchDashboardData();
+//   }, []);
+
+//   const getStatusColor = (status: string) => {
+//     const statusColors = {
+//       ACTIVE: "bg-green-100 text-green-800",
+//       DRAFT: "bg-yellow-100 text-yellow-800",
+//       EXPIRED: "bg-red-100 text-red-800",
+//       PENDING: "bg-blue-100 text-blue-800",
+//       REVIEWED: "bg-green-100 text-green-800",
+//       SHORTLISTED: "bg-purple-100 text-purple-800",
+//       INTERVIEWED: "bg-yellow-100 text-yellow-800",
+//       ACCEPTED: "bg-green-100 text-green-800",
+//       REJECTED: "bg-red-100 text-red-800",
+//       default: "bg-gray-100 text-gray-800",
+//     };
+//     return (
+//       statusColors[status as keyof typeof statusColors] || statusColors.default
+//     );
+//   };
+
+//   if (error) {
+//     return (
+//       <div className="flex items-center justify-center h-screen">
+//         <Card className="w-full max-w-md">
+//           <CardHeader>
+//             <CardTitle>Error Loading Dashboard</CardTitle>
+//           </CardHeader>
+//           <CardContent>
+//             <p className="text-red-500 mb-4">{error}</p>
+//             <Button onClick={() => window.location.reload()}>Retry</Button>
+//           </CardContent>
+//         </Card>
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div className="container mx-auto px-4 py-8">
+//       <h1 className="text-3xl font-bold mb-8 text-center">
+//         Recruiter Dashboard
+//       </h1>
+
+//       {/* Job Posts Statistics */}
+//       <section className="mb-10">
+//         <h2 className="text-2xl font-semibold mb-6"> Overview</h2>
+//         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+//           {loading ? (
+//             Array.from({ length: 3 }).map((_, i) => (
+//               <Card key={`stats-skeleton-${i}`}>
+//                 <CardHeader>
+//                   <Skeleton className="h-6 w-3/4" />
+//                 </CardHeader>
+//                 <CardContent>
+//                   <Skeleton className="h-8 w-1/2 mb-2" />
+//                   <Skeleton className="h-4 w-full" />
+//                 </CardContent>
+//               </Card>
+//             ))
+//           ) : (
+//             <>
+//               <Card>
+//                 <CardHeader className="pb-2">
+//                   <CardTitle className="text-lg">Total Job Posts</CardTitle>
+//                 </CardHeader>
+//                 <CardContent>
+//                   <p className="text-3xl font-bold mb-2">{stats?.totalJobs}</p>
+//                   <div className="flex flex-col gap-1">
+//                     <Badge className={getStatusColor("ACTIVE")}>
+//                       Active: {stats?.jobStatusCounts.ACTIVE}
+//                     </Badge>
+//                     <Badge className={getStatusColor("DRAFT")}>
+//                       Draft: {stats?.jobStatusCounts.DRAFT}
+//                     </Badge>
+//                     <Badge className={getStatusColor("EXPIRED")}>
+//                       Expired: {stats?.jobStatusCounts.EXPIRED}
+//                     </Badge>
+//                   </div>
+//                 </CardContent>
+//               </Card>
+
+//               <Card>
+//                 <CardHeader className="pb-2">
+//                   <CardTitle className="text-lg">Total Applications</CardTitle>
+//                 </CardHeader>
+//                 <CardContent>
+//                   <p className="text-3xl font-bold mb-2">
+//                     {stats?.totalApplications}
+//                   </p>
+//                   <div className="flex gap-2 flex-wrap">
+//                     <Badge className={getStatusColor("PENDING")}>
+//                       Pending: {stats?.applicationStatusCounts.PENDING}
+//                     </Badge>
+//                     <Badge className={getStatusColor("REVIEWED")}>
+//                       Reviewed: {stats?.applicationStatusCounts.REVIEWED}
+//                     </Badge>
+//                     <Badge className={getStatusColor("SHORTLISTED")}>
+//                       Shortlisted: {stats?.applicationStatusCounts.SHORTLISTED}
+//                     </Badge>
+//                     <Badge className={getStatusColor("INTERVIEWED")}>
+//                       Interviewed: {stats?.applicationStatusCounts.INTERVIEWED}
+//                     </Badge>
+//                     <Badge className={getStatusColor("ACCEPTED")}>
+//                       Accepted: {stats?.applicationStatusCounts.ACCEPTED}
+//                     </Badge>
+//                     <Badge className={getStatusColor("REJECTED")}>
+//                       Rejected: {stats?.applicationStatusCounts.REJECTED}
+//                     </Badge>
+//                   </div>
+//                 </CardContent>
+//               </Card>
+
+//               <Card>
+//                 <CardHeader className="pb-2">
+//                   <CardTitle className="text-lg">
+//                     Candidate Engagement
+//                   </CardTitle>
+//                 </CardHeader>
+//                 <CardContent>
+//                   <p className="text-3xl font-bold mb-2">
+//                     {stats?.viewedCandidates}
+//                   </p>
+//                   <p className="text-sm text-muted-foreground">
+//                     Candidates viewed
+//                   </p>
+//                 </CardContent>
+//               </Card>
+//             </>
+//           )}
+//         </div>
+//       </section>
+
+//       {/* Jobs Status Breakdown */}
+//       <section>
+//         <h2 className="text-2xl font-semibold mb-6">Job Post Status</h2>
+//         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+//           {loading
+//             ? Array.from({ length: 3 }).map((_, i) => (
+//                 <Card key={`app-status-skeleton-${i}`}>
+//                   <CardContent className="pt-6">
+//                     <Skeleton className="h-6 w-full mb-2" />
+//                     <Skeleton className="h-8 w-3/4" />
+//                   </CardContent>
+//                 </Card>
+//               ))
+//             : Object.entries(stats?.jobStatusCounts || {}).map(
+//                 ([status, count]) => (
+//                   <Card key={status}>
+//                     <CardContent className="pt-6">
+//                       <Badge className={`mb-2 ${getStatusColor(status)}`}>
+//                         {status}
+//                       </Badge>
+//                       <p className="text-2xl font-bold">{count}</p>
+//                     </CardContent>
+//                   </Card>
+//                 )
+//               )}
+//         </div>
+//       </section>
+
+//       {/* Application Status Breakdown */}
+//       <section className="mt-2">
+//         <h2 className="text-2xl font-semibold mb-6">Application Status</h2>
+//         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+//           {loading
+//             ? Array.from({ length: 6 }).map((_, i) => (
+//                 <Card key={`app-status-skeleton-${i}`}>
+//                   <CardContent className="pt-6">
+//                     <Skeleton className="h-6 w-full mb-2" />
+//                     <Skeleton className="h-8 w-3/4" />
+//                   </CardContent>
+//                 </Card>
+//               ))
+//             : Object.entries(stats?.applicationStatusCounts || {}).map(
+//                 ([status, count]) => (
+//                   <Card key={status}>
+//                     <CardContent className="pt-6">
+//                       <Badge className={`mb-2 ${getStatusColor(status)}`}>
+//                         {status}
+//                       </Badge>
+//                       <p className="text-2xl font-bold">{count}</p>
+//                     </CardContent>
+//                   </Card>
+//                 )
+//               )}
+//         </div>
+//       </section>
+//     </div>
+//   );
+// }
+
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -771,8 +1014,9 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useRouter } from "next/navigation";
+import { CheckCircle, AlertCircle } from "lucide-react";
 
-// Updated interfaces to match new API response
 interface DashboardStats {
   totalJobs: number;
   jobStatusCounts: {
@@ -792,16 +1036,33 @@ interface DashboardStats {
   viewedCandidates: number;
 }
 
+interface SubscriptionStatus {
+  active: boolean;
+  planName?: string;
+  endDate?: string;
+  isTrial?: boolean;
+}
+
 export default function RecruiterDashboard() {
+  const router = useRouter();
   const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [subscription, setSubscription] = useState<SubscriptionStatus | null>(
+    null
+  );
+  const [loading, setLoading] = useState({
+    stats: true,
+    subscription: true,
+  });
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchDashboardData() {
       try {
         setError(null);
-        const statsResponse = await fetch("/api/recruiter/stats");
+        const [statsResponse, subscriptionResponse] = await Promise.all([
+          fetch("/api/recruiter/stats"),
+          fetch("/api/recruiter/subscription/status"),
+        ]);
 
         if (!statsResponse.ok) {
           throw new Error("Failed to fetch dashboard data");
@@ -809,11 +1070,19 @@ export default function RecruiterDashboard() {
 
         const statsData = await statsResponse.json();
         setStats(statsData);
+
+        if (subscriptionResponse.ok) {
+          const subscriptionData = await subscriptionResponse.json();
+          setSubscription(subscriptionData);
+        }
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
         setError("Failed to load dashboard data. Please try again later.");
       } finally {
-        setLoading(false);
+        setLoading({
+          stats: false,
+          subscription: false,
+        });
       }
     }
 
@@ -856,13 +1125,92 @@ export default function RecruiterDashboard() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Recruiter Dashboard</h1>
+      <h1 className="text-3xl font-bold mb-8 text-center">
+        Recruiter Dashboard
+      </h1>
+
+      {/* Subscription Status Card */}
+      <section className="mb-10">
+        <h2 className="text-2xl font-semibold mb-6">Subscription Status</h2>
+        {loading.subscription ? (
+          <Card>
+            <CardHeader>
+              <Skeleton className="h-6 w-1/4" />
+            </CardHeader>
+            <CardContent>
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-10 w-1/2 mt-4" />
+            </CardContent>
+          </Card>
+        ) : (
+          <Card
+            className={
+              subscription?.active ? "border-green-500" : "border-yellow-500"
+            }
+          >
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2">
+                {subscription?.active ? (
+                  <CheckCircle className="text-green-500" />
+                ) : (
+                  <AlertCircle className="text-yellow-500" />
+                )}
+                {subscription?.active
+                  ? "Active Subscription"
+                  : "No Active Subscription"}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {subscription?.active ? (
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <div>
+                    <p className="text-lg font-medium">
+                      Plan: {subscription.planName}
+                    </p>
+                    {subscription.endDate && (
+                      <p className="text-muted-foreground">
+                        Valid until:{" "}
+                        {new Date(subscription.endDate).toLocaleDateString()}
+                      </p>
+                    )}
+                    {subscription.isTrial && (
+                      <Badge
+                        variant="outline"
+                        className="mt-2 text-yellow-600 border-yellow-500"
+                      >
+                        Trial Period
+                      </Badge>
+                    )}
+                  </div>
+                  <Button onClick={() => router.push("/company/subscription")}>
+                    Manage Subscription
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <div>
+                    <p className="text-muted-foreground">
+                      You do not have an active subscription
+                    </p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Subscribe to unlock all features
+                    </p>
+                  </div>
+                  <Button onClick={() => router.push("/company/subscription")}>
+                    View Plans
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
+      </section>
 
       {/* Job Posts Statistics */}
       <section className="mb-10">
-        <h2 className="text-2xl font-semibold mb-6">Job Posts Overview</h2>
+        <h2 className="text-2xl font-semibold mb-6">Overview</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {loading ? (
+          {loading.stats ? (
             Array.from({ length: 3 }).map((_, i) => (
               <Card key={`stats-skeleton-${i}`}>
                 <CardHeader>
@@ -898,7 +1246,7 @@ export default function RecruiterDashboard() {
 
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">Applications</CardTitle>
+                  <CardTitle className="text-lg">Total Applications</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-3xl font-bold mb-2">
@@ -949,9 +1297,9 @@ export default function RecruiterDashboard() {
 
       {/* Jobs Status Breakdown */}
       <section>
-        <h2 className="text-2xl font-semibold mb-6">Job Status</h2>
+        <h2 className="text-2xl font-semibold mb-6">Job Post Status</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {loading
+          {loading.stats
             ? Array.from({ length: 3 }).map((_, i) => (
                 <Card key={`app-status-skeleton-${i}`}>
                   <CardContent className="pt-6">
@@ -979,7 +1327,7 @@ export default function RecruiterDashboard() {
       <section className="mt-2">
         <h2 className="text-2xl font-semibold mb-6">Application Status</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {loading
+          {loading.stats
             ? Array.from({ length: 6 }).map((_, i) => (
                 <Card key={`app-status-skeleton-${i}`}>
                   <CardContent className="pt-6">

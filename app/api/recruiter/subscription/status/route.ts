@@ -26,45 +26,33 @@ export async function GET() {
       );
     }
 
-    // const companyId = user.Company.id;
-
-    // Vérifier l'abonnement actif
     const activeSubscription = await prisma.subscription.findFirst({
       where: {
         userId: session.user.id,
         status: "ACTIVE",
-        endDate: {
-          gte: new Date(), // Seulement les abonnements non expirés
-        },
+        endDate: { gte: new Date() }, // Seulement les abonnements non expirés
       },
-      select: {
-        status: true,
-        endDate: true,
-        plan: {
-          select: {
-            name: true,
-            features: true,
-          },
-        },
-      },
+      include: { plan: { select: { name: true } } },
       orderBy: {
         endDate: "desc", // Prendre le plus récent
       },
     });
 
     if (!activeSubscription) {
-      return NextResponse.json({ status: "INACTIVE" }, { status: 200 });
+      return NextResponse.json({
+        active: false,
+      });
     }
 
     return NextResponse.json({
-      status: activeSubscription.status,
-      endDate: activeSubscription.endDate,
-      plan: activeSubscription.plan,
+      active: true,
+      planName: activeSubscription?.plan.name,
+      endDate: activeSubscription?.endDate.toISOString(),
     });
   } catch (error) {
     console.error("[SUBSCRIPTION_ERROR]", error);
     return NextResponse.json(
-      { message: "Internal server error" },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }
