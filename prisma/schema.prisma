@@ -28,6 +28,10 @@ model User {
   Company      Company?
   JobSeeker    JobSeeker?
   SavedJobPost SavedJobPost[]
+
+  // Ajouts pour la gestion des abonnements
+  subscriptions  Subscription[]
+  lastActiveAt DateTime?      // Dernière activité pour suivi
 }
 
 model Account {
@@ -275,6 +279,33 @@ model ViewedCandidate {
   @@unique([companyId, jobSeekerId])
 }
 
+model Subscription {
+  id        String      @id @default(cuid())
+  userId    String 
+  user      User        @relation(fields: [userId], references: [id])
+  planId    String
+  plan      Plan        @relation(fields: [planId], references: [id])
+  status    SubscriptionStatus
+   stripeSubscriptionId String?
+  startDate DateTime
+  endDate   DateTime
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+model Plan {
+  id          String         @id @default(cuid())
+  name        String
+  description String?
+  price       Decimal
+  duration    Int            // in days
+  features    Json
+  subscriptions Subscription[]
+  isActive    Boolean        @default(true)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
 enum ApplicationStatus {
   PENDING
   REVIEWED
@@ -299,4 +330,11 @@ enum JobType {
   FREELANCE
   INTERNSHIP
   
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  EXPIRED
+  PENDING
 }

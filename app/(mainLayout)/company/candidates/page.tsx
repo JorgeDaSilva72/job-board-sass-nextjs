@@ -661,6 +661,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+// import { SubscriptionStatus } from "@prisma/client";
+import { LoadingSpinner } from "@/components/general/loading-spinner";
 
 // Types
 type Candidate = {
@@ -696,6 +698,11 @@ type FilterState = {
 
 export default function CandidatesPage() {
   const router = useRouter();
+  const [hasValidSubscription, setHasValidSubscription] = useState<
+    boolean | null
+  >(null);
+  const [isLoadingSubscription, setIsLoadingSubscription] = useState(true);
+
   //   const searchParams = useSearchParams();
 
   // État pour les filtres
@@ -957,6 +964,32 @@ export default function CandidatesPage() {
     }
   };
 
+  // Vérifier l'abonnement au chargement de la page
+  useEffect(() => {
+    const checkSubscription = async () => {
+      try {
+        const response = await fetch("/api/recruiter/subscription");
+        const data = await response.json();
+
+        if (response.ok && data.status === "ACTIVE") {
+          setHasValidSubscription(true);
+        } else {
+          setHasValidSubscription(false);
+          toast.error("You need an active subscription to access this feature");
+          router.push("/company/subscription");
+        }
+      } catch (error) {
+        console.error("Error checking subscription:", error);
+        toast.error("Error checking subscription status");
+        setHasValidSubscription(false);
+      } finally {
+        setIsLoadingSubscription(false);
+      }
+    };
+
+    checkSubscription();
+  }, [router]);
+
   // Charger les candidats quand les filtres ou la pagination changent avec un debounce
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -996,6 +1029,33 @@ export default function CandidatesPage() {
     loadSavedFilters();
   }, []);
 
+  if (isLoadingSubscription) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <LoadingSpinner size="lg" />
+      </div>
+    );
+  }
+
+  if (!hasValidSubscription) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Card className="w-full max-w-md text-center">
+          <CardHeader>
+            <CardTitle>Subscription Required</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="mb-4">
+              You need an active subscription to access candidate search.
+            </p>
+            <Button onClick={() => router.push("/company/subscription")}>
+              View Subscription Plans
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
   return (
     <div className="container mx-auto py-8">
       <TooltipProvider
