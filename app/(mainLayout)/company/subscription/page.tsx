@@ -338,7 +338,7 @@ export default function SubscriptionPage() {
         // Trouver l'ID du plan dans notre liste de plans
         if (subscriptionData.plan && subscriptionData.plan.name) {
           const matchingPlan = plansData.find(
-            (p) => p.name === subscriptionData.plan.name
+            (p: any) => p.name === subscriptionData.plan.name
           );
           if (matchingPlan) {
             // Enrichir les données du plan avec l'ID et le prix
