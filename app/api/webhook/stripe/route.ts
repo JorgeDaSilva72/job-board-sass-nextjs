@@ -404,8 +404,8 @@ async function handleSubscriptionCreated(session: Stripe.Checkout.Session) {
 
     // Calculer la date de fin basée sur la période de facturation
     const endDate = new Date(stripeSubscription.current_period_end * 1000);
-    const status =
-      stripeSubscription.status === "active" ? "ACTIVE" : "PENDING"; // ajout
+    // const status =
+    //   stripeSubscription.status === "active" ? "ACTIVE" : "PENDING"; // ajout
 
     // pour le DEBUG
     const pendingSubscription = await prisma.subscription.findFirst({
