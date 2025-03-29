@@ -192,11 +192,12 @@ export async function POST(req: Request) {
         // },
         {
           price_data: {
-            currency: "USD",
             product_data: {
               name: plan.name,
               description: plan.description || "plan d'abonnement",
+              images: ["https://job-board-sass-nextjs.vercel.app/logo.png"],
             },
+            currency: "USD",
             unit_amount: Math.round(Number(plan.price) * 100),
             recurring: {
               interval: "month", // ou la période appropriée

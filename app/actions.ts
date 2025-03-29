@@ -1155,7 +1155,8 @@ export async function createJob(data: z.infer<typeof jobSchema>) {
                 name: `Job Posting - ${pricingTier.days} Days`,
                 description: pricingTier.description,
                 images: [
-                  "https://pve1u6tfz1.ufs.sh/f/Ae8VfpRqE7c0gFltIEOxhiBIFftvV4DTM8a13LU5EyzGb2SQ",
+                  "https://job-board-sass-nextjs.vercel.app/logo.png",
+                  // "https://pve1u6tfz1.ufs.sh/f/Ae8VfpRqE7c0gFltIEOxhiBIFftvV4DTM8a13LU5EyzGb2SQ",
                 ],
               },
               currency: "USD",
