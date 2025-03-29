@@ -338,6 +338,7 @@ export default function SubscriptionPage() {
         // Trouver l'ID du plan dans notre liste de plans
         if (subscriptionData.plan && subscriptionData.plan.name) {
           const matchingPlan = plansData.find(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (p: any) => p.name === subscriptionData.plan.name
           );
           if (matchingPlan) {
