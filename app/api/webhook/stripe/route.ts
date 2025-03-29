@@ -173,7 +173,7 @@
 //   }
 // }
 
-// Dans votre fichier webhook existant
+// ------------------------------------------
 import { prisma } from "@/app/utils/db";
 import { stripe } from "@/app/utils/stripe";
 import { headers } from "next/headers";
@@ -369,7 +369,8 @@ async function handleJobPayment(session: Stripe.Checkout.Session) {
 
 // Nouvelle fonction pour gérer la création d'abonnement
 async function handleSubscriptionCreated(session: Stripe.Checkout.Session) {
-  console.log("🔹 Traitement de la création d'abonnement");
+  console.log("🔹 [SUBSCRIPTION] Traitement de la création d'abonnement");
+  console.log("🔹 Session complète:", JSON.stringify(session, null, 2));
 
   const customerId = session.customer as string;
   const planId = session.metadata?.planId;
@@ -382,7 +383,7 @@ async function handleSubscriptionCreated(session: Stripe.Checkout.Session) {
   console.log("🔹 Subscription ID:", subscriptionId);
 
   if (!customerId || !planId || !userId || !subscriptionId) {
-    console.error("❌ Données manquantes pour l'abonnement:", {
+    console.error("❌ [SUBSCRIPTION] Données manquantes:", {
       customerId,
       planId,
       userId,
@@ -403,28 +404,46 @@ async function handleSubscriptionCreated(session: Stripe.Checkout.Session) {
 
     // Calculer la date de fin basée sur la période de facturation
     const endDate = new Date(stripeSubscription.current_period_end * 1000);
+    const status =
+      stripeSubscription.status === "active" ? "ACTIVE" : "PENDING"; // ajout
 
+    // pour le DEBUG
+    const pendingSubscription = await prisma.subscription.findFirst({
+      where: {
+        userId: userId,
+        planId: planId,
+        status: "PENDING",
+      },
+    });
+    console.log("🔹 Abonnement PENDING trouvé:", pendingSubscription);
     // Mettre à jour l'abonnement dans la base de données
     const updatedSubscription = await prisma.subscription.updateMany({
       where: {
         userId: userId,
         planId: planId,
         status: "PENDING",
-        stripeSubscriptionId: subscriptionId,
+        // stripeSubscriptionId: subscriptionId,
       },
       data: {
         status: "ACTIVE",
         endDate: endDate,
+        stripeSubscriptionId: subscriptionId,
       },
     });
 
-    console.log("🟢 Abonnement mis à jour avec succès:", updatedSubscription);
+    console.log(
+      "🟢 [SUBSCRIPTION] Abonnement mis à jour avec succès:",
+      updatedSubscription
+    );
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
   } catch (err) {
-    console.error("❌ Erreur lors de la mise à jour de l'abonnement:", err);
+    console.error(
+      "❌ [SUBSCRIPTION]  Erreur lors de la mise à jour de l'abonnement:",
+      err
+    );
     return new Response(
       `Subscription update failed: ${
         err instanceof Error ? err.message : "Unknown Error"
