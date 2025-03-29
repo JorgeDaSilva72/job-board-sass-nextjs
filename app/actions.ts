@@ -1167,6 +1167,8 @@ export async function createJob(data: z.infer<typeof jobSchema>) {
         mode: "payment",
         metadata: {
           jobId: jobPost.id,
+          companyId: company.id,
+          paymentType: "job",
         },
         success_url: `${process.env.NEXT_PUBLIC_URL}/payment/success`,
         cancel_url: `${process.env.NEXT_PUBLIC_URL}/payment/cancel`,

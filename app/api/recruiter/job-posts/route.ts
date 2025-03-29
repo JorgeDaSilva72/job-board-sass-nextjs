@@ -51,7 +51,10 @@ export async function GET() {
       applications: Array(post._count.applications).fill(null), // Create an array of applications
       employmentType: post.employmentType,
       location: post.location,
-      salaryRange: `${post.salaryFrom} - ${post.salaryTo}`,
+      salaryRange:
+        post.salaryFrom && post.salaryTo
+          ? `${post.salaryFrom} - ${post.salaryTo}`
+          : "N/A",
     }));
 
     return NextResponse.json(formattedJobPosts);
@@ -63,6 +66,6 @@ export async function GET() {
     );
   } finally {
     // Ensure Prisma connection is closed
-    await prisma.$disconnect();
+    //await prisma.$disconnect();
   }
 }
