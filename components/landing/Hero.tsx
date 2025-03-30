@@ -41,7 +41,7 @@ export const HeroSection = () => {
             </Button>
 
             <Button asChild className="w-5/6 md:w-1/4 font-bold">
-              <Link href="/post-job">Post a Job</Link>
+              <Link href="/company/post-job">Post a Job</Link>
             </Button>
           </div>
         </div>

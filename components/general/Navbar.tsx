@@ -323,7 +323,7 @@ const NavigationLinks = ({
       <div className={cn("flex flex-col gap-2", className)}>
         {commonLinks}
         <Link
-          href="/post-job"
+          href="/company/post-job"
           className="flex items-center gap-2 text-lg font-medium hover:text-primary transition-colors"
         >
           <Briefcase className="h-4 w-4" />
@@ -368,7 +368,7 @@ const NavigationLinks = ({
     <div className={cn("flex flex-col gap-2", className)}>
       {commonLinks}
       <Link
-        href="/post-job"
+        href="/company/post-job"
         className="flex items-center gap-2 text-lg font-medium hover:text-primary transition-colors"
       >
         <Briefcase className="h-4 w-4" />
@@ -420,7 +420,10 @@ export async function Navbar() {
 
     if (userType === "COMPANY") {
       return (
-        <Link href="/post-job" className={buttonVariants({ size: "sm" })}>
+        <Link
+          href="/company/post-job"
+          className={buttonVariants({ size: "sm" })}
+        >
           Post New Job
         </Link>
       );

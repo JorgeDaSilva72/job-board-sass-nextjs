@@ -1,5 +1,10 @@
 export const jobListingDurationPricing = [
   {
+    days: 3,
+    price: 0,
+    description: "To test the service",
+  },
+  {
     days: 30,
     price: 10,
     description: "Standard listing",

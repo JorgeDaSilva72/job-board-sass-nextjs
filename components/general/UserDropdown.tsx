@@ -170,7 +170,7 @@ export function UserDropdown({
         <DropdownMenuGroup>
           {userType === "COMPANY" && (
             <DropdownMenuItem asChild className="flex items-center gap-2 py-2">
-              <Link href="/post-job">
+              <Link href="/company/post-job">
                 <PlusCircle
                   size={16}
                   className="text-primary"
