@@ -1993,130 +1993,129 @@ export async function renew(data: RenewJobData) {
       return { success: false, error: "Invalid listing duration selected" };
     }
 
-    // Vérifier si le prix est > 0 (renouvellement payant)
-    if (pricingTier.price > 0) {
-      // Récupérer ou créer un stripeCustomerId
-
-      const company = await prisma.company.findUnique({
-        where: {
-          userId: user.id,
-        },
-        select: {
-          id: true,
-          user: {
-            select: {
-              stripeCustomerId: true,
-            },
-          },
-        },
-      });
-
-      if (!company?.id) {
-        return {
-          success: false,
-          error: "Company profile not found",
-          redirect: "/",
-        };
-      }
-
-      let stripeCustomerId = company.user.stripeCustomerId;
-
-      // Si pas de stripeCustomerId, créer le customer
-      if (!stripeCustomerId) {
-        const customer = await stripe.customers.create({
-          email: user.email!,
-          name: user.name || undefined,
-        });
-
-        stripeCustomerId = customer.id;
-
-        // Mettre à jour l'utilisateur avec le Stripe customer ID
-        await prisma.user.update({
-          where: { id: user.id },
-          data: { stripeCustomerId: customer.id },
-        });
-      }
-
+    // Cas gratuit (mise à jour immédiate)
+    if (pricingTier.price <= 0) {
       await prisma.jobPost.update({
-        where: {
-          id: jobId,
-        },
-        data: {
-          // status: "ACTIVE",
-          listingDuration: duration,
-          // Vous pourriez aussi mettre à jour la date d'expiration ici
-          // expiresAt: new Date(Date.now() + duration * 24 * 60 * 60 * 1000),
-        },
-      });
-
-      // Créer la session Stripe
-      const session = await stripe.checkout.sessions.create({
-        // Utilisez la propriété customer_email au lieu de customer pour les API Stripe plus récentes
-        // OU assurez-vous que vos types d'API Stripe sont à jour
-        // customer: stripeCustomerId!, // Cette ligne cause l'erreur
-
-        // Option 1: Utiliser customer_email si la propriété customer n'est pas disponible
-        // customer_email: user.email!,
-        customer: stripeCustomerId!,
-        line_items: [
-          {
-            price_data: {
-              product_data: {
-                name: `Job Renewal - ${pricingTier.days} Days`,
-                description: `Renew your job listing "${job?.jobTitle}" for ${pricingTier.days} days.`,
-                images: ["https://job-board-sass-nextjs.vercel.app/logo.png"],
-              },
-              currency: "USD",
-              unit_amount: pricingTier.price * 100, // Convert to cents for Stripe
-            },
-            quantity: 1,
-          },
-        ],
-        mode: "payment",
-        metadata: {
-          jobId: job?.id,
-          companyId: job?.company.id,
-          paymentType: "job_renewal",
-          duration: duration.toString(),
-        },
-        success_url: `${process.env.NEXT_PUBLIC_URL}/payment/success?type=renewal`,
-        cancel_url: `${process.env.NEXT_PUBLIC_URL}/payment/cancel`,
-      });
-      return {
-        success: true,
-        data: { redirectUrl: session.url },
-      };
-    } else {
-      // Si le renouvellement est gratuit (ce qui semble improbable d'après votre frontend,
-      // mais inclus par souci de complétude)
-
-      // Mettre à jour l'annonce
-      await prisma.jobPost.update({
-        where: {
-          id: jobId,
-        },
+        where: { id: jobId },
         data: {
           status: "ACTIVE",
           listingDuration: duration,
-          // Vous pourriez aussi mettre à jour la date d'expiration ici
-          // expiresAt: new Date(Date.now() + duration * 24 * 60 * 60 * 1000),
         },
       });
-
-      // Enregistrer un historique de renouvellement si vous avez une telle table
-      // await prisma.renewalHistory.create({...})
-
       revalidatePath("/my-jobs");
+      return { success: true };
+    }
 
+    // Récupérer ou créer un stripeCustomerId
+    // Cas payant
+    const company = await prisma.company.findUnique({
+      where: {
+        userId: user.id,
+      },
+      select: {
+        id: true,
+        user: {
+          select: {
+            stripeCustomerId: true,
+          },
+        },
+      },
+    });
+
+    if (!company?.id) {
       return {
-        success: true,
+        success: false,
+        error: "Company profile not found",
+        redirect: "/",
       };
     }
+
+    let stripeCustomerId = company.user.stripeCustomerId;
+
+    // Si pas de stripeCustomerId, créer le customer
+    if (!stripeCustomerId) {
+      const customer = await stripe.customers.create({
+        email: user.email!,
+        name: user.name || undefined,
+      });
+
+      stripeCustomerId = customer.id;
+
+      // Mettre à jour l'utilisateur avec le Stripe customer ID
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { stripeCustomerId: customer.id },
+      });
+    }
+
+    // Créer la session Stripe
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      customer: stripeCustomerId,
+
+      line_items: [
+        {
+          price_data: {
+            product_data: {
+              name: `Job Renewal - ${pricingTier.days} Days`,
+              description: `Renew your job listing "${job?.jobTitle}" for ${pricingTier.days} days.`,
+              images: ["https://job-board-sass-nextjs.vercel.app/logo.png"],
+            },
+            currency: "USD",
+            unit_amount: pricingTier.price * 100, // Convert to cents for Stripe
+          },
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      metadata: {
+        jobId: job?.id?.toString() ?? "unknown",
+        paymentType: "job_renewal",
+        duration: duration.toString(),
+      },
+      success_url: `${process.env.NEXT_PUBLIC_URL}/payment/success?type=renewal`,
+      cancel_url: `${process.env.NEXT_PUBLIC_URL}/payment/cancel`,
+    });
+    return {
+      success: true,
+      data: { redirectUrl: session.url },
+    };
+    // const session = await stripe.checkout.sessions.create({
+    //   payment_method_types: ["card"], // Assure la compatibilité
+    //   customer: stripeCustomerId,
+    //   line_items: [
+    //     {
+    //       price_data: {
+    //         product_data: {
+    //           name: `Job Renewal - ${pricingTier.days} Days`,
+    //           description: `Renew your job listing "${job?.jobTitle}" for ${pricingTier.days} days.`,
+    //           images: ["https://job-board-sass-nextjs.vercel.app/logo.png"],
+    //         },
+    //         currency: "USD",
+    //         unit_amount: pricingTier.price * 100, // Convertir en cents pour Stripe
+    //       },
+    //       quantity: 1,
+    //     },
+    //   ],
+    //   mode: "payment",
+    //   metadata: {
+    //     jobId: job?.id?.toString() ?? "unknown",
+    //     companyId: job?.company?.id?.toString() ?? "unknown",
+    //     paymentType: "job_renewal",
+    //     duration: duration.toString(),
+    //   },
+
+    //   success_url: `${process.env.NEXT_PUBLIC_URL}/payment/success`,
+    //   cancel_url: `${process.env.NEXT_PUBLIC_URL}/payment/cancel`,
+    // });
+    console.log("Session créée avec succès:", session);
   } catch (error) {
     console.error("Error renewing job:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error";
     return {
       success: false,
-      error: "Failed to renew job. Please try again.",
+      error: `Failed to renew job: ${errorMessage}`,
     };
   }
 }

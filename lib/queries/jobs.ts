@@ -12,6 +12,7 @@ export async function getJobs(userId: string) {
       jobTitle: true,
       status: true,
       createdAt: true,
+      expiresAt: true,
       company: {
         select: {
           name: true,

@@ -260,6 +260,15 @@ export async function POST(req: Request) {
           return await handleJobPayment(session);
         }
 
+        // Si c'est un paiement pour un renouvelement d annonce d'emploi
+        if (
+          paymentType === "job_renewal" ||
+          session.metadata?.jobId ||
+          session.metadata?.duration
+        ) {
+          return await handleJobRenewal(session);
+        }
+
         // Si c'est un paiement pour un abonnement
         if (paymentType === "subscription" || session.metadata?.planId) {
           return await handleSubscriptionCreated(session);
@@ -587,6 +596,125 @@ async function handleInvoicePaid(invoice: Stripe.Invoice) {
     console.error("❌ Erreur lors du traitement du paiement de facture:", err);
     return new Response(
       `Invoice processing failed: ${
+        err instanceof Error ? err.message : "Unknown Error"
+      }`,
+      { status: 500 }
+    );
+  }
+}
+// Votre fonction pour gérer les paiements de renouvellement d'annonces
+async function handleJobRenewal(session: Stripe.Checkout.Session) {
+  console.log("🔹 Traitement du paiement de renouvellement d'annonce d'emploi");
+
+  const customerId = session.customer as string;
+  const jobId = session.metadata?.jobId;
+  const duration = session.metadata?.duration;
+
+  if (!customerId || !jobId || !duration) {
+    console.error("❌ Métadonnées manquantes");
+    return new Response("Missing metadata", { status: 400 });
+  }
+
+  const durationDays = parseInt(duration);
+  if (isNaN(durationDays)) {
+    console.error("❌ Durée invalide:", duration);
+    return new Response("Invalid duration", { status: 400 });
+  }
+
+  console.log("🔹 Customer ID :", customerId);
+  console.log("🔹 Job ID :", jobId);
+  console.log("🔹 Duration :", duration);
+
+  if (!customerId || !jobId || isNaN(durationDays)) {
+    console.error("❌ Données manquantes ou invalides:");
+    return new Response("Missing required data or invalid data", {
+      status: 400,
+    });
+  }
+
+  try {
+    // Trouver l'entreprise associée au customer Stripe
+    const company = await prisma.company.findFirst({
+      where: {
+        user: {
+          stripeCustomerId: customerId,
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (!company) {
+      console.error(
+        "❌ Entreprise non trouvée pour le customerId:",
+        customerId
+      );
+
+      return new Response("Company not found", { status: 404 });
+    }
+
+    // 2. Vérifier que le job existe et appartient à cette entreprise
+    const existingJob = await prisma.jobPost.findUnique({
+      where: {
+        id: jobId,
+        companyId: company.id,
+      },
+    });
+
+    if (!existingJob) {
+      console.error("❌ Annonce non trouvée ou non autorisée:");
+      return new Response("Annonce non trouvée ou non autorisée", {
+        status: 404,
+      });
+    }
+    // 3. Calculer la nouvelle date d'expiration
+    const newExpiresAt = new Date();
+    newExpiresAt.setDate(newExpiresAt.getDate() + durationDays);
+
+    // 4. Mettre à jour l'annonce avec TOUS les champs nécessaires
+    const updatedJob = await prisma.jobPost.update({
+      where: {
+        id: jobId,
+      },
+      data: {
+        status: "ACTIVE",
+        listingDuration: durationDays,
+        expiresAt: newExpiresAt,
+        lastRenewedAt: new Date(),
+      },
+      select: {
+        id: true,
+        status: true,
+        listingDuration: true,
+        expiresAt: true,
+        lastRenewedAt: true,
+      },
+    });
+
+    // Enregistrer le paiement dans l'historique
+    // await prisma.paymentHistory.create({
+    //   data: {
+    //     amount: session.amount_total ? session.amount_total / 100 : 0,
+    //     currency: session.currency || "USD",
+    //     paymentType: "JOB_RENEWAL",
+    //     status: "COMPLETED",
+    //     stripeSessionId: session.id,
+    //     jobPostId: jobId,
+    //     companyId: company.id,
+    //     metadata: {
+    //       durationDays: durationDays,
+    //     },
+    //   },
+    // });
+    console.log("🟢 Annonce renouvellée mise à jour avec succès:", updatedJob);
+
+    return new Response(JSON.stringify({ success: true }), { status: 200 });
+  } catch (err) {
+    console.error("❌ Job renewal failed :", err);
+
+    return new Response(
+      `Job renewal failed: ${
         err instanceof Error ? err.message : "Unknown Error"
       }`,
       { status: 500 }

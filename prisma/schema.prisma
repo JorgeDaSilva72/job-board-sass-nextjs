@@ -167,6 +167,10 @@ model JobPost {
   status       JobPostStatus @default(DRAFT)
   // applications Int           @default(0)
 
+  // Nouveaux champs
+  expiresAt       DateTime?  // Nullable pour les annonces en brouillon
+  lastRenewedAt   DateTime?  // Pour suivre quand l'annonce a été renouvelée
+
 
   // requiredSkills    String[]
   // requiredLanguages String[]
