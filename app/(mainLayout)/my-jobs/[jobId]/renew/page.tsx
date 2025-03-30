@@ -13,7 +13,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { jobListingDurationPricing } from "@/app/utils/pricingTiers";
-import { renew as renewJobListing } from "@/app/actions"; // Vous devrez créer cette action serveur
+import { renew as renewJobListing } from "@/app/actions";
+
+interface RenewJobActionResultProps {
+  success: boolean;
+  error?: string;
+  data?: {
+    redirectUrl: string;
+  };
+}
 
 export default function RenewJobPage() {
   const params = useParams();
@@ -29,10 +37,10 @@ export default function RenewJobPage() {
   const handleRenew = async () => {
     setIsSubmitting(true);
     try {
-      const result = await renewJobListing({
+      const result = (await renewJobListing({
         jobId: params.jobId as string,
         duration: selectedDuration,
-      });
+      })) as RenewJobActionResultProps;
       if (!result.success) {
         toast.error(result.error || "An error occured");
         return;
