@@ -11,6 +11,13 @@ type SearchParamsProps = {
     page?: string;
     jobTypes?: string;
     location?: string;
+    experience?: string;
+    // education?: string;
+    remote?: boolean;
+    minSalary?: number;
+    maxSalary?: number;
+    skills?: string;
+    companySize?: string;
   }>;
 };
 
@@ -19,6 +26,13 @@ const JobPage = async ({ searchParams }: SearchParamsProps) => {
   const currentPage = Number(params.page) || 1;
   const jobTypes = params.jobTypes?.split(",") || [];
   const location = params.location || "";
+  const experience = params.experience?.split(",") || [];
+  // const education=params.education?.split(",") || [];
+  // const remote = params.remote || false;
+  const minSalary = params.minSalary || 0;
+  const maxSalary = params.maxSalary || 1000000;
+  const skills = params.skills || "";
+  const companySize = params.companySize || "";
 
   // const filterKey = `page=${currentPage};types=${jobTypes.join(
   //   ","
@@ -64,6 +78,13 @@ const JobPage = async ({ searchParams }: SearchParamsProps) => {
               currentPage={currentPage}
               jobTypes={jobTypes}
               location={location}
+              experience={experience}
+              // education={education}
+              // remote={remote}
+              minSalary={minSalary}
+              maxSalary={maxSalary}
+              skills={skills}
+              companySize={companySize}
             />
           </Suspense>
         </div>
