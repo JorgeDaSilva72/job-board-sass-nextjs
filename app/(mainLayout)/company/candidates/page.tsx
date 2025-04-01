@@ -968,7 +968,7 @@ export default function CandidatesPage() {
   useEffect(() => {
     const checkSubscription = async () => {
       try {
-        const response = await fetch("/api/recruiter/subscription");
+        const response = await fetch("/api/recruiter/database-access");
         const data = await response.json();
 
         if (response.ok && data.status === "ACTIVE") {

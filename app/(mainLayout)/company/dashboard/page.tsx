@@ -1061,7 +1061,7 @@ export default function RecruiterDashboard() {
         setError(null);
         const [statsResponse, subscriptionResponse] = await Promise.all([
           fetch("/api/recruiter/stats"),
-          fetch("/api/recruiter/subscription/status"),
+          fetch("/api/recruiter/database-access/status"),
         ]);
 
         if (!statsResponse.ok) {
