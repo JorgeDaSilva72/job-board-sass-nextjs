@@ -62,6 +62,15 @@ export async function GET() {
       endDate: activeSubscription.endDate,
       plan: activeSubscription.plan,
     });
+    // return NextResponse.json({
+    //   status: activeSubscription.status,
+    //   endDate: activeSubscription.endDate,
+    //   plan: {
+    //     id: activeSubscription.plan.id, // Ajoutez l'ID du plan
+    //     name: activeSubscription.plan.name,
+    //     features: activeSubscription.plan.features || []
+    //   },
+    // });
   } catch (error) {
     console.error("[SUBSCRIPTION_ERROR]", error);
     return NextResponse.json(
@@ -132,36 +141,36 @@ export async function POST(req: Request) {
     // }
 
     // Si l'utilisateur a déjà un abonnement actif, annuler l'ancien avant d'en créer un nouveau
-    const activeSubscription = await prisma.subscription.findFirst({
-      where: {
-        userId,
-        status: "ACTIVE",
-        endDate: { gt: new Date() },
-      },
-    });
+    // const activeSubscription = await prisma.subscription.findFirst({
+    //   where: {
+    //     userId,
+    //     status: "ACTIVE",
+    //     endDate: { gt: new Date() },
+    //   },
+    // });
 
-    if (activeSubscription) {
-      // Option 1: Permettre le changement de plan
-      // Mettre à jour le statut de l'abonnement existant
-      await prisma.subscription.update({
-        where: { id: activeSubscription.id },
-        data: { status: "CANCELED" },
-      });
+    // if (activeSubscription) {
+    //   // Option 1: Permettre le changement de plan
+    //   // Mettre à jour le statut de l'abonnement existant
+    //   await prisma.subscription.update({
+    //     where: { id: activeSubscription.id },
+    //     data: { status: "CANCELED" },
+    //   });
 
-      // Si vous utilisez Stripe, vous devriez également annuler l'abonnement côté Stripe
-      if (activeSubscription.stripeSubscriptionId) {
-        try {
-          await stripe.subscriptions.update(
-            activeSubscription.stripeSubscriptionId,
-            {
-              cancel_at_period_end: true,
-            }
-          );
-        } catch (error) {
-          console.error("Failed to cancel Stripe subscription:", error);
-        }
-      }
-    }
+    //   // Si vous utilisez Stripe, vous devriez également annuler l'abonnement côté Stripe
+    //   // if (activeSubscription.stripeSubscriptionId) {
+    //   //   try {
+    //   //     await stripe.subscriptions.update(
+    //   //       activeSubscription.stripeSubscriptionId,
+    //   //       {
+    //   //         cancel_at_period_end: true,
+    //   //       }
+    //   //     );
+    //   //   } catch (error) {
+    //   //     console.error("Failed to cancel Stripe subscription:", error);
+    //   //   }
+    //   // }
+    // }
 
     // Créer ou récupérer le client Stripe
     let stripeCustomerId = user.stripeCustomerId;
@@ -194,37 +203,36 @@ export async function POST(req: Request) {
           price_data: {
             product_data: {
               name: plan.name,
-              description: plan.description || "plan d'abonnement",
+              description: `Access to candidate database for ${plan.duration} days`,
               images: ["https://job-board-sass-nextjs.vercel.app/logo.png"],
             },
             currency: "USD",
             unit_amount: Math.round(Number(plan.price) * 100),
-            recurring: {
-              interval: "month", // ou la période appropriée
-            },
+            // recurring: {
+            //   interval: "month", // ou la période appropriée
+            // },
           },
           quantity: 1,
         },
       ],
-      mode: "subscription",
-      // success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?success=true`,
-      success_url: `${process.env.NEXT_PUBLIC_URL}/payment/success`,
+      // mode: "subscription",
+      mode: "payment", // One-time payment
+      success_url: `${process.env.NEXT_PUBLIC_URL}/payment/success?session_id={CHECKOUT_SESSION_ID`,
 
-      // cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/subscription?canceled=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_URL}/payment/cancel`,
+      cancel_url: `${process.env.NEXT_PUBLIC_URL}/payment/cancel?session_id={CHECKOUT_SESSION_ID`,
 
       metadata: {
         userId,
         planId,
-        paymentType: "subscription",
+        paymentType: "one_time_access",
       },
-      subscription_data: {
-        metadata: {
-          userId,
-          planId,
-          paymentType: "subscription",
-        },
-      },
+      // subscription_data: {
+      //   metadata: {
+      //     userId,
+      //     planId,
+      //     paymentType: "subscription",
+      //   },
+      // },
     });
 
     // Créer un enregistrement d'abonnement en statut PENDING
@@ -237,7 +245,10 @@ export async function POST(req: Request) {
         endDate: new Date(
           new Date().setDate(new Date().getDate() + plan.duration)
         ),
-        stripeSubscriptionId: session.subscription?.toString(),
+        // Ne pas utiliser stripeSubscriptionId puisqu'il n'y a pas d'abonnement
+        // Utiliser plutôt:
+        // stripeSubscriptionId: session.subscription?.toString(),
+        stripeSessionId: session.id,
       },
     });
     return NextResponse.json({ url: session.url });

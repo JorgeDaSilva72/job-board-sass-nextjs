@@ -247,7 +247,7 @@ export async function POST(req: Request) {
 
     // Gérer différents types d'événements
     switch (event.type) {
-      // Pour les annonces d'emploi (votre logique existante)
+      // Pour les annonces d'emploi
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
         console.log("🔹 Données de la session :", session);
@@ -257,30 +257,31 @@ export async function POST(req: Request) {
         console.log("🔹 Type de paiement:", paymentType);
 
         // Si c'est un paiement pour une annonce d'emploi
-        if (paymentType === "job_creation" || session.metadata?.jobId) {
+        if (paymentType === "job_creation") {
           return await handleJobPayment(session);
         }
 
         // Si c'est un paiement pour un renouvelement d annonce d'emploi
-        if (
-          paymentType === "job_renewal" ||
-          session.metadata?.jobId ||
-          session.metadata?.duration
-        ) {
+        if (paymentType === "job_renewal" || session.metadata?.duration) {
           return await handleJobRenewal(session);
         }
 
-        // Si c'est un paiement pour un abonnement
-        if (paymentType === "subscription" || session.metadata?.planId) {
-          return await handleSubscriptionCreated(session);
+        // Si c'est un paiement unique pour l'accès à la base de données candidats
+        if (paymentType === "one_time_access" || session.metadata?.planId) {
+          return await handleOneTimeAccessPayment(session);
         }
 
+        // Si c'est un paiement pour un abonnement
+        // if (paymentType === "subscription" || session.metadata?.planId) {
+        //   return await handleSubscriptionCreated(session);
+        // }
+
         // Si aucun type n'est spécifié, on tente de déterminer par la présence des métadonnées
-        if (session.metadata?.jobId) {
-          return await handleJobPayment(session);
-        } else if (session.metadata?.planId) {
-          return await handleSubscriptionCreated(session);
-        }
+        // if (session.metadata?.jobId) {
+        //   return await handleJobPayment(session);
+        // } else if (session.metadata?.planId) {
+        //   return await handleSubscriptionCreated(session);
+        // }
 
         console.warn(
           "⚠️ Type de paiement non identifié dans la session:",
@@ -403,90 +404,92 @@ async function handleJobPayment(session: Stripe.Checkout.Session) {
 }
 
 // Fonction pour gérer la création d'abonnement
-async function handleSubscriptionCreated(session: Stripe.Checkout.Session) {
-  console.log("🔹 [SUBSCRIPTION] Traitement de la création d'abonnement");
-  console.log("🔹 Session complète:", JSON.stringify(session, null, 2));
+// async function handleSubscriptionCreated(session: Stripe.Checkout.Session) {
+//   console.log("🔹 [SUBSCRIPTION] Traitement de la création d'abonnement");
+//   console.log("🔹 Session complète:", JSON.stringify(session, null, 2));
 
-  const customerId = session.customer as string;
-  const planId = session.metadata?.planId;
-  const userId = session.metadata?.userId;
-  const subscriptionId = session.subscription as string;
+//   // 1. Validation des métadonnées
 
-  console.log("🔹 Customer ID:", customerId);
-  console.log("🔹 Plan ID:", planId);
-  console.log("🔹 User ID:", userId);
-  console.log("🔹 Subscription ID:", subscriptionId);
+//   const customerId = session.customer as string;
+//   const planId = session.metadata?.planId;
+//   const userId = session.metadata?.userId;
+//   const subscriptionId = session.subscription as string;
 
-  if (!customerId || !planId || !userId || !subscriptionId) {
-    console.error("❌ [SUBSCRIPTION] Données manquantes:", {
-      customerId,
-      planId,
-      userId,
-      subscriptionId,
-    });
-    return new Response("Missing required subscription data", { status: 400 });
-  }
+//   console.log("🔹 Customer ID:", customerId);
+//   console.log("🔹 Plan ID:", planId);
+//   console.log("🔹 User ID:", userId);
+//   console.log("🔹 Subscription ID:", subscriptionId);
 
-  try {
-    // Récupérer les détails de l'abonnement Stripe
-    const stripeSubscription = await stripe.subscriptions.retrieve(
-      subscriptionId
-    );
-    console.log("🔹 Données de l'abonnement Stripe:", {
-      status: stripeSubscription.status,
-      current_period_end: stripeSubscription.current_period_end,
-    });
+//   if (!customerId || !planId || !userId || !subscriptionId) {
+//     console.error("❌ [SUBSCRIPTION] Données manquantes:", {
+//       customerId,
+//       planId,
+//       userId,
+//       subscriptionId,
+//     });
+//     return new Response("Missing required subscription data", { status: 400 });
+//   }
 
-    // Calculer la date de fin basée sur la période de facturation
-    const endDate = new Date(stripeSubscription.current_period_end * 1000);
-    // const status =
-    //   stripeSubscription.status === "active" ? "ACTIVE" : "PENDING"; // ajout
+//   try {
+//     // 2.Récupérer les détails de l'abonnement Stripe
+//     const stripeSubscription = await stripe.subscriptions.retrieve(
+//       subscriptionId
+//     );
+//     console.log("🔹 Données de l'abonnement Stripe:", {
+//       status: stripeSubscription.status,
+//       current_period_end: stripeSubscription.current_period_end,
+//     });
 
-    // pour le DEBUG
-    const pendingSubscription = await prisma.subscription.findFirst({
-      where: {
-        userId: userId,
-        planId: planId,
-        status: "PENDING",
-      },
-    });
-    console.log("🔹 Abonnement PENDING trouvé:", pendingSubscription);
-    // Mettre à jour l'abonnement dans la base de données
-    const updatedSubscription = await prisma.subscription.updateMany({
-      where: {
-        userId: userId,
-        planId: planId,
-        status: "PENDING",
-        // stripeSubscriptionId: subscriptionId,
-      },
-      data: {
-        status: "ACTIVE",
-        endDate: endDate,
-        stripeSubscriptionId: subscriptionId,
-      },
-    });
+//     // Calculer la date de fin basée sur la période de facturation
+//     const endDate = new Date(stripeSubscription.current_period_end * 1000);
+//     // const status =
+//     //   stripeSubscription.status === "active" ? "ACTIVE" : "PENDING"; // ajout
 
-    console.log(
-      "🟢 [SUBSCRIPTION] Abonnement mis à jour avec succès:",
-      updatedSubscription
-    );
-    return new Response(JSON.stringify({ success: true }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
-  } catch (err) {
-    console.error(
-      "❌ [SUBSCRIPTION]  Erreur lors de la mise à jour de l'abonnement:",
-      err
-    );
-    return new Response(
-      `Subscription update failed: ${
-        err instanceof Error ? err.message : "Unknown Error"
-      }`,
-      { status: 500 }
-    );
-  }
-}
+//     // pour le DEBUG
+//     const pendingSubscription = await prisma.subscription.findFirst({
+//       where: {
+//         userId: userId,
+//         planId: planId,
+//         status: "PENDING",
+//       },
+//     });
+//     console.log("🔹 Abonnement PENDING trouvé:", pendingSubscription);
+//     // Mettre à jour l'abonnement dans la base de données
+//     const updatedSubscription = await prisma.subscription.updateMany({
+//       where: {
+//         userId: userId,
+//         planId: planId,
+//         status: "PENDING",
+//         stripeSubscriptionId: subscriptionId,
+//       },
+//       data: {
+//         status: "ACTIVE",
+//         endDate: endDate,
+//         stripeSubscriptionId: subscriptionId,
+//       },
+//     });
+
+//     console.log(
+//       "🟢 [SUBSCRIPTION] Abonnement mis à jour avec succès:",
+//       updatedSubscription
+//     );
+//     return new Response(JSON.stringify({ success: true }), {
+//       status: 200,
+//       headers: { "Content-Type": "application/json" },
+//     });
+//   } catch (err) {
+//     console.error(
+//       "❌ [SUBSCRIPTION]  Erreur lors de la mise à jour de l'abonnement:",
+//       err
+//     );
+//     return new Response(
+//       `Subscription update failed: ${
+//         err instanceof Error ? err.message : "Unknown Error"
+//       }`,
+//       { status: 500 }
+//     );
+//   }
+// }
 
 // Nouvelle fonction pour gérer les mises à jour d'abonnement
 async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
@@ -767,6 +770,81 @@ async function handleJobRenewal(session: Stripe.Checkout.Session) {
 
     return new Response(
       `Job renewal failed: ${
+        err instanceof Error ? err.message : "Unknown Error"
+      }`,
+      { status: 500 }
+    );
+  }
+}
+
+async function handleOneTimeAccessPayment(session: Stripe.Checkout.Session) {
+  console.log("🔹 [ONE_TIME_ACCESS] Traitement du paiement unique");
+
+  // 1. Validation des métadonnées
+  const customerId = session.customer as string;
+  const planId = session.metadata?.planId;
+  const userId = session.metadata?.userId;
+  const paymentIntentId = session.payment_intent as string;
+
+  console.log("🔹 Customer ID:", customerId);
+  console.log("🔹 Plan ID:", planId);
+  console.log("🔹 User ID:", userId);
+  console.log("🔹 Payment Intent ID:", paymentIntentId);
+
+  if (!customerId || !planId || !userId) {
+    console.error("❌ [ONE_TIME_ACCESS] Missing required data:", {
+      customerId,
+      planId,
+      userId,
+    });
+    return new Response("Missing required data", { status: 400 });
+  }
+
+  try {
+    // 2. Récupérer le plan pour connaître la durée
+    const plan = await prisma.plan.findUnique({
+      where: { id: planId },
+      select: { duration: true },
+    });
+
+    if (!plan) {
+      console.error("❌ [ONE_TIME_ACCESS] Plan not found:", planId);
+      return new Response("Plan not found", { status: 404 });
+    }
+
+    // 3. Calculer la date de fin
+    const endDate = new Date();
+    endDate.setDate(endDate.getDate() + plan.duration);
+
+    // 4. Mettre à jour l'abonnement en BDD
+    const updatedSubscription = await prisma.subscription.updateMany({
+      where: {
+        userId: userId,
+        planId: planId,
+        stripeSessionId: session.id,
+        status: "PENDING",
+      },
+      data: {
+        status: "ACTIVE",
+        endDate: endDate,
+        stripePaymentIntentId: paymentIntentId, // Stocker l'ID du paiement
+      },
+    });
+
+    if (updatedSubscription.count === 0) {
+      console.error("❌ [ONE_TIME_ACCESS] No PENDING subscriptions found");
+      return new Response("No PENDING subscription found", { status: 404 });
+    }
+
+    console.log("🟢 [ONE_TIME_ACCESS] Access activated successfully");
+    return new Response(JSON.stringify({ success: true }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (err) {
+    console.error("❌ [ONE_TIME_ACCESS] Error:", err);
+    return new Response(
+      `Payment processing failed: ${
         err instanceof Error ? err.message : "Unknown Error"
       }`,
       { status: 500 }

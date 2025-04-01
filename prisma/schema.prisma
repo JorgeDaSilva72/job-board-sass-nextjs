@@ -290,7 +290,9 @@ model Subscription {
   planId    String
   plan      Plan        @relation(fields: [planId], references: [id])
   status    SubscriptionStatus
-   stripeSubscriptionId String?
+  stripeSubscriptionId String? // Si je décide de faire un abonnement récurrent 
+  stripePaymentIntentId String? // Pour les paiements uniques
+stripeSessionId String? // Garder pour référence
   startDate DateTime
   endDate   DateTime
   createdAt DateTime    @default(now())
@@ -306,6 +308,7 @@ model Plan {
   features    Json
   subscriptions Subscription[]
   isActive    Boolean        @default(true)
+  isPopular   Boolean        @default(false)  // Ajouté ici
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
 }
