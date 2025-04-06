@@ -177,6 +177,7 @@ interface SubscriptionResponse {
   active: boolean;
   planName?: string;
   endDate?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   features?: any;
   status?: "active" | "expiring_soon" | "expired";
   autoRenew?: boolean;
