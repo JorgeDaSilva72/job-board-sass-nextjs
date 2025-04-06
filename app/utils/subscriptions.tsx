@@ -5,7 +5,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { auth } from "./auth";
 
 /**
- * Vérifie et met à jour le statut des abonnements
+ * Vérifie et met à jour le statut des abonnements automatiquement via un CRON
  * - Marque les abonnements comme EXPIRING_SOON 7 jours avant expiration
  * - Marque les abonnements comme EXPIRED après leur date de fin
  * - Met à jour le champ hasActiveSubscription des utilisateurs

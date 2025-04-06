@@ -971,7 +971,10 @@ export default function CandidatesPage() {
         const response = await fetch("/api/recruiter/database-access");
         const data = await response.json();
 
-        if (response.ok && data.status === "ACTIVE") {
+        if (
+          response.ok &&
+          (data.status === "ACTIVE" || data.status === "EXPIRING_SOON")
+        ) {
           setHasValidSubscription(true);
         } else {
           setHasValidSubscription(false);
