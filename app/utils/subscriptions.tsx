@@ -3,7 +3,6 @@ import { addDays } from "date-fns";
 import { prisma } from "./db";
 import { NextApiRequest, NextApiResponse } from "next";
 import { auth } from "./auth";
-import { useEffect, useState } from "react";
 
 /**
  * Vérifie et met à jour le statut des abonnements
@@ -191,6 +190,7 @@ export async function checkSubscriptionMiddleware(
       await checkUserSubscriptionStatus(userId!);
 
     // Attacher l'information d'abonnement à la requête pour utilisation ultérieure
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (req as any).userSubscription = {
       hasActiveSubscription,
       subscription,
@@ -198,6 +198,7 @@ export async function checkSubscriptionMiddleware(
     };
 
     // Si cette route nécessite un abonnement actif
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((req as any).requiresSubscription && !hasActiveSubscription) {
       return res.status(403).json({
         error: "Abonnement requis",
@@ -211,47 +212,4 @@ export async function checkSubscriptionMiddleware(
     console.error("Erreur lors de la vérification de l'abonnement:", error);
     return res.status(500).json({ error: "Erreur interne du serveur" });
   }
-}
-
-/**
- * Hook React pour vérifier l'abonnement d'un utilisateur côté client
- */
-export function useSubscription(userId: string) {
-  const [subscriptionStatus, setSubscriptionStatus] = useState({
-    loading: true,
-    hasActiveSubscription: false,
-    subscription: null,
-    error: "",
-  });
-
-  useEffect(() => {
-    async function fetchSubscriptionStatus() {
-      try {
-        const response = await fetch(
-          `/api/subscriptions/status?userId=${userId}`
-        );
-        const data = await response.json();
-
-        setSubscriptionStatus({
-          loading: false,
-          hasActiveSubscription: data.hasActiveSubscription,
-          subscription: data.subscription,
-          error: "",
-        });
-      } catch (error) {
-        setSubscriptionStatus({
-          loading: false,
-          hasActiveSubscription: false,
-          subscription: null,
-          error: "Erreur lors de la récupération du statut d'abonnement",
-        });
-      }
-    }
-
-    if (userId) {
-      fetchSubscriptionStatus();
-    }
-  }, [userId]);
-
-  return subscriptionStatus;
 }
