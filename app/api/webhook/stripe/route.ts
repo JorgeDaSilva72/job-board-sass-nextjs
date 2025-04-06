@@ -816,26 +816,52 @@ async function handleOneTimeAccessPayment(session: Stripe.Checkout.Session) {
     const endDate = new Date();
     endDate.setDate(endDate.getDate() + plan.duration);
 
-    // 4. Mettre à jour l'abonnement en BDD
-    const updatedSubscription = await prisma.subscription.updateMany({
-      where: {
-        userId: userId,
-        planId: planId,
-        stripeSessionId: session.id,
-        status: "PENDING",
-      },
-      data: {
-        status: "ACTIVE",
-        endDate: endDate,
-        stripePaymentIntentId: paymentIntentId, // Stocker l'ID du paiement
-      },
-    });
+    // 4. Mettre à jour l'abonnement en BDD dans une transaction
+    const [updatedSubscription, updatedUser] = await prisma.$transaction([
+      prisma.subscription.updateMany({
+        where: {
+          userId: userId,
+          planId: planId,
+          stripeSessionId: session.id,
+          status: "PENDING",
+        },
+        data: {
+          status: "ACTIVE",
+          endDate: endDate,
+          stripePaymentIntentId: paymentIntentId,
+          updatedAt: new Date(),
+        },
+      }),
+      prisma.user.update({
+        where: { id: userId },
+        data: {
+          hasActiveSubscription: true,
+          lastActiveAt: new Date(),
+          updatedAt: new Date(),
+        },
+      }),
+    ]);
 
     if (updatedSubscription.count === 0) {
       console.error("❌ [ONE_TIME_ACCESS] No PENDING subscriptions found");
       return new Response("No PENDING subscription found", { status: 404 });
     }
 
+    console.log(
+      "✅ [ONE_TIME_ACCESS] Subscription updated:",
+      updatedSubscription
+    );
+    console.log("✅ [ONE_TIME_ACCESS] User updated:", updatedUser);
+
+    // 5. Vérification finale de cohérence
+    const finalCheck = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { hasActiveSubscription: true },
+    });
+
+    if (!finalCheck?.hasActiveSubscription) {
+      throw new Error("User subscription status not properly updated");
+    }
     console.log("🟢 [ONE_TIME_ACCESS] Access activated successfully");
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
@@ -843,6 +869,15 @@ async function handleOneTimeAccessPayment(session: Stripe.Checkout.Session) {
     });
   } catch (err) {
     console.error("❌ [ONE_TIME_ACCESS] Error:", err);
+    // Tentative de remise à false en cas d'échec
+    try {
+      await prisma.user.update({
+        where: { id: userId },
+        data: { hasActiveSubscription: false },
+      });
+    } catch (cleanupError) {
+      console.error("❌ Cleanup failed:", cleanupError);
+    }
     return new Response(
       `Payment processing failed: ${
         err instanceof Error ? err.message : "Unknown Error"

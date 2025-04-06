@@ -965,32 +965,70 @@ export default function CandidatesPage() {
   };
 
   // Vérifier l'abonnement au chargement de la page
+  // useEffect(() => {
+  //   const checkSubscription = async () => {
+  //     try {
+  //       const response = await fetch("/api/recruiter/database-access");
+  //       const data = await response.json();
+
+  //       if (
+  //         response.ok &&
+  //         (data.status === "ACTIVE" || data.status === "EXPIRING_SOON")
+  //       ) {
+  //         setHasValidSubscription(true);
+  //       } else {
+  //         setHasValidSubscription(false);
+  //         toast.error("You need an active subscription to access this feature");
+  //         router.push("/company/subscription");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error checking subscription:", error);
+  //       toast.error("Error checking subscription status");
+  //       setHasValidSubscription(false);
+  //     } finally {
+  //       setIsLoadingSubscription(false);
+  //     }
+  //   };
+
+  //   checkSubscription();
+  // }, [router]);
+
+  // avec le changement du code de la route
+  // Vérifier l'abonnement au chargement de la page
   useEffect(() => {
-    const checkSubscription = async () => {
+    const checkDatabaseAccess = async () => {
+      setIsLoadingSubscription(true);
       try {
-        const response = await fetch("/api/recruiter/database-access");
+        const response = await fetch("/api/recruiter/database-access/status");
         const data = await response.json();
 
-        if (
-          response.ok &&
-          (data.status === "ACTIVE" || data.status === "EXPIRING_SOON")
-        ) {
-          setHasValidSubscription(true);
+        if (response.ok) {
+          // Vérification avec les valeurs exactes retournées par l'API (en lowercase)
+          const hasAccess =
+            data.active &&
+            (data.status === "active" || data.status === "expiring_soon");
+
+          setHasValidSubscription(hasAccess);
+
+          if (!hasAccess) {
+            toast.error(
+              "You need an active subscription to access candidate database"
+            );
+            router.push("/company/subscription");
+          }
         } else {
-          setHasValidSubscription(false);
-          toast.error("You need an active subscription to access this feature");
-          router.push("/company/subscription");
+          throw new Error(data.error || "Failed to check subscription");
         }
       } catch (error) {
-        console.error("Error checking subscription:", error);
-        toast.error("Error checking subscription status");
+        console.error("Error checking database access:", error);
+        toast.error("Error verifying your subscription status");
         setHasValidSubscription(false);
       } finally {
         setIsLoadingSubscription(false);
       }
     };
 
-    checkSubscription();
+    checkDatabaseAccess();
   }, [router]);
 
   // Charger les candidats quand les filtres ou la pagination changent avec un debounce
