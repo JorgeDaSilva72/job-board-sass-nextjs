@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/expire-jobs?apiKey=Ght1pc9a3",
+      "schedule": "0 0 * * *"
+    }
+  ]
+}
