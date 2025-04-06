@@ -3,6 +3,10 @@
     {
       "path": "/api/cron/expire-jobs?apiKey=Ght1pc9a3",
       "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/expire-subscriptions?apiKey=Ght1pc9a3",
+      "schedule": "0 0 * * *"
     }
   ]
 }

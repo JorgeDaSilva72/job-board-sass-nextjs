@@ -32,6 +32,9 @@ model User {
   // Ajouts pour la gestion des abonnements
   subscriptions  Subscription[]
   lastActiveAt DateTime?      // Dernière activité pour suivi
+
+  // Ajout d'un champ pour faciliter les requêtes sur l'état de l'abonnement
+  hasActiveSubscription Boolean @default(false)
 }
 
 model Account {
@@ -295,8 +298,15 @@ model Subscription {
 stripeSessionId String? // Garder pour référence
   startDate DateTime
   endDate   DateTime
+
+  // Ajout de champs pour la gestion des expirations
+  expirationNotifiedAt DateTime? // Date à laquelle l'utilisateur a été notifié de l'expiration
+  autoRenew  Boolean   @default(false) // Indique si l'abonnement doit être renouvelé automatiquement
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
+  // Index pour rechercher rapidement les abonnements expirants/expirés
+  @@index([endDate])
+  @@index([status])
 }
 
 model Plan {
@@ -344,4 +354,5 @@ enum SubscriptionStatus {
   CANCELED
   EXPIRED
   PENDING
+  EXPIRING_SOON // Nouvel état pour les abonnements qui vont bientôt expirer
 }
