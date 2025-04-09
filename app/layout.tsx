@@ -15,11 +15,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Afrique Avenir Emploi",
+  title: "Afrique Avenir Job",
   description:
     "Afrique Avenir Emploi connects employers and talents across Africa through an intuitive platform for job posting and searching. ",
   icons: {
-    icon: "/favicon.ico", // Chemin vers ton favicon
+    icon: "/favicon.ico",
   },
 };
 

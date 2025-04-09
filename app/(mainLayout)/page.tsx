@@ -7,12 +7,26 @@ import { PricingSection } from "@/components/landing/Pricing";
 import { SponsorsSection } from "@/components/landing/sponsors";
 import { TeamSection } from "@/components/landing/Team";
 import { TestimonialSection } from "@/components/landing/Testimonial";
+import { auth } from "../utils/auth";
+import { prisma } from "../utils/db";
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const session = await auth();
+  let userTypeData = null;
+
+  // Si l'utilisateur est connecté, récupérer son type depuis la base de données
+  if (session?.user?.email) {
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      select: { userType: true, onboardingCompleted: true },
+    });
+
+    userTypeData = user;
+  }
   return (
     <div>
       <div className="flex flex-col items-center">
-        <HeroSection />
+        <HeroSection userTypeData={userTypeData} />
         <FeaturesSection />
         <SponsorsSection />
         <TestimonialSection />
