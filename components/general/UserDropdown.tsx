@@ -123,6 +123,7 @@ import {
   FileText,
   MessageSquare,
   UserSearch,
+  LayoutDashboard,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -238,6 +239,16 @@ export function UserDropdown({
                   aria-hidden="true"
                 />
                 <span>Company Profile</span>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild className="flex items-center gap-2 py-2">
+              <Link href="/company/dashboard">
+                <LayoutDashboard
+                  size={16}
+                  className="text-muted-foreground"
+                  aria-hidden="true"
+                />
+                <span>Company Dashboard</span>
               </Link>
             </DropdownMenuItem>
           </DropdownMenuGroup>

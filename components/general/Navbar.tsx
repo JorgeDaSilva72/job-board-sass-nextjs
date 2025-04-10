@@ -329,13 +329,13 @@ const NavigationLinks = ({
           <Briefcase className="h-4 w-4" />
           Post a Job
         </Link>
-        <Link
+        {/* <Link
           href="/company/dashboard"
           className="flex items-center gap-2 text-lg font-medium hover:text-primary transition-colors"
         >
           <Building className="h-4 w-4" />
           Company Dashboard
-        </Link>
+        </Link> */}
       </div>
     );
   }
