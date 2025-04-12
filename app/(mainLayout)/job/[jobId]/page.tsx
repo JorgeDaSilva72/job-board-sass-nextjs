@@ -413,7 +413,7 @@ const JobIdPage = async ({
               {jobData.company.about}
             </p>
             <Button variant="outline" className="w-full mt-4" asChild>
-              <Link href={`/company/${jobData.company.id}`}>
+              <Link href={`/profile/company/${jobData.company.id}/View`}>
                 View Company Profile
               </Link>
             </Button>

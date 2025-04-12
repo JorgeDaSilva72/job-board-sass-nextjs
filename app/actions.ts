@@ -2120,3 +2120,61 @@ export async function renew(data: RenewJobData) {
     };
   }
 }
+
+export async function getCompanyProfileById(companyId: string) {
+  try {
+    const DEBUG = true; // Active/Désactive les logs
+    // Vérification de l'authentification
+    // const user = await requireUser();
+
+    // if (!user) return { success: false, error: "Unauthorized" };
+
+    // Protection Arcjet
+    // Access the request object so Arcjet can analyze it
+    const req = await request();
+    // Call Arcjet protect
+    const decision = await aj.protect(req);
+
+    if (decision.isDenied()) {
+      if (DEBUG) console.error("Accès refusé par Arcjet");
+      return { success: false, error: "Forbidden by security rules" };
+    }
+
+    const company = await prisma.company.findUnique({
+      where: {
+        id: companyId,
+      },
+      select: {
+        id: true,
+        name: true,
+        location: true,
+        logo: true,
+        about: true,
+        website: true,
+        userId: true,
+        xAccount: true,
+        industry: true,
+        companySize: true,
+        countryCode: true,
+        city: true,
+        phoneNumber: true,
+        linkedinProfile: true,
+        languages: true,
+      },
+    });
+
+    // Vérification de l'existence de company
+    if (!company) {
+      return { success: false, error: "Company profile not found" };
+    }
+
+    return { success: true, data: company };
+  } catch (error) {
+    // Log the error for debugging (in a production environment)
+    console.error("Error fetching company profile:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}
