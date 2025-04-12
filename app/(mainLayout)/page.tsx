@@ -34,7 +34,7 @@ export default async function LandingPage() {
         <PricingSection />
         <ContactSection />
         <FAQSection />
-        <CTASection />
+        <CTASection userTypeData={userTypeData} />
       </div>
     </div>
   );

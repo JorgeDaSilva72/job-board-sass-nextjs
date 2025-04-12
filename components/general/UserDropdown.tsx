@@ -277,7 +277,7 @@ export function UserDropdown({
                 <span>Saved Jobs</span>
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild className="flex items-center gap-2 py-2">
+            {/* <DropdownMenuItem asChild className="flex items-center gap-2 py-2">
               <Link href="/messages">
                 <MessageSquare
                   size={16}
@@ -286,7 +286,7 @@ export function UserDropdown({
                 />
                 <span>Messages</span>
               </Link>
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
             <DropdownMenuItem asChild className="flex items-center gap-2 py-2">
               <Link href="/job-seeker/profile">
                 <User
