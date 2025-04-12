@@ -339,7 +339,7 @@ export default function RecruiterResources() {
                       </CardContent>
 
                       <CardFooter className="p-4 flex justify-between items-center">
-                        <span className="text-xs flex items-center">
+                        <span className="hidden sm:flex text-xs items-center text-gray-500">
                           <Download className="h-3 w-3 mr-1" />
                           {resource.downloads} downloads
                         </span>
@@ -439,7 +439,7 @@ export default function RecruiterResources() {
           Our team can help you create custom job listings or guide you through
           using our platform.
         </p>
-        <div className="flex justify-center space-x-4">
+        <div className="flex flex-col sm:flex-row justify-center gap-4">
           <Button asChild>
             <Link href="#contact" className="flex items-center">
               <Phone className="h-4 w-4 mr-2" aria-hidden="true" />
