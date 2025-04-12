@@ -102,6 +102,8 @@ export function CreateJobForm({
   });
 
   const [pending, setPending] = useState(false);
+  const readOnly = true;
+
   async function onSubmit(values: z.infer<typeof jobSchema>) {
     try {
       setPending(true);
@@ -511,7 +513,11 @@ export function CreateJobForm({
                   <FormItem>
                     <FormLabel>Company Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Company Name" {...field} />
+                      <Input
+                        placeholder="Company Name"
+                        {...field}
+                        readOnly={readOnly}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -527,6 +533,7 @@ export function CreateJobForm({
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
+                      disabled={readOnly}
                     >
                       <FormControl>
                         <SelectTrigger>
@@ -580,6 +587,7 @@ export function CreateJobForm({
                         <Input
                           {...field}
                           placeholder="Company Website"
+                          readOnly={readOnly}
                           className="rounded-l-none"
                         />
                       </div>
@@ -603,6 +611,7 @@ export function CreateJobForm({
                         <Input
                           {...field}
                           placeholder="Company X Account"
+                          readOnly={readOnly}
                           className="rounded-l-none"
                         />
                       </div>
@@ -622,6 +631,7 @@ export function CreateJobForm({
                   <FormControl>
                     <Textarea
                       placeholder="Company Description"
+                      readOnly={readOnly}
                       className="min-h-[120px]"
                       {...field}
                     />
@@ -648,15 +658,17 @@ export function CreateJobForm({
                             height={100}
                             className="rounded-lg"
                           />
-                          <Button
-                            type="button"
-                            variant="destructive"
-                            size="icon"
-                            className="absolute -top-2 -right-2 "
-                            onClick={() => field.onChange("")}
-                          >
-                            <XIcon className="h-4 w-4" />
-                          </Button>
+                          {field.value && !readOnly && (
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="icon"
+                              className="absolute -top-2 -right-2 "
+                              onClick={() => field.onChange("")}
+                            >
+                              <XIcon className="h-4 w-4" />
+                            </Button>
+                          )}
                         </div>
                       ) : (
                         <UploadDropzone
