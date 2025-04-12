@@ -31,7 +31,7 @@ export default async function LandingPage() {
         <SponsorsSection />
         <TestimonialSection />
         <TeamSection />
-        <PricingSection />
+        <PricingSection userTypeData={userTypeData} />
         <ContactSection />
         <FAQSection />
         <CTASection userTypeData={userTypeData} />
