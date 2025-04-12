@@ -121,7 +121,6 @@ import {
   User,
   Building,
   FileText,
-  MessageSquare,
   UserSearch,
   LayoutDashboard,
 } from "lucide-react";
