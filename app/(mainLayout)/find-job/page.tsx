@@ -29,8 +29,6 @@ const JobPage = async ({ searchParams }: SearchParamsProps) => {
   const experience = params.experience?.split(",") || [];
   // const education=params.education?.split(",") || [];
   // const remote = params.remote || false;
-  // const minSalary = params.minSalary || 0;
-  // const maxSalary = params.maxSalary || 1000000;
   // Conversion explicite en nombres
   const minSalary = params.minSalary ? Number(params.minSalary) : 0;
   const maxSalary = params.maxSalary ? Number(params.maxSalary) : 1000000;
