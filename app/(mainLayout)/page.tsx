@@ -27,7 +27,7 @@ export default async function LandingPage() {
     <div>
       <div className="flex flex-col items-center">
         <HeroSection userTypeData={userTypeData} />
-        <FeaturesSection />
+        <FeaturesSection userTypeData={userTypeData} />
         <SponsorsSection />
         <TestimonialSection />
         <TeamSection />
