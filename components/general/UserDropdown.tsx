@@ -230,6 +230,17 @@ export function UserDropdown({
                 <span>Candidates database</span>
               </Link>
             </DropdownMenuItem>
+
+            <DropdownMenuItem asChild className="flex items-center gap-2 py-2">
+              <Link href="/recruiter-resources">
+                <Briefcase
+                  size={16}
+                  className="text-muted-foreground"
+                  aria-hidden="true"
+                />
+                <span>Resources</span>
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuItem asChild className="flex items-center gap-2 py-2">
               <Link href="/company/profile">
                 <Building

@@ -308,7 +308,7 @@ export default function RecruiterResources() {
                   {filterResources(category.id, searchQuery).map((resource) => (
                     <Card
                       key={resource.id}
-                      className="overflow-hidden transition-all duration-300 hover:shadow-md"
+                      className="flex flex-col justify-between h-full overflow-hidden transition-all duration-300 hover:shadow-md"
                     >
                       <CardContent className="p-6 space-y-4">
                         <div className="flex justify-between items-start">
@@ -339,7 +339,7 @@ export default function RecruiterResources() {
                       </CardContent>
 
                       <CardFooter className="p-4 flex justify-between items-center">
-                        <span className="text-xs text-gray-500 flex items-center">
+                        <span className="text-xs flex items-center">
                           <Download className="h-3 w-3 mr-1" />
                           {resource.downloads} downloads
                         </span>
@@ -359,7 +359,7 @@ export default function RecruiterResources() {
 
                 {filterResources(category.id, searchQuery).length === 0 && (
                   <div className="text-center py-12">
-                    <p className="text-lg text-gray-600">
+                    <p className="text-lg">
                       No resources found. Try another search.
                     </p>
                   </div>
@@ -405,7 +405,7 @@ export default function RecruiterResources() {
             <h3 className="font-medium text-lg">
               How can I customize the templates?
             </h3>
-            <p className="text-gray-600 mt-2">
+            <p className=" mt-2">
               All our templates are available in editable .docx and .pdf
               formats. Simply download them and adjust the sections according to
               your needs.
@@ -413,7 +413,7 @@ export default function RecruiterResources() {
           </div>
           <div className="border rounded-lg p-4">
             <h3 className="font-medium text-lg">Are these resources free?</h3>
-            <p className="text-gray-600 mt-2">
+            <p className=" mt-2">
               Yes, all resources available on this page are completely free for
               our users.
             </p>
@@ -422,7 +422,7 @@ export default function RecruiterResources() {
             <h3 className="font-medium text-lg">
               Can I suggest new resources?
             </h3>
-            <p className="text-gray-600 mt-2">
+            <p className=" mt-2">
               Absolutely! Use the contact form at the bottom of the page to send
               us your suggestions.
             </p>
@@ -435,7 +435,7 @@ export default function RecruiterResources() {
         <h2 className="text-2xl font-bold mb-4">
           Need Help or Custom Resources?
         </h2>
-        <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+        <p className=" mb-6 max-w-2xl mx-auto">
           Our team can help you create custom job listings or guide you through
           using our platform.
         </p>
