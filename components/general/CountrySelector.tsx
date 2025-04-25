@@ -143,6 +143,7 @@ const africanCountries = [
 
 // Définition de l'interface pour les props du composant
 interface CountrySelectorProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   form: UseFormReturn<any>;
 }
 
@@ -150,9 +151,9 @@ export function CountrySelector({ form }: CountrySelectorProps) {
   const [open, setOpen] = React.useState(false);
 
   // Utilisation des images de placeholder au lieu des URLs externes
-  const getFlagPlaceholder = (countryCode: string) => {
-    return `/api/placeholder/20/15?text=${countryCode}`;
-  };
+  // const getFlagPlaceholder = (countryCode: string) => {
+  //   return `/api/placeholder/20/15?text=${countryCode}`;
+  // };
 
   return (
     // <FormField
@@ -323,10 +324,10 @@ export function CountrySelector({ form }: CountrySelectorProps) {
 }
 
 // Interface pour le type de formulaire
-interface FormValues {
-  countryCode: string;
-  // Autres champs de formulaire...
-}
+// interface FormValues {
+//   countryCode: string;
+//   // Autres champs de formulaire...
+// }
 
 // Interface pour le type de formulaire
 // interface FormValues {
