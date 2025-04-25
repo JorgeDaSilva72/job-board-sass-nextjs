@@ -28,52 +28,52 @@ interface ReviewProps {
 
 const reviewList: ReviewProps[] = [
   {
-    image: "/testimonial/Amina Diallo.jpg",
-    name: "Amina Diallo",
-    userName: "Médecin ",
+    image: "/testimonial/Aïssatou Diallo.jpg",
+    name: "Aïssatou Diallo",
+    userName: "Community Manager ",
     comment:
-      "Afrique Avenir est une véritable source d'inspiration et d'information. J'y trouve des perspectives nouvelles et innovantes pour le développement de notre continent. Bravo ",
+      "This job board made my job search so much easier. I found a position that matches my skills in less than a week! ",
     rating: 5.0,
   },
   {
-    image: "/testimonial/kwame Mensah.jpg",
-    name: "Kwame Mensah",
-    userName: "Ingénieur ",
+    image: "/testimonial/Koffi Mensah.jpg",
+    name: "Koffi Mensah",
+    userName: "Renewable Energy Engineer ",
     comment:
-      "Le site Afrique Avenir est fantastique ! Il met en lumière des initiatives incroyables et offre une vision optimiste de l'avenir de l'Afrique. Continuez votre excellent travail ! ",
+      "Clean interface, relevant job offers, and easy application process. Love it! ",
     rating: 4.8,
   },
 
   {
-    image: "/testimonial/Fatoumata Diop.jpg",
-    name: "Fatoumata Diop",
-    userName: "Avocate",
+    image: "/testimonial/Fatoumata Keïta.jpg",
+    name: "Fatoumata Keïta",
+    userName: "Registered Nurse",
     comment:
-      "Je suis impressionnée par la richesse des contenus sur Afrique Avenir. C'est une ressource incontournable pour tous ceux qui s'intéressent à l'évolution et au progrès de l'Afrique.",
+      "Thanks to this platform, I finally landed my dream job. Forever grateful!",
     rating: 4.9,
   },
   {
-    image: "/testimonial/Tunde Adebayo.jpg",
-    name: "Tunde Adebayo ",
-    userName: "Banquier",
+    image: "/testimonial/Thierno Ba.jpg",
+    name: "Thierno Ba ",
+    userName: "Full Stack Developer",
     comment:
-      "Afrique Avenir offre un excellent aperçu des opportunités de développement en Afrique. Les articles sont bien rédigés et les sujets très pertinents. Un site à recommander !",
+      "Great platform for job seekers and companies alike. The filtering options are very helpful.",
     rating: 5.0,
   },
   {
-    image: "/testimonial/Nia Nkrumah.jpg",
-    name: "Nia Nkrumah",
-    userName: "Professeure d'université",
+    image: "/testimonial/Chantal Biyela.jpg",
+    name: "Chantal Biyela",
+    userName: "Human Resources Manager",
     comment:
-      "J'adore Afrique Avenir ! Le site propose des articles inspirants et des histoires de réussite qui montrent le potentiel énorme de notre continent. Merci pour cette belle plateforme !",
+      "I appreciate how the site is available in multiple languages. It really makes job hunting easier for international users.",
     rating: 5.0,
   },
   {
-    image: "/testimonial/Lamine Cissé.jpg",
-    name: "Lamine Cissé",
-    userName: "Entrepreneur",
+    image: "/testimonial/Idriss N’Doye.jpg",
+    name: "Idriss N’Doye",
+    userName: "Logistics Project Manager",
     comment:
-      "Afrique Avenir est une mine d'or pour quiconque souhaite comprendre les défis et les opportunités en Afrique. Les analyses sont pertinentes et les solutions proposées sont innovantes. Félicitations !",
+      "As an employer, I was impressed by how quickly we received quality applications. Highly recommended!",
     rating: 4.0,
   },
 ];
