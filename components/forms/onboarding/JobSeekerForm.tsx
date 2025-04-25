@@ -1189,6 +1189,7 @@ import Image from "next/image";
 import { createJobSeeker } from "@/app/actions";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
+import { CountrySelector } from "@/components/general/CountrySelector";
 
 const JobSeekerForm = () => {
   const [pending, setPending] = useState(false);
@@ -1451,7 +1452,7 @@ const JobSeekerForm = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="countryCode"
                 render={({ field }) => (
@@ -1463,6 +1464,12 @@ const JobSeekerForm = () => {
                     <FormMessage />
                   </FormItem>
                 )}
+              /> */}
+
+              <FormField
+                control={form.control}
+                name="countryCode"
+                render={() => <CountrySelector form={form} />}
               />
 
               <FormField
