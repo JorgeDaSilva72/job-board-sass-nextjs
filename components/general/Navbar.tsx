@@ -636,13 +636,13 @@ const NavigationLinks = ({
           <Briefcase className="h-4 w-4" />
           {t("links.myApplications")}
         </Link>
-        <Link
+        {/* <Link
           href="/job-seeker/profile"
           className="flex items-center gap-2 text-lg font-medium hover:text-primary transition-colors"
         >
           <User className="h-4 w-4" />
           {t("links.myProfile")}
-        </Link>
+        </Link> */}
       </div>
     );
   }

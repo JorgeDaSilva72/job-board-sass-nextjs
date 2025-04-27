@@ -10,6 +10,7 @@ import { notFound } from "next/navigation";
 import { getMessages } from "next-intl/server";
 
 import { routing } from "@/i18n/routing";
+import BackToTop from "@/components/landing/BackTotop";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -90,6 +91,7 @@ export default async function LocaleLayout({
               richColors
             />
             {children}
+            <BackToTop />
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>
