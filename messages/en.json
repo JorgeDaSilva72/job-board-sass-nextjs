@@ -104,6 +104,26 @@
     "title": "Our Sponsors",
     "yourAdHere": "Your ad here"
   },
+  "Testimonials": {
+    "title": "TESTIMONIALS",
+    "subtitle": "Read what our 1,000+ customers are saying.",
+    "roles": {
+      "communityManager": "Community Manager",
+      "energyEngineer": "Renewable Energy Engineer",
+      "nurse": "Registered Nurse",
+      "developer": "Full Stack Developer",
+      "hrManager": "Human Resources Manager",
+      "projectManager": "Logistics Project Manager"
+    },
+    "comments": {
+      "aisssatou": "This job board made my job search so much easier. I found a position that matches my skills in less than a week!",
+      "koffi": "Clean interface, relevant job offers, and easy application process. Love it!",
+      "fatoumata": "Thanks to this platform, I finally landed my dream job. Forever grateful!",
+      "thierno": "Great platform for job seekers and companies alike. The filtering options are very helpful.",
+      "chantal": "I appreciate how the site is available in multiple languages. It really makes job hunting easier for international users.",
+      "idriss": "As an employer, I was impressed by how quickly we received quality applications. Highly recommended!"
+    }
+  },
 
   "UserDropdown": {
     "postJob": "Post a Job",

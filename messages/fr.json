@@ -103,6 +103,26 @@
     "title": "Nos Sponsors",
     "yourAdHere": "Votre publicité ici"
   },
+  "Testimonials": {
+    "title": "TÉMOIGNAGES",
+    "subtitle": "Lisez ce que disent nos 1000+ clients.",
+    "roles": {
+      "communityManager": "Community Manager",
+      "energyEngineer": "Ingénieur en énergie renouvelable",
+      "nurse": "Infirmière diplômée",
+      "developer": "Développeur Full Stack",
+      "hrManager": "Responsable des Ressources Humaines",
+      "projectManager": "Chef de projet logistique"
+    },
+    "comments": {
+      "aisssatou": "Ce job board a grandement facilité ma recherche d'emploi. J'ai trouvé un poste qui correspond à mes compétences en moins d'une semaine !",
+      "koffi": "Interface claire, offres d'emploi pertinentes et processus de candidature facile. J'adore !",
+      "fatoumata": "Grâce à cette plateforme, j'ai enfin décroché le job de mes rêves. Éternellement reconnaissante !",
+      "thierno": "Excellente plateforme pour les chercheurs d'emploi et les entreprises. Les options de filtrage sont très utiles.",
+      "chantal": "J'apprécie que le site soit disponible en plusieurs langues. Cela facilite vraiment la recherche d'emploi pour les utilisateurs internationaux.",
+      "idriss": "En tant qu'employeur, j'ai été impressionné par la rapidité avec laquelle nous avons reçu des candidatures de qualité. Vivement recommandé !"
+    }
+  },
 
   "UserDropdown": {
     "postJob": "Publier une offre",
