@@ -287,6 +287,27 @@
     "copyright": "© 2024 Conçu et développé par",
     "developerName": "Jorge Da Silva"
   },
+  "Navbar": {
+    "logoAlt": "Logo Afrique Avenir",
+    "brandName": "Afrique Avenir",
+    "brandSuffix": "Emplois",
+    "links": {
+      "findJobs": "Trouver un emploi",
+      "postJob": "Publier une offre",
+      "myApplications": "Mes candidatures",
+      "myProfile": "Mon profil"
+    },
+    "buttons": {
+      "login": "Connexion",
+      "postNewJob": "Publier une offre",
+      "jobAlerts": "Alertes emploi"
+    },
+    "mobileMenu": {
+      "companyDescription": "Gérez vos offres d'emploi",
+      "jobSeekerDescription": "Trouvez votre prochaine opportunité",
+      "defaultDescription": "Découvrez des opportunités ou publiez une offre"
+    }
+  },
 
   "UserDropdown": {
     "postJob": "Publier une offre",

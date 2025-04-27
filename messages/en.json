@@ -288,6 +288,27 @@
     "copyright": "© 2024 Designed and developed by",
     "developerName": "Jorge Da Silva"
   },
+  "Navbar": {
+    "logoAlt": "Afrique Avenir Logo",
+    "brandName": "Afrique Avenir",
+    "brandSuffix": "Jobs",
+    "links": {
+      "findJobs": "Find Jobs",
+      "postJob": "Post a Job",
+      "myApplications": "My Applications",
+      "myProfile": "My Profile"
+    },
+    "buttons": {
+      "login": "Login",
+      "postNewJob": "Post New Job",
+      "jobAlerts": "Job Alerts"
+    },
+    "mobileMenu": {
+      "companyDescription": "Manage your job listings",
+      "jobSeekerDescription": "Find your next opportunity",
+      "defaultDescription": "Discover your next opportunity or post a new job"
+    }
+  },
 
   "UserDropdown": {
     "postJob": "Post a Job",
