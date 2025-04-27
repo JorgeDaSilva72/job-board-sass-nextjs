@@ -43,6 +43,64 @@
     "dreamJobSuffix": "Today"
   },
 
+  "FeaturesSection": {
+    "ourBenefits": "Our Benefits",
+    "title": {
+      "company": "Why Post Jobs on Afrique Avenir ?",
+      "jobSeeker": "Why Choose Afrique Avenir Jobs ?"
+    },
+    "subtitle": {
+      "company": "Discover how our platform simplifies recruitment and connects you with the best talents in Africa.",
+      "jobSeeker": "Discover how our platform makes your job search easier and connects you with the best professional opportunities in Africa."
+    },
+    "jobSeeker": {
+      "smartSearch": {
+        "title": "Smart Search",
+        "description": "Find relevant job opportunities quickly with our advanced search engine that understands your skills and needs."
+      },
+      "africanCompanies": {
+        "title": "African Companies",
+        "description": "Connect with the best African companies actively looking for talents like you."
+      },
+      "exclusiveJobs": {
+        "title": "Exclusive Jobs",
+        "description": "Access unique and exclusive job opportunities across Africa, carefully selected for you."
+      },
+      "careerGrowth": {
+        "title": "Career Growth",
+        "description": "Develop your career with opportunities tailored to your profile and professional ambitions in Africa."
+      },
+      "allLevels": {
+        "title": "All Levels",
+        "description": "Whether you're a beginner or expert, find jobs matching your experience level and qualifications."
+      }
+    },
+    "company": {
+      "qualifiedCandidates": {
+        "title": "Qualified Candidates",
+        "description": "Easily find candidates who match your job requirements across various industries."
+      },
+      "smartFiltering": {
+        "title": "Smart Filtering",
+        "description": "Use advanced filters and AI suggestions to identify the right talents faster."
+      },
+      "trustedNetwork": {
+        "title": "Trusted Network",
+        "description": "Join a growing network of verified African companies hiring top talents."
+      },
+      "boostHiringEfficiency": {
+        "title": "Boost Hiring Efficiency",
+        "description": "Optimize your hiring process and reduce time-to-hire with our all-in-one platform."
+      }
+    },
+    "common": {
+      "panAfrican": {
+        "title": "Pan-African",
+        "description": "Explore opportunities in different African countries and contribute to the continent's development."
+      }
+    }
+  },
+
   "UserDropdown": {
     "postJob": "Post a Job",
     "searchJobs": "Search Jobs",

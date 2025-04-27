@@ -41,6 +41,63 @@
     "dreamJobHighlight": "Emploi de Rêve",
     "dreamJobSuffix": "Aujourd'hui"
   },
+  "FeaturesSection": {
+    "ourBenefits": "Nos Avantages",
+    "title": {
+      "company": "Pourquoi publier des offres sur Afrique Avenir ?",
+      "jobSeeker": "Pourquoi choisir Afrique Avenir Jobs ?"
+    },
+    "subtitle": {
+      "company": "Découvrez comment notre plateforme simplifie le recrutement et vous connecte aux meilleurs talents en Afrique.",
+      "jobSeeker": "Découvrez comment notre plateforme facilite votre recherche d'emploi et vous connecte aux meilleures opportunités professionnelles en Afrique."
+    },
+    "jobSeeker": {
+      "smartSearch": {
+        "title": "Recherche Intelligente",
+        "description": "Trouvez rapidement des offres d'emploi pertinentes grâce à notre moteur de recherche avancé qui comprend vos compétences et vos besoins."
+      },
+      "africanCompanies": {
+        "title": "Entreprises Africaines",
+        "description": "Connectez-vous avec les meilleures entreprises africaines qui recherchent activement des talents comme vous."
+      },
+      "exclusiveJobs": {
+        "title": "Offres Exclusives",
+        "description": "Accédez à des opportunités d'emploi uniques et exclusives à travers l'Afrique, soigneusement sélectionnées pour vous."
+      },
+      "careerGrowth": {
+        "title": "Évolution de Carrière",
+        "description": "Développez votre carrière grâce à des opportunités adaptées à votre profil et à vos ambitions professionnelles en Afrique."
+      },
+      "allLevels": {
+        "title": "Tous Niveaux",
+        "description": "Que vous soyez débutant ou expert, trouvez des emplois correspondant à votre niveau d'expérience et à vos qualifications."
+      }
+    },
+    "company": {
+      "qualifiedCandidates": {
+        "title": "Candidats Qualifiés",
+        "description": "Trouvez facilement des candidats correspondant à vos exigences dans divers secteurs d'activité."
+      },
+      "smartFiltering": {
+        "title": "Filtrage Intelligent",
+        "description": "Utilisez des filtres avancés et des suggestions basées sur l'IA pour identifier plus rapidement les bons talents."
+      },
+      "trustedNetwork": {
+        "title": "Réseau de Confiance",
+        "description": "Rejoignez un réseau croissant d'entreprises africaines vérifiées recrutant les meilleurs talents."
+      },
+      "boostHiringEfficiency": {
+        "title": "Optimisez Votre Recrutement",
+        "description": "Optimisez votre processus de recrutement et réduisez le délai d'embauche grâce à notre plateforme tout-en-un."
+      }
+    },
+    "common": {
+      "panAfrican": {
+        "title": "Pan-Africain",
+        "description": "Explorez des opportunités dans différents pays africains et contribuez au développement du continent."
+      }
+    }
+  },
 
   "UserDropdown": {
     "postJob": "Publier une offre",
