@@ -57,13 +57,7 @@ import { locales } from "@/config/i18n";
 import { useLocale } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
 
 // Définition du type pour les locales
 type LocaleKey = string;
