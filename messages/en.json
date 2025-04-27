@@ -255,6 +255,23 @@
       "contactSupport": "You can reach out to us through the contact form on our website, and our team will respond as soon as possible."
     }
   },
+  "CTASection": {
+    "default": {
+      "title": "Ready to Take the Next Step?",
+      "description": "Whether you are a job seeker or an employer, we are here to help you achieve your goals. Join us today and unlock new opportunities!",
+      "buttonText": "Get Started"
+    },
+    "jobSeeker": {
+      "title": "Looking for Your Dream Job?",
+      "description": "Explore thousands of job opportunities tailored just for you. Start applying today!",
+      "buttonText": "Browse Jobs"
+    },
+    "company": {
+      "title": "Ready to Hire Top Talent?",
+      "description": "Find the perfect candidates to grow your business. Post a job and connect with talent today.",
+      "buttonText": "Post a Job"
+    }
+  },
 
   "UserDropdown": {
     "postJob": "Post a Job",

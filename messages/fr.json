@@ -254,6 +254,23 @@
       "contactSupport": "Vous pouvez nous contacter via le formulaire de contact sur notre site web, et notre équipe vous répondra dès que possible."
     }
   },
+  "CTASection": {
+    "default": {
+      "title": "Prêt à passer à l'étape suivante ?",
+      "description": "Que vous soyez chercheur d'emploi ou employeur, nous sommes là pour vous aider à atteindre vos objectifs. Rejoignez-nous dès aujourd'hui et découvrez de nouvelles opportunités !",
+      "buttonText": "Commencer"
+    },
+    "jobSeeker": {
+      "title": "À la recherche de votre emploi idéal ?",
+      "description": "Explorez des milliers d'opportunités d'emploi faites pour vous. Postulez dès aujourd'hui !",
+      "buttonText": "Parcourir les offres"
+    },
+    "company": {
+      "title": "Prêt à recruter les meilleurs talents ?",
+      "description": "Trouvez les candidats parfaits pour développer votre entreprise. Publiez une offre et connectez-vous avec des talents dès aujourd'hui.",
+      "buttonText": "Publier une offre"
+    }
+  },
 
   "UserDropdown": {
     "postJob": "Publier une offre",
