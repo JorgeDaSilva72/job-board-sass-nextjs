@@ -60,8 +60,6 @@ const BackToTop = () => {
   const [showTopBtn, setShowTopBtn] = useState(false);
   const { theme } = useTheme();
 
-  console.log("theme", theme);
-
   useEffect(() => {
     const handleScroll = () => {
       setShowTopBtn(window.scrollY > 400);
