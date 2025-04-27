@@ -8,7 +8,7 @@ import "@devnomic/marquee/dist/index.css";
 // import TopWave from "./topWave";
 // import BottomWave from "./bottomWave";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 // interface sponsorsProps {
 //   icon: string;
 //   name: string;

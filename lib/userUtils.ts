@@ -1,4 +1,4 @@
-// import { prisma } from "@/app/utils/db";
+import { prisma } from "@/app/utils/db";
 
 // /**
 //  * Détermine si un utilisateur est une entreprise ou un chercheur d'emploi
@@ -41,7 +41,7 @@
 //   }
 // }
 
-import { prisma } from "@/app/utils/db";
+// import { prisma } from "@/app/utils/db";
 
 /**
  * Détermine si un utilisateur est un demandeur d'emploi ou une entreprise

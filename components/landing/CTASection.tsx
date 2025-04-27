@@ -1,6 +1,6 @@
 // import { Button } from "@/components/ui/button";
 // import { ArrowRight } from "lucide-react";
-// import Link from "next/link";
+// import {Link} from '@/i18n/navigation';
 
 // // export const HeroSection = ({
 // //   userTypeData,
@@ -52,7 +52,7 @@
 
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 
 export const CTASection = ({
   userTypeData,

@@ -1,6 +1,6 @@
 // "use client";
 
-// import Link from "next/link";
+// import {Link} from '@/i18n/navigation';
 // import { Card, CardHeader } from "../ui/card";
 // import { MapPin, User2 } from "lucide-react";
 // import { Badge } from "../ui/badge";
@@ -96,7 +96,7 @@
 
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { Card, CardHeader } from "../ui/card";
 import { MapPin, Building, Clock, Briefcase, DollarSign } from "lucide-react";
 import { Badge } from "../ui/badge";

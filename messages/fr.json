@@ -1,0 +1,60 @@
+{
+  "filters": {
+    "title": "Filtres",
+    "clearAll": "Tout effacer",
+    "jobType": "Type d'emploi",
+    "location": "Emplacement",
+    "salaryRange": "Échelle salariale (€)",
+    "minSalary": "Min",
+    "maxSalary": "Max",
+    "apply": "Appliquer",
+    "selectLocation": "Sélectionner un lieu",
+    "worldwide": "Mondial"
+  },
+  "jobTypes": {
+    "full-time": "Temps plein",
+    "part-time": "Temps partiel",
+    "contract": "Contrat",
+    "internship": "Stage",
+    "freelance": "Freelance"
+  },
+  "HeroSection": {
+    "defaultHeading": "Trouvez Votre Emploi de Rêve Aujourd'hui",
+    "defaultDescription": "Découvrez des milliers d'opportunités d'emploi et connectez-vous avec les meilleurs recruteurs en Afrique. Votre prochaine évolution de carrière commence ici !",
+    "defaultPrimaryButton": "Chercher des Emplois",
+    "defaultSecondaryButton": "Publier une Offre",
+    "defaultImageAlt": "tableau de bord",
+
+    "jobSeekerHeading": "Découvrez Votre Prochaine Opportunité Professionnelle",
+    "jobSeekerDescription": "Parcourez les dernières offres d'emploi adaptées à vos compétences et à votre expérience. Votre emploi de rêve n'est qu'à un clic !",
+    "jobSeekerPrimaryButton": "Parcourir les Offres",
+    "jobSeekerSecondaryButton": "Mettre à Jour le Profil",
+    "jobSeekerImageAlt": "tableau de bord chercheur d'emploi",
+
+    "companyHeading": "Trouvez Les Meilleurs Talents en Afrique",
+    "companyDescription": "Publiez vos offres d'emploi et connectez-vous avec des candidats qualifiés. Simplifiez votre processus de recrutement et constituez votre équipe de rêve.",
+    "companyPrimaryButton": "Publier une Offre",
+    "companySecondaryButton": "Parcourir les Candidats",
+    "companyImageAlt": "tableau de bord recrutement",
+
+    "dreamJobPrefix": "Trouvez Votre",
+    "dreamJobHighlight": "Emploi de Rêve",
+    "dreamJobSuffix": "Aujourd'hui"
+  },
+
+  "UserDropdown": {
+    "postJob": "Publier une offre",
+    "searchJobs": "Rechercher des offres",
+    "myJobListings": "Mes offres",
+    "applicationsReceived": "Candidatures reçues",
+    "candidatesDatabase": "Base de candidats",
+    "recruiterResources": "Ressources RH",
+    "companyProfile": "Profil entreprise",
+    "companyDashboard": "Tableau de bord",
+    "myApplications": "Mes candidatures",
+    "savedJobs": "Offres sauvegardées",
+    "myProfile": "Mon profil",
+    "completeProfile": "Compléter votre profil",
+    "logout": "Se déconnecter"
+  }
+}

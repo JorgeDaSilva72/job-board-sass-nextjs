@@ -1,4 +1,4 @@
-// import Link from "next/link";
+// import {Link} from '@/i18n/navigation';
 
 // import { Button, buttonVariants } from "../ui/button";
 // import Image from "next/image";
@@ -105,7 +105,7 @@
 //   );
 // }
 
-// import Link from "next/link";
+// import {Link} from '@/i18n/navigation';
 // import { Button, buttonVariants } from "../ui/button";
 // import Image from "next/image";
 // import Logo from "@/public/logo.png";
@@ -278,7 +278,7 @@
 //   );
 // }
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { Button, buttonVariants } from "../ui/button";
 import Image from "next/image";
 import Logo from "@/public/logo.png";
@@ -297,6 +297,7 @@ import { ThemeToggle } from "./ThemeToggle";
 import { UserDropdown } from "./UserDropdown";
 import { cn } from "@/lib/utils";
 import { getUserType } from "@/lib/userUtils";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 // Navigation links component based on user type
 const NavigationLinks = ({
@@ -308,13 +309,16 @@ const NavigationLinks = ({
 }) => {
   // Common links for all user types
   const commonLinks = (
-    <Link
-      href="/find-job"
-      className="flex items-center gap-2 text-lg font-medium hover:text-primary transition-colors"
-    >
-      <Search className="h-4 w-4" />
-      Find Jobs
-    </Link>
+    <>
+      <Link
+        href="/find-job"
+        className="flex items-center gap-2 text-lg font-medium hover:text-primary transition-colors"
+      >
+        <Search className="h-4 w-4" />
+        Find Jobs
+      </Link>
+      <LanguageSwitcher />
+    </>
   );
 
   // Company-specific links

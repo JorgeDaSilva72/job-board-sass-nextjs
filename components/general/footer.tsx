@@ -1,7 +1,7 @@
 // import { Separator } from "@/components/ui/separator";
 // import { ChevronsUpIcon } from "lucide-react";
 // import Image from "next/image";
-// import Link from "next/link";
+// import {Link} from '@/i18n/navigation';
 
 // export const FooterSection = () => {
 //   return (
@@ -143,7 +143,7 @@ import {
   GlobeIcon,
 } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 
 export const FooterSection = () => {
   return (
