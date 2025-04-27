@@ -191,6 +191,54 @@
       }
     }
   },
+  "Contact": {
+    "title": "CONTACT",
+    "subtitle": "Connect With Us",
+    "description": "We are here to answer your questions about job offers, partnerships or any other request.",
+    "contactMethods": {
+      "findUs": "Find us",
+      "callUs": "Call us",
+      "mailUs": "Mail us",
+      "visitUs": "Visit us"
+    },
+    "contactInfo": {
+      "location": "Paris",
+      "phone": "+00 33 662300932",
+      "workingDays": "Monday - Friday",
+      "workingHours": "8AM - 4PM"
+    },
+    "contactEmail": "afriqueavenirinfo@gmail.com",
+    "formLabels": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "subject": "Subject",
+      "message": "Message"
+    },
+    "formPlaceholders": {
+      "firstName": "Your first name",
+      "lastName": "Your last name",
+      "email": "your.email@gmail.com",
+      "selectSubject": "Select a subject",
+      "message": "Your message..."
+    },
+    "formSubjects": {
+      "jobApplication": "Job Application",
+      "employerPartnership": "Employer Partnership",
+      "technicalSupport": "Technical Support",
+      "accountIssues": "Account Issues",
+      "feedback": "Feedback or Suggestions",
+      "advertising": "Advertising Opportunities",
+      "generalInquiry": "General Inquiry"
+    },
+    "formErrors": {
+      "minLength": "Must be at least {min} characters",
+      "invalidEmail": "Invalid email address",
+      "required": "This field is required"
+    },
+    "emailBody": "Hello I am {firstName} {lastName}, my Email is {email}. %0D%0A{message}",
+    "submitButton": "Send message"
+  },
 
   "UserDropdown": {
     "postJob": "Post a Job",

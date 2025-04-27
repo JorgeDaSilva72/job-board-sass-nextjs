@@ -190,6 +190,54 @@
       }
     }
   },
+  "Contact": {
+    "title": "CONTACT",
+    "subtitle": "Contactez-nous",
+    "description": "Nous sommes là pour répondre à vos questions sur les offres d'emploi, les partenariats ou toute autre demande.",
+    "contactMethods": {
+      "findUs": "Nous trouver",
+      "callUs": "Nous appeler",
+      "mailUs": "Nous écrire",
+      "visitUs": "Nous visiter"
+    },
+    "contactInfo": {
+      "location": "Paris",
+      "phone": "+00 33 662300932",
+      "workingDays": "Lundi - Vendredi",
+      "workingHours": "8h - 16h"
+    },
+    "contactEmail": "afriqueavenirinfo@gmail.com",
+    "formLabels": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Email",
+      "subject": "Sujet",
+      "message": "Message"
+    },
+    "formPlaceholders": {
+      "firstName": "Votre prénom",
+      "lastName": "Votre nom",
+      "email": "votre.email@gmail.com",
+      "selectSubject": "Sélectionnez un sujet",
+      "message": "Votre message..."
+    },
+    "formSubjects": {
+      "jobApplication": "Candidature",
+      "employerPartnership": "Partenariat employeur",
+      "technicalSupport": "Support technique",
+      "accountIssues": "Problèmes de compte",
+      "feedback": "Retour ou suggestions",
+      "advertising": "Opportunités publicitaires",
+      "generalInquiry": "Demande générale"
+    },
+    "formErrors": {
+      "minLength": "Doit contenir au moins {min} caractères",
+      "invalidEmail": "Adresse email invalide",
+      "required": "Ce champ est requis"
+    },
+    "emailBody": "Bonjour, je suis {firstName} {lastName}, mon email est {email}. %0D%0A{message}",
+    "submitButton": "Envoyer le message"
+  },
 
   "UserDropdown": {
     "postJob": "Publier une offre",
