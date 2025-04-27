@@ -123,6 +123,28 @@
       "idriss": "En tant qu'employeur, j'ai été impressionné par la rapidité avec laquelle nous avons reçu des candidatures de qualité. Vivement recommandé !"
     }
   },
+  "Team": {
+    "title": "NOTRE ÉQUIPE",
+    "subtitle": "Rencontrez l'équipe qui donne vie à vos ambitions !",
+    "positions": {
+      "ceo": "Directeur Général",
+      "ceoTitle": "CEO",
+      "cto": "Directeur Technique",
+      "ctoTitle": "CTO",
+      "cfo": "Directeur Financier",
+      "cfoTitle": "CFO",
+      "cmo": "Directeur Marketing",
+      "cmoTitle": "CMO",
+      "chro": "Directeur des Ressources Humaines",
+      "chroTitle": "CHRO",
+      "cso": "Directeur Commercial",
+      "csoTitle": "CSO",
+      "coo": "Directeur des Opérations",
+      "cooTitle": "COO",
+      "clo": "Directeur Juridique",
+      "cloTitle": "CLO"
+    }
+  },
 
   "UserDropdown": {
     "postJob": "Publier une offre",
