@@ -239,6 +239,22 @@
     "emailBody": "Hello I am {firstName} {lastName}, my Email is {email}. %0D%0A{message}",
     "submitButton": "Send message"
   },
+  "FAQ": {
+    "title": "FREQUENTLY ASKED QUESTIONS",
+    "subtitle": "Find answers to the most frequently asked questions",
+    "questions": {
+      "jobSearch": "How can I find job listings in Africa?",
+      "careerAdvice": "Do you provide career advice or CV reviews?",
+      "employerPosting": "Can employers post job listings on your platform?",
+      "contactSupport": "How do I contact the support team?"
+    },
+    "answers": {
+      "jobSearch": "Our platform is designed to connect job seekers with opportunities across Africa. You can browse job listings by category, location, or keyword to find the perfect match for your skills and experience.",
+      "careerAdvice": "Yes, we offer resources and tips to help you improve your CV and prepare for interviews. Check out our blog and resources section for helpful guides, or contact us for personalized assistance.",
+      "employerPosting": "Absolutely! Employers can create an account and post job listings to reach qualified candidates. We also offer premium options to highlight your job postings for greater visibility.",
+      "contactSupport": "You can reach out to us through the contact form on our website, and our team will respond as soon as possible."
+    }
+  },
 
   "UserDropdown": {
     "postJob": "Post a Job",

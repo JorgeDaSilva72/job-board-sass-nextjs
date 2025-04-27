@@ -238,6 +238,22 @@
     "emailBody": "Bonjour, je suis {firstName} {lastName}, mon email est {email}. %0D%0A{message}",
     "submitButton": "Envoyer le message"
   },
+  "FAQ": {
+    "title": "QUESTIONS FRÉQUEMMENT POSÉES",
+    "subtitle": "Trouvez des réponses aux questions les plus fréquentes",
+    "questions": {
+      "jobSearch": "Comment trouver des offres d'emploi en Afrique ?",
+      "careerAdvice": "Proposez-vous des conseils de carrière ou des relectures de CV ?",
+      "employerPosting": "Les employeurs peuvent-ils publier des offres d'emploi sur votre plateforme ?",
+      "contactSupport": "Comment contacter l'équipe de support ?"
+    },
+    "answers": {
+      "jobSearch": "Notre plateforme est conçue pour connecter les chercheurs d'emploi avec des opportunités à travers l'Afrique. Vous pouvez parcourir les offres d'emploi par catégorie, localisation ou mot-clé pour trouver le poste qui correspond à vos compétences et expérience.",
+      "careerAdvice": "Oui, nous proposons des ressources et conseils pour vous aider à améliorer votre CV et vous préparer aux entretiens. Consultez notre blog et section ressources pour des guides utiles, ou contactez-nous pour une assistance personnalisée.",
+      "employerPosting": "Absolument ! Les employeurs peuvent créer un compte et publier des offres d'emploi pour atteindre des candidats qualifiés. Nous proposons également des options premium pour mettre en valeur vos annonces.",
+      "contactSupport": "Vous pouvez nous contacter via le formulaire de contact sur notre site web, et notre équipe vous répondra dès que possible."
+    }
+  },
 
   "UserDropdown": {
     "postJob": "Publier une offre",
