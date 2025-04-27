@@ -634,7 +634,7 @@ export default function EffectiveJobAds() {
                         <AlertCircle className="h-4 w-4 text-red-500 mr-2" />
                         Before
                       </h4>
-
+                      {/* eslint-disable-next-line react/no-unescaped-entities */}
                       <p className="text-sm italic">"{example.before}"</p>
                     </div>
 
@@ -643,7 +643,7 @@ export default function EffectiveJobAds() {
                         <Check className="h-4 w-4 text-green-500 mr-2" />
                         After
                       </h4>
-
+                      {/* eslint-disable-next-line react/no-unescaped-entities */}
                       <p className="text-sm italic">"{example.after}"</p>
                     </div>
                   </div>
