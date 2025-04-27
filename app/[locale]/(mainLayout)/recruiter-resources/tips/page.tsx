@@ -342,7 +342,6 @@ export default function EffectiveJobAds() {
                   be excited about this opportunity.
                 </p>
                 <div className=" p-4 rounded">
-                  {/* eslint-disable-next-line react/no-unescaped-entities */}
                   <p className="text-sm italic">
                     Join our innovative team and help shape the future of
                     healthcare technology. As a UX Designer at HealthTech,
@@ -374,7 +373,7 @@ export default function EffectiveJobAds() {
                 <h3 className="text-xl font-semibold mb-3">
                   3. Role Description
                 </h3>
-                {/* eslint-disable-next-line react/no-unescaped-entities */}
+
                 <p className=" mb-4">
                   Describe what the person will actually do on a day-to-day
                   basis. Use present tense and &apos;you&apos; language.
@@ -394,7 +393,6 @@ export default function EffectiveJobAds() {
                   4. Requirements & Qualifications
                 </h3>
                 <p className=" mb-4">
-                  {/* eslint-disable-next-line react/no-unescaped-entities */}
                   Clearly separate must-haves from nice-to-haves. Focus on
                   skills and competencies, not just credentials.
                 </p>
@@ -636,7 +634,7 @@ export default function EffectiveJobAds() {
                         <AlertCircle className="h-4 w-4 text-red-500 mr-2" />
                         Before
                       </h4>
-                      {/* eslint-disable-next-line react/no-unescaped-entities */}
+
                       <p className="text-sm italic">"{example.before}"</p>
                     </div>
 
@@ -645,7 +643,7 @@ export default function EffectiveJobAds() {
                         <Check className="h-4 w-4 text-green-500 mr-2" />
                         After
                       </h4>
-                      {/* eslint-disable-next-line react/no-unescaped-entities */}
+
                       <p className="text-sm italic">"{example.after}"</p>
                     </div>
                   </div>
@@ -662,7 +660,6 @@ export default function EffectiveJobAds() {
                 <div className="text-sm space-y-4">
                   <p className="font-medium">About Us:</p>
                   <p>
-                    {/* eslint-disable-next-line react/no-unescaped-entities */}
                     GreenTech is a growing renewable energy company dedicated to
                     making sustainable technology accessible to all. With 75
                     employees across three offices, we&apos;ve been helping

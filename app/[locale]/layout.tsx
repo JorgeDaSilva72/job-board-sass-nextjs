@@ -26,9 +26,9 @@ export async function generateMetadata({
   params: { locale: string };
 }): Promise<Metadata> {
   // Vous devez attendre la résolution des paramètres
-  const resolvedParams = await Promise.resolve(params);
-  const { locale } = resolvedParams;
-
+  // const resolvedParams = await Promise.resolve(params);
+  // const { locale } = resolvedParams;
+  const { locale } = params;
   return {
     title: locale === "fr" ? "AFRIQUE AVENIR EMPLOIS" : "AFRIQUE AVENIR JOBS",
     description:
@@ -54,11 +54,12 @@ export default async function LocaleLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ locale: string }>;
+  // params: Promise<{ locale: string }>;
+  params: { locale: string };
 }) {
   // Ensure that the incoming `locale` is valid
-  const { locale } = await params;
-
+  // const { locale } = await params;
+  const { locale } = params;
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
