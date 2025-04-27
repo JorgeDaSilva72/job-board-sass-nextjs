@@ -272,6 +272,22 @@
       "buttonText": "Post a Job"
     }
   },
+  "Footer": {
+    "logoAlt": "Company logo",
+    "companyName": "AFRIQUE AVENIR",
+    "sections": {
+      "contact": "Contact",
+      "platforms": "Platforms",
+      "help": "Help",
+      "socialMedia": "Social Media"
+    },
+    "links": {
+      "contactUs": "Contact us",
+      "feedback": "Feedback"
+    },
+    "copyright": "© 2024 Designed and developed by",
+    "developerName": "Jorge Da Silva"
+  },
 
   "UserDropdown": {
     "postJob": "Post a Job",

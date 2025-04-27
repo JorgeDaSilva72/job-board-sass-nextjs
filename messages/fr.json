@@ -271,6 +271,22 @@
       "buttonText": "Publier une offre"
     }
   },
+  "Footer": {
+    "logoAlt": "Logo de l'entreprise",
+    "companyName": "AFRIQUE AVENIR",
+    "sections": {
+      "contact": "Contact",
+      "platforms": "Plateformes",
+      "help": "Aide",
+      "socialMedia": "Réseaux sociaux"
+    },
+    "links": {
+      "contactUs": "Nous contacter",
+      "feedback": "Feedback"
+    },
+    "copyright": "© 2024 Conçu et développé par",
+    "developerName": "Jorge Da Silva"
+  },
 
   "UserDropdown": {
     "postJob": "Publier une offre",
