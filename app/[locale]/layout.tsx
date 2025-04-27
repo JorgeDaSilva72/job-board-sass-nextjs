@@ -23,12 +23,13 @@ const geistMono = Geist_Mono({
 export async function generateMetadata({
   params,
 }: {
-  params: { locale: string };
+  // params: { locale: string };
+  params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   // Vous devez attendre la résolution des paramètres
-  // const resolvedParams = await Promise.resolve(params);
-  // const { locale } = resolvedParams;
-  const { locale } = params;
+  const resolvedParams = await Promise.resolve(params);
+  const { locale } = resolvedParams;
+  // const { locale } = params;
   return {
     title: locale === "fr" ? "AFRIQUE AVENIR EMPLOIS" : "AFRIQUE AVENIR JOBS",
     description:
