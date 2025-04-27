@@ -145,6 +145,51 @@
       "cloTitle": "CLO"
     }
   },
+  "Pricing": {
+    "title": "PLANS TARIFAIRES",
+    "subtitleCompany": "Plans conçus pour les recruteurs et entreprises",
+    "subtitleJobSeeker": "Trouvez le plan adapté à votre recherche d'emploi",
+    "descriptionCompany": "Choisissez un plan pour recruter efficacement les meilleurs talents en Afrique.",
+    "descriptionJobSeeker": "Que vous soyez débutant ou expert, nous avons le plan qu'il vous faut pour décrocher votre prochain emploi en Afrique.",
+    "priceSuffix": " /paiement unique",
+    "plans": {
+      "premium": {
+        "title": "Premium",
+        "description": "Idéal pour les chercheurs d'emploi actifs voulant plus de visibilité et de fonctionnalités.",
+        "buttonText": "S'abonner",
+        "benefits": {
+          "unlimitedApplications": "Candidatures illimitées",
+          "advancedFilters": "Filtres de recherche avancés",
+          "priorityListing": "Listage prioritaire dans les recherches",
+          "resumeReview": "Relecture et feedback de CV"
+        }
+      },
+      "oneMonth": {
+        "title": "Accès 1 mois",
+        "description": "Pour recruteurs et employeurs cherchant à trouver les meilleurs talents.",
+        "buttonText": "Nous contacter",
+        "benefits": {
+          "fullAccess": "Accès complet à la base de candidats"
+        }
+      },
+      "threeMonths": {
+        "title": "Accès 3 mois",
+        "description": "Pour recruteurs et employeurs cherchant des talents.",
+        "buttonText": "Nous contacter",
+        "benefits": {
+          "fullAccess": "Accès complet à la base de candidats"
+        }
+      },
+      "sixMonths": {
+        "title": "Accès 6 mois",
+        "description": "Pour recruteurs et employeurs cherchant des talents.",
+        "buttonText": "Nous contacter",
+        "benefits": {
+          "fullAccess": "Accès complet à la base de candidats"
+        }
+      }
+    }
+  },
 
   "UserDropdown": {
     "postJob": "Publier une offre",

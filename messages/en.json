@@ -146,6 +146,51 @@
       "cloTitle": "CLO"
     }
   },
+  "Pricing": {
+    "title": "PRICING PLANS",
+    "subtitleCompany": "Plans designed for recruiters and companies",
+    "subtitleJobSeeker": "Find the Right Plan for Your Job Search",
+    "descriptionCompany": "Choose a plan to efficiently hire top talent across Africa.",
+    "descriptionJobSeeker": "Whether you are a beginner or an expert, we have the right plan to help you land your next job in Africa.",
+    "priceSuffix": " /one-time payment",
+    "plans": {
+      "premium": {
+        "title": "Premium",
+        "description": "Ideal for active job seekers who want more visibility and features.",
+        "buttonText": "Subscribe Now",
+        "benefits": {
+          "unlimitedApplications": "Unlimited job applications",
+          "advancedFilters": "Advanced search filters",
+          "priorityListing": "Priority listing in recruiter searches",
+          "resumeReview": "Resume review and feedback"
+        }
+      },
+      "oneMonth": {
+        "title": "1 Month Access",
+        "description": "For recruiters and employers looking to post jobs and find top talent.",
+        "buttonText": "Contact Us",
+        "benefits": {
+          "fullAccess": "Full access to candidate database"
+        }
+      },
+      "threeMonths": {
+        "title": "3 Months Access",
+        "description": "For recruiters and employers to find top talent.",
+        "buttonText": "Contact Us",
+        "benefits": {
+          "fullAccess": "Full access to candidate database"
+        }
+      },
+      "sixMonths": {
+        "title": "6 Months Access",
+        "description": "For recruiters and employers to find top talent.",
+        "buttonText": "Contact Us",
+        "benefits": {
+          "fullAccess": "Full access to candidate database"
+        }
+      }
+    }
+  },
 
   "UserDropdown": {
     "postJob": "Post a Job",
