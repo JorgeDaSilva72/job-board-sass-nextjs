@@ -99,6 +99,11 @@
     }
   },
 
+  "SponsorsSection": {
+    "title": "Nos Sponsors",
+    "yourAdHere": "Votre publicité ici"
+  },
+
   "UserDropdown": {
     "postJob": "Publier une offre",
     "searchJobs": "Rechercher des offres",
