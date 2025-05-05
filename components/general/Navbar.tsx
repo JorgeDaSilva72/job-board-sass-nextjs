@@ -837,7 +837,6 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-  SheetClose,
 } from "@/components/ui/sheet";
 import { auth } from "@/app/utils/auth";
 import { ThemeToggle } from "./ThemeToggle";
