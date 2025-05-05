@@ -561,7 +561,6 @@ import { requireUser } from "@/app/utils/hooks";
 import { CopyLinkMenuItem } from "@/components/general/CopyLink";
 import { getJobs } from "@/lib/queries/jobs";
 import { getStatusJobsBadgeStyle } from "@/app/utils/badgesStyles";
-import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
 const MyJobs = async () => {
