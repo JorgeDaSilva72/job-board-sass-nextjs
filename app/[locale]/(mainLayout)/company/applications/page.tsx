@@ -1863,6 +1863,7 @@ export default function ReceivedApplicationsPage() {
 
       setApplications((prev) =>
         prev.map((app) =>
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           app.id === applicationId ? { ...app, status: newStatus as any } : app
         )
       );
