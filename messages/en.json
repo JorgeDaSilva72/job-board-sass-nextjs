@@ -413,5 +413,25 @@
       "generalError": "Something went wrong. Please try again.",
       "uploadError": "Something went wrong. Please try again."
     }
+  },
+  "BenefitsSelector": {
+    "selectedCount": "Selected benefits",
+    "benefits": {
+      "healthcare": "Healthcare coverage",
+      "vacation": "Paid vacation",
+      "working_hours": "Flexible working hours",
+      "transport": "Company-provided transport",
+      "housing": "Housing allowance",
+      "training": "Professional training programs",
+      "meals": "Subsidized meals",
+      "retirement": "Retirement plan",
+      "team_spirit": "Team-building activities",
+      "internet": "Internet allowance",
+      "family_support": "Family support programs",
+      "savings_plan": "Employee savings plan",
+      "legal_aid": "Legal assistance",
+      "profit_sharing": "Profit sharing",
+      "diversity": "Diversity and inclusion policy"
+    }
   }
 }

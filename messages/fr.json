@@ -412,5 +412,25 @@
       "generalError": "Quelque chose s'est mal passé. Veuillez réessayer.",
       "uploadError": "Quelque chose s'est mal passé. Veuillez réessayer."
     }
+  },
+  "BenefitsSelector": {
+    "selectedCount": "Avantages sélectionnés",
+    "benefits": {
+      "healthcare": "Couverture santé",
+      "vacation": "Congés payés",
+      "working_hours": "Horaires flexibles",
+      "transport": "Transport fourni",
+      "housing": "Allocation logement",
+      "training": "Programmes de formation",
+      "meals": "Repas subventionnés",
+      "retirement": "Plan retraite",
+      "team_spirit": "Activités team-building",
+      "internet": "Allocation internet",
+      "family_support": "Programmes d'aide familiale",
+      "savings_plan": "Plan épargne salariale",
+      "legal_aid": "Assistance juridique",
+      "profit_sharing": "Participation aux bénéfices",
+      "diversity": "Politique diversité et inclusion"
+    }
   }
 }
