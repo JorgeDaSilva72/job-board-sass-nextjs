@@ -339,6 +339,188 @@
 
 // -----------------------------------------------------
 
+// import React from "react";
+// import {
+//   Card,
+//   CardContent,
+//   CardDescription,
+//   CardHeader,
+//   CardTitle,
+// } from "@/components/ui/card";
+// import {
+//   Table,
+//   TableBody,
+//   TableCell,
+//   TableHead,
+//   TableHeader,
+//   TableRow,
+// } from "@/components/ui/table";
+// import Image from "next/image";
+// import {
+//   DropdownMenu,
+//   DropdownMenuContent,
+//   DropdownMenuItem,
+//   DropdownMenuLabel,
+//   DropdownMenuSeparator,
+//   DropdownMenuTrigger,
+// } from "@/components/ui/dropdown-menu";
+// import { Button } from "@/components/ui/button";
+// import {
+//   Eye,
+//   MoreHorizontal,
+//   PenBoxIcon,
+//   RefreshCw,
+//   User2,
+//   XCircle,
+// } from "lucide-react";
+// import { Link } from "@/i18n/navigation";
+
+// import { EmptyState } from "@/components/general/EmptyState";
+// import { requireUser } from "@/app/utils/hooks";
+// import { CopyLinkMenuItem } from "@/components/general/CopyLink";
+// import { getJobs } from "@/lib/queries/jobs";
+// import { getStatusJobsBadgeStyle } from "@/app/utils/badgesStyles";
+
+// const MyJobs = async () => {
+//   const session = await requireUser();
+//   const data = await getJobs(session.id as string);
+
+//   if (data.length === 0) {
+//     return (
+//       <EmptyState
+//         title="No job posts found"
+//         description="You don't have any job posts yet."
+//         buttonText="Create a job post"
+//         href="/company/post-job"
+//       />
+//     );
+//   }
+
+//   const company = data.length > 0 ? data[0].company : null;
+
+//   return (
+//     <Card>
+//       <CardHeader className="text-center">
+//         {company?.logo ? (
+//           <Image
+//             src={company.logo}
+//             alt={`${company.name} logo`}
+//             width={60}
+//             height={60}
+//             className="rounded-md mx-auto"
+//           />
+//         ) : (
+//           <div className="bg-red-500 size-14 rounded-lg flex items-center justify-center mx-auto">
+//             <User2 className="size-8 text-white" />
+//           </div>
+//         )}
+//         <CardTitle className="text-2xl mt-2">{company?.name}</CardTitle>
+//         <CardDescription>Manage your job listings here.</CardDescription>
+//       </CardHeader>
+//       <CardContent>
+//         <Table>
+//           <TableHeader>
+//             <TableRow>
+//               <TableHead>Job Title</TableHead>
+//               <TableHead>Status</TableHead>
+//               <TableHead>Created On</TableHead>
+//               <TableHead>Expires At</TableHead>
+//               <TableHead className="text-right">Actions</TableHead>
+//             </TableRow>
+//           </TableHeader>
+//           <TableBody>
+//             {data.map((listing) => (
+//               <TableRow key={listing.id}>
+//                 <TableCell>{listing.jobTitle}</TableCell>
+//                 <TableCell>
+//                   <span className={getStatusJobsBadgeStyle(listing.status)}>
+//                     {listing.status.charAt(0).toUpperCase() +
+//                       listing.status.slice(1).toLowerCase()}
+//                   </span>
+//                 </TableCell>
+//                 <TableCell>
+//                   {listing.createdAt.toLocaleDateString("en-US", {
+//                     month: "long",
+//                     day: "numeric",
+//                     year: "numeric",
+//                   })}
+//                 </TableCell>
+//                 <TableCell>
+//                   {listing.expiresAt
+//                     ? listing.expiresAt.toLocaleDateString("en-US", {
+//                         month: "long",
+//                         day: "numeric",
+//                         year: "numeric",
+//                       })
+//                     : "No expiration date"}
+//                 </TableCell>
+//                 <TableCell className="text-right">
+//                   <DropdownMenu>
+//                     <DropdownMenuTrigger asChild>
+//                       <Button variant="ghost" size="icon">
+//                         <MoreHorizontal className="size-4" />
+//                       </Button>
+//                     </DropdownMenuTrigger>
+//                     <DropdownMenuContent align="end">
+//                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
+//                       <DropdownMenuItem asChild>
+//                         <Link href={`/job/${listing.id}`} role="menuitem">
+//                           <Eye className="size-4 mr-2" />
+//                           View Job
+//                         </Link>
+//                       </DropdownMenuItem>
+//                       <DropdownMenuItem asChild>
+//                         <Link
+//                           href={`/my-jobs/${listing.id}/edit`}
+//                           role="menuitem"
+//                         >
+//                           <PenBoxIcon className="size-4 mr-2" />
+//                           Edit Job
+//                         </Link>
+//                       </DropdownMenuItem>
+//                       {listing.status.toLowerCase() === "expired" && (
+//                         <DropdownMenuItem asChild>
+//                           <Link
+//                             href={`/my-jobs/${listing.id}/renew`}
+//                             role="menuitem"
+//                           >
+//                             <RefreshCw className="size-4 mr-2" />
+//                             Renew Job
+//                           </Link>
+//                         </DropdownMenuItem>
+//                       )}
+//                       <CopyLinkMenuItem
+//                         jobUrl={`${
+//                           process.env.NEXT_PUBLIC_URL ??
+//                           "https://job-board-sass-nextjs.vercel.app"
+//                         }/job/${listing.id}`}
+//                       />
+//                       <DropdownMenuSeparator />
+//                       <DropdownMenuItem asChild>
+//                         <Link
+//                           href={`/my-jobs/${listing.id}/delete`}
+//                           role="menuitem"
+//                         >
+//                           <XCircle className="h-4 w-4 mr-2" />
+//                           Delete Job
+//                         </Link>
+//                       </DropdownMenuItem>
+//                     </DropdownMenuContent>
+//                   </DropdownMenu>
+//                 </TableCell>
+//               </TableRow>
+//             ))}
+//           </TableBody>
+//         </Table>
+//       </CardContent>
+//     </Card>
+//   );
+// };
+
+// export default MyJobs;
+//-------------------------------------------------------------
+// BEGIN 05/05/2025 compatible next-intl
+
 import React from "react";
 import {
   Card,
@@ -374,23 +556,25 @@ import {
   XCircle,
 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
-
 import { EmptyState } from "@/components/general/EmptyState";
 import { requireUser } from "@/app/utils/hooks";
 import { CopyLinkMenuItem } from "@/components/general/CopyLink";
 import { getJobs } from "@/lib/queries/jobs";
 import { getStatusJobsBadgeStyle } from "@/app/utils/badgesStyles";
+import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 
 const MyJobs = async () => {
+  const t = await getTranslations("MyJobs");
   const session = await requireUser();
   const data = await getJobs(session.id as string);
 
   if (data.length === 0) {
     return (
       <EmptyState
-        title="No job posts found"
-        description="You don't have any job posts yet."
-        buttonText="Create a job post"
+        title={t("emptyState.title")}
+        description={t("emptyState.description")}
+        buttonText={t("emptyState.buttonText")}
         href="/company/post-job"
       />
     );
@@ -398,13 +582,21 @@ const MyJobs = async () => {
 
   const company = data.length > 0 ? data[0].company : null;
 
+  const formatDate = (date: Date) => {
+    return new Intl.DateTimeFormat(t("locale"), {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    }).format(date);
+  };
+
   return (
     <Card>
       <CardHeader className="text-center">
         {company?.logo ? (
           <Image
             src={company.logo}
-            alt={`${company.name} logo`}
+            alt={t("companyLogoAlt", { companyName: company.name })}
             width={60}
             height={60}
             className="rounded-md mx-auto"
@@ -415,17 +607,19 @@ const MyJobs = async () => {
           </div>
         )}
         <CardTitle className="text-2xl mt-2">{company?.name}</CardTitle>
-        <CardDescription>Manage your job listings here.</CardDescription>
+        <CardDescription>{t("manageDescription")}</CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Job Title</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Created On</TableHead>
-              <TableHead>Expires At</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>{t("tableHeaders.jobTitle")}</TableHead>
+              <TableHead>{t("tableHeaders.status")}</TableHead>
+              <TableHead>{t("tableHeaders.createdOn")}</TableHead>
+              <TableHead>{t("tableHeaders.expiresAt")}</TableHead>
+              <TableHead className="text-right">
+                {t("tableHeaders.actions")}
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -434,25 +628,14 @@ const MyJobs = async () => {
                 <TableCell>{listing.jobTitle}</TableCell>
                 <TableCell>
                   <span className={getStatusJobsBadgeStyle(listing.status)}>
-                    {listing.status.charAt(0).toUpperCase() +
-                      listing.status.slice(1).toLowerCase()}
+                    {t(`status.${listing.status.toLowerCase()}`)}
                   </span>
                 </TableCell>
-                <TableCell>
-                  {listing.createdAt.toLocaleDateString("en-US", {
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric",
-                  })}
-                </TableCell>
+                <TableCell>{formatDate(listing.createdAt)}</TableCell>
                 <TableCell>
                   {listing.expiresAt
-                    ? listing.expiresAt.toLocaleDateString("en-US", {
-                        month: "long",
-                        day: "numeric",
-                        year: "numeric",
-                      })
-                    : "No expiration date"}
+                    ? formatDate(listing.expiresAt)
+                    : t("noExpirationDate")}
                 </TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu>
@@ -462,11 +645,11 @@ const MyJobs = async () => {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuLabel>{t("actionsLabel")}</DropdownMenuLabel>
                       <DropdownMenuItem asChild>
                         <Link href={`/job/${listing.id}`} role="menuitem">
                           <Eye className="size-4 mr-2" />
-                          View Job
+                          {t("actions.viewJob")}
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
@@ -475,7 +658,7 @@ const MyJobs = async () => {
                           role="menuitem"
                         >
                           <PenBoxIcon className="size-4 mr-2" />
-                          Edit Job
+                          {t("actions.editJob")}
                         </Link>
                       </DropdownMenuItem>
                       {listing.status.toLowerCase() === "expired" && (
@@ -485,7 +668,7 @@ const MyJobs = async () => {
                             role="menuitem"
                           >
                             <RefreshCw className="size-4 mr-2" />
-                            Renew Job
+                            {t("actions.renewJob")}
                           </Link>
                         </DropdownMenuItem>
                       )}
@@ -502,7 +685,7 @@ const MyJobs = async () => {
                           role="menuitem"
                         >
                           <XCircle className="h-4 w-4 mr-2" />
-                          Delete Job
+                          {t("actions.deleteJob")}
                         </Link>
                       </DropdownMenuItem>
                     </DropdownMenuContent>

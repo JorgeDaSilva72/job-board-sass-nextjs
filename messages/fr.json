@@ -444,5 +444,37 @@
       "60": "Visibilité étendue",
       "90": "Exposition maximale"
     }
+  },
+  "MyJobs": {
+    "locale": "fr-FR",
+    "companyLogoAlt": "Logo de {companyName}",
+    "manageDescription": "Gérez vos offres d'emploi ici",
+    "noExpirationDate": "Pas de date d'expiration",
+    "emptyState": {
+      "title": "Aucune offre trouvée",
+      "description": "Vous n'avez pas encore publié d'offre.",
+      "buttonText": "Créer une offre"
+    },
+    "tableHeaders": {
+      "jobTitle": "Intitulé du poste",
+      "status": "Statut",
+      "createdOn": "Créé le",
+      "expiresAt": "Expire le",
+      "actions": "Actions"
+    },
+    "actionsLabel": "Actions",
+    "actions": {
+      "viewJob": "Voir l'offre",
+      "editJob": "Modifier l'offre",
+      "renewJob": "Renouveler l'offre",
+      "deleteJob": "Supprimer l'offre"
+    },
+    "status": {
+      "active": "Actif",
+      "expired": "Expiré",
+      "draft": "Brouillon",
+      "pending": "En attente",
+      "rejected": "Rejeté"
+    }
   }
 }

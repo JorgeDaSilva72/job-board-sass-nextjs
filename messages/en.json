@@ -445,5 +445,37 @@
       "60": "Extended visibility",
       "90": "Maximum exposure"
     }
+  },
+  "MyJobs": {
+    "locale": "en-US",
+    "companyLogoAlt": "{companyName} logo",
+    "manageDescription": "Manage your job listings here",
+    "noExpirationDate": "No expiration date",
+    "emptyState": {
+      "title": "No job posts found",
+      "description": "You don't have any job posts yet.",
+      "buttonText": "Create a job post"
+    },
+    "tableHeaders": {
+      "jobTitle": "Job Title",
+      "status": "Status",
+      "createdOn": "Created On",
+      "expiresAt": "Expires At",
+      "actions": "Actions"
+    },
+    "actionsLabel": "Actions",
+    "actions": {
+      "viewJob": "View Job",
+      "editJob": "Edit Job",
+      "renewJob": "Renew Job",
+      "deleteJob": "Delete Job"
+    },
+    "status": {
+      "active": "Active",
+      "expired": "Expired",
+      "draft": "Draft",
+      "pending": "Pending",
+      "rejected": "Rejected"
+    }
   }
 }
