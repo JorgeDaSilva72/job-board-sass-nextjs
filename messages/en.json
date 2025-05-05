@@ -324,5 +324,94 @@
     "myProfile": "My Profile",
     "completeProfile": "Complete Your Profile",
     "logout": "Logout"
+  },
+  "PostJobPage": {
+    "trustedTitle": "Trusted by Industry Leaders",
+    "trustedDescription": "Join thousands of companies hiring top talent",
+    "testimonials": {
+      "0": {
+        "quote": "We found our ideal candidate within 48 hours of posting. The quality of applicants was exceptional!",
+        "author": "Sarah Chen",
+        "company": "TechCorp"
+      },
+      "1": {
+        "quote": "The platform made hiring remote talent incredibly simple. Highly recommended!",
+        "author": "Mark Johnson",
+        "company": "StartupX"
+      },
+      "2": {
+        "quote": "We've consistently found high-quality candidates here. It's our go-to platform for all our hiring needs.",
+        "author": "Emily Rodriguez",
+        "company": "InnovateNow"
+      }
+    },
+    "stats": {
+      "0": {
+        "value": "10k+",
+        "label": "Monthly active job seekers"
+      },
+      "1": {
+        "value": "48h",
+        "label": "Average time to hire"
+      },
+      "2": {
+        "value": "95%",
+        "label": "Employer satisfaction rate"
+      },
+      "3": {
+        "value": "500+",
+        "label": "Companies hiring monthly"
+      }
+    }
+  },
+  "CreateJobForm": {
+    "jobInfo": {
+      "title": "Job Information",
+      "jobTitle": "Job Title",
+      "jobTitlePlaceholder": "Job Title",
+      "employmentType": "Employment Type",
+      "selectEmploymentType": "Select Employment Type",
+      "location": "Location",
+      "selectLocation": "Select Location",
+      "worldwide": "Worldwide",
+      "worldwideRemote": "Worldwide / Remote",
+      "salaryRange": "Salary Range",
+      "jobDescription": "Job Description",
+      "benefits": "Benefits"
+    },
+    "companyInfo": {
+      "title": "Company Information",
+      "companyName": "Company Name",
+      "companyNamePlaceholder": "Company Name",
+      "location": "Location",
+      "selectLocation": "Select Location",
+      "worldwide": "Worldwide",
+      "website": "Company Website",
+      "websitePlaceholder": "yourcompany.com",
+      "xAccount": "Company X Account",
+      "xAccountPlaceholder": "yourcompany",
+      "description": "Company Description",
+      "descriptionPlaceholder": "Tell us about your company...",
+      "logo": "Company Logo",
+      "logoAlt": "Company Logo"
+    },
+    "listingDuration": {
+      "title": "Job Listing Duration"
+    },
+    "employmentTypes": {
+      "fullTime": "Full Time",
+      "partTime": "Part Time",
+      "contract": "Contract",
+      "internship": "Internship"
+    },
+    "buttons": {
+      "continue": "Continue",
+      "submitting": "Submitting..."
+    },
+    "errors": {
+      "submissionError": "An error occurred",
+      "generalError": "Something went wrong. Please try again.",
+      "uploadError": "Something went wrong. Please try again."
+    }
   }
 }

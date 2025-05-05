@@ -323,5 +323,94 @@
     "myProfile": "Mon profil",
     "completeProfile": "Compléter votre profil",
     "logout": "Se déconnecter"
+  },
+  "PostJobPage": {
+    "trustedTitle": "Reconnu par les leaders du secteur",
+    "trustedDescription": "Rejoignez des milliers d'entreprises qui recrutent les meilleurs talents",
+    "testimonials": {
+      "0": {
+        "quote": "Nous avons trouvé notre candidat idéal dans les 48 heures suivant la publication. La qualité des candidats était exceptionnelle !",
+        "author": "Sarah Chen",
+        "company": "TechCorp"
+      },
+      "1": {
+        "quote": "La plateforme a rendu le recrutement de talents à distance incroyablement simple. Vivement recommandé !",
+        "author": "Mark Johnson",
+        "company": "StartupX"
+      },
+      "2": {
+        "quote": "Nous avons régulièrement trouvé des candidats de haute qualité ici. C'est notre plateforme de référence pour tous nos besoins en recrutement.",
+        "author": "Emily Rodriguez",
+        "company": "InnovateNow"
+      }
+    },
+    "stats": {
+      "0": {
+        "value": "10k+",
+        "label": "Chercheurs d'emploi actifs mensuels"
+      },
+      "1": {
+        "value": "48h",
+        "label": "Temps moyen d'embauche"
+      },
+      "2": {
+        "value": "95%",
+        "label": "Taux de satisfaction des employeurs"
+      },
+      "3": {
+        "value": "500+",
+        "label": "Entreprises recrutant chaque mois"
+      }
+    }
+  },
+  "CreateJobForm": {
+    "jobInfo": {
+      "title": "Informations sur le poste",
+      "jobTitle": "Intitulé du poste",
+      "jobTitlePlaceholder": "Intitulé du poste",
+      "employmentType": "Type d'emploi",
+      "selectEmploymentType": "Sélectionnez un type d'emploi",
+      "location": "Localisation",
+      "selectLocation": "Sélectionnez une localisation",
+      "worldwide": "Monde entier",
+      "worldwideRemote": "Monde entier / Télétravail",
+      "salaryRange": "Échelle salariale",
+      "jobDescription": "Description du poste",
+      "benefits": "Avantages"
+    },
+    "companyInfo": {
+      "title": "Informations sur l'entreprise",
+      "companyName": "Nom de l'entreprise",
+      "companyNamePlaceholder": "Nom de l'entreprise",
+      "location": "Localisation",
+      "selectLocation": "Sélectionnez une localisation",
+      "worldwide": "Monde entier",
+      "website": "Site web de l'entreprise",
+      "websitePlaceholder": "votresociete.com",
+      "xAccount": "Compte X de l'entreprise",
+      "xAccountPlaceholder": "votresociete",
+      "description": "Description de l'entreprise",
+      "descriptionPlaceholder": "Parlez-nous de votre entreprise...",
+      "logo": "Logo de l'entreprise",
+      "logoAlt": "Logo de l'entreprise"
+    },
+    "listingDuration": {
+      "title": "Durée de publication de l'offre"
+    },
+    "employmentTypes": {
+      "fullTime": "Temps plein",
+      "partTime": "Temps partiel",
+      "contract": "Contrat",
+      "internship": "Stage"
+    },
+    "buttons": {
+      "continue": "Continuer",
+      "submitting": "Envoi en cours..."
+    },
+    "errors": {
+      "submissionError": "Une erreur est survenue",
+      "generalError": "Quelque chose s'est mal passé. Veuillez réessayer.",
+      "uploadError": "Quelque chose s'est mal passé. Veuillez réessayer."
+    }
   }
 }

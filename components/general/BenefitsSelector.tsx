@@ -5,7 +5,7 @@ import { benefits } from "@/app/utils/listOfBenefits";
 import { Badge } from "@/components/ui/badge";
 
 interface BenefitsSelectorProps {
-  field: any; // Replace with proper type if needed
+  field: any;
 }
 
 export default function BenefitsSelector({ field }: BenefitsSelectorProps) {
