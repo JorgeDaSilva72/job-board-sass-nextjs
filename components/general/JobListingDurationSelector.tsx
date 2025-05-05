@@ -68,6 +68,7 @@
 // }
 
 // BEGIN 05/05/2025 compatible next-intl
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 "use client";
 
