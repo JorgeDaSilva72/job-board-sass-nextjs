@@ -433,5 +433,17 @@
       "profit_sharing": "Profit sharing",
       "diversity": "Diversity and inclusion policy"
     }
+  },
+  "JobListingDurationSelector": {
+    "durationDays": "{days} Days",
+    "free": "Free",
+    "price": "${price}",
+    "pricePerDay": "${price}/day",
+    "descriptions": {
+      "3": "To test the service",
+      "30": "Standard listing",
+      "60": "Extended visibility",
+      "90": "Maximum exposure"
+    }
   }
 }

@@ -170,7 +170,6 @@ import { CreateJobForm } from "@/components/forms/CreateJobForm";
 import { prisma } from "@/app/utils/db";
 import { requireUser } from "@/app/utils/hooks";
 import { redirect } from "next/navigation";
-// import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
 const companies = [
@@ -183,7 +182,6 @@ const companies = [
 ];
 
 const PostJobPage = async () => {
-  // const t = useTranslations("PostJobPage");
   const t = await getTranslations("PostJobPage");
   const session = await requireUser();
   const data = await getCompany(session.id as string);

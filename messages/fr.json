@@ -432,5 +432,17 @@
       "profit_sharing": "Participation aux bénéfices",
       "diversity": "Politique diversité et inclusion"
     }
+  },
+  "JobListingDurationSelector": {
+    "durationDays": "{days} Jours",
+    "free": "Gratuit",
+    "price": "{price}$",
+    "pricePerDay": "{price}$/jour",
+    "descriptions": {
+      "3": "Pour tester le service",
+      "30": "Publication standard",
+      "60": "Visibilité étendue",
+      "90": "Exposition maximale"
+    }
   }
 }
