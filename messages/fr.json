@@ -476,5 +476,59 @@
       "pending": "En attente",
       "rejected": "Rejeté"
     }
+  },
+  "ReceivedApplications": {
+    "title": "Candidatures Reçues",
+    "manageTitle": "Gérer les Candidatures",
+    "searchPlaceholder": "Rechercher des candidatures...",
+    "loading": "Chargement des candidatures...",
+    "noApplications": "Aucune candidature trouvée",
+    "appliedOn": "Postulé le {date}",
+    "positionInfo": "Informations sur le Poste",
+    "candidateInfo": "Informations sur le Candidat",
+    "coverLetter": "Lettre de Motivation",
+    "showMore": "Voir plus",
+    "viewCompleteOffer": "Voir l'Offre Complète",
+    "viewResume": "Voir le CV",
+    "viewCompleteCandidate": "Voir les Informations Complètes",
+    "viewCompleteApplication": "Voir la Candidature Complète",
+    "yearsExperience": "années d'expérience",
+    "tabs": {
+      "all": "Toutes",
+      "pending": "En Attente",
+      "reviewed": "Examinées",
+      "shortlisted": "Pré-sélectionnées",
+      "interviewed": "Interviewées",
+      "accepted": "Acceptées"
+    },
+    "status": {
+      "pending": "En Attente",
+      "reviewed": "Examinée",
+      "shortlisted": "Pré-sélectionnée",
+      "interviewed": "Interviewée",
+      "accepted": "Acceptée",
+      "rejected": "Rejetée"
+    },
+    "actions": {
+      "markReviewed": "Marquer comme Examinée",
+      "shortlist": "Pré-sélectionner",
+      "scheduleInterview": "Planifier un Entretien",
+      "accept": "Accepter le Candidat",
+      "reject": "Rejeter le Candidat"
+    },
+    "statusMessages": {
+      "pending": "Candidature marquée comme en attente",
+      "reviewed": "Candidature marquée comme examinée",
+      "shortlisted": "Candidature pré-sélectionnée avec succès",
+      "interviewed": "Statut d'entretien mis à jour",
+      "accepted": "Candidat accepté avec succès",
+      "rejected": "Candidat rejeté"
+    },
+    "errors": {
+      "fetchFailed": "Échec de récupération des candidatures",
+      "loadFailed": "Échec du chargement des candidatures",
+      "updateFailed": "Échec de la mise à jour du statut",
+      "noResume": "Aucun CV disponible pour ce candidat"
+    }
   }
 }

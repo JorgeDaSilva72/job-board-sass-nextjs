@@ -477,5 +477,59 @@
       "pending": "Pending",
       "rejected": "Rejected"
     }
+  },
+  "ReceivedApplications": {
+    "title": "Applications Received",
+    "manageTitle": "Manage Applications",
+    "searchPlaceholder": "Search applications...",
+    "loading": "Loading applications...",
+    "noApplications": "No applications found",
+    "appliedOn": "Applied {date}",
+    "positionInfo": "Position Information",
+    "candidateInfo": "Candidate Information",
+    "coverLetter": "Cover Letter",
+    "showMore": "Show more",
+    "viewCompleteOffer": "View Complete Offer",
+    "viewResume": "View Resume",
+    "viewCompleteCandidate": "View Complete Candidate Information",
+    "viewCompleteApplication": "View Complete Application",
+    "yearsExperience": "years experience",
+    "tabs": {
+      "all": "All",
+      "pending": "Pending",
+      "reviewed": "Reviewed",
+      "shortlisted": "Shortlisted",
+      "interviewed": "Interviewed",
+      "accepted": "Accepted"
+    },
+    "status": {
+      "pending": "Pending",
+      "reviewed": "Reviewed",
+      "shortlisted": "Shortlisted",
+      "interviewed": "Interviewed",
+      "accepted": "Accepted",
+      "rejected": "Rejected"
+    },
+    "actions": {
+      "markReviewed": "Mark as Reviewed",
+      "shortlist": "Shortlist Candidate",
+      "scheduleInterview": "Schedule Interview",
+      "accept": "Accept Candidate",
+      "reject": "Reject Candidate"
+    },
+    "statusMessages": {
+      "pending": "Application marked as pending",
+      "reviewed": "Application marked as reviewed",
+      "shortlisted": "Application shortlisted successfully",
+      "interviewed": "Interview status updated",
+      "accepted": "Candidate accepted successfully",
+      "rejected": "Candidate rejected"
+    },
+    "errors": {
+      "fetchFailed": "Failed to fetch applications",
+      "loadFailed": "Failed to load applications",
+      "updateFailed": "Failed to update application status",
+      "noResume": "No resume available for this candidate"
+    }
   }
 }
