@@ -310,6 +310,8 @@
   },
 
   "UserDropdown": {
+    "appearance": "Appearance",
+    "language": "language",
     "postJob": "Publier une offre",
     "searchJobs": "Rechercher des offres",
     "myJobListings": "Mes offres",

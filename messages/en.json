@@ -311,6 +311,8 @@
   },
 
   "UserDropdown": {
+    "appearance": "Apparence",
+    "language": "Langue",
     "postJob": "Post a Job",
     "searchJobs": "Search Jobs",
     "myJobListings": "My Job Listings",
