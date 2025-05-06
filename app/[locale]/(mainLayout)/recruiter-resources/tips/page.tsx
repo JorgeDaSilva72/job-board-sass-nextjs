@@ -1330,7 +1330,9 @@ export default function EffectiveJobAds() {
                         <AlertCircle className="h-4 w-4 text-red-500 mr-2" />
                         {t("examples.before")}
                       </h4>
-                      <p className="text-sm italic">"{example.before}"</p>
+                      <p className="text-sm italic">
+                        &quot;{example.before}&quot;
+                      </p>
                     </div>
 
                     <div className="border rounded-lg p-4">
@@ -1338,7 +1340,9 @@ export default function EffectiveJobAds() {
                         <Check className="h-4 w-4 text-green-500 mr-2" />
                         {t("examples.after")}
                       </h4>
-                      <p className="text-sm italic">"{example.after}"</p>
+                      <p className="text-sm italic">
+                        `&quot;`{example.after}`&quot;`
+                      </p>
                     </div>
                   </div>
                 </div>
