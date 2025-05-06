@@ -752,5 +752,250 @@
         "suggest": "Suggérer une ressource"
       }
     }
+  },
+  "EffectiveJobAds": {
+    "backButton": "Retour aux ressources",
+    "downloadButton": "Télécharger en PDF",
+    "title": "Conseils pour rédiger des offres d'emploi efficaces",
+    "subtitle": "Apprenez à créer des annonces attractives qui attirent des candidats qualifiés et réduisent le délai de recrutement.",
+    "stats": {
+      "jobSeekers": "des chercheurs d'emploi disent que la description de poste influence fortement leur décision de postuler",
+      "qualifiedApplicants": "d'augmentation des candidatures qualifiées lorsque le salaire est mentionné",
+      "fewerApplications": "moins de candidatures de femmes quand les offres utilisent un langage masculinisé"
+    },
+    "checklist": {
+      "clearTitle": "Titre clair et précis",
+      "salaryInfo": "Informations sur le salaire",
+      "qualifications": "Qualifications requises",
+      "responsibilities": "Responsabilités du poste",
+      "companyCulture": "Culture d'entreprise",
+      "growthOpportunities": "Opportunités de croissance",
+      "benefits": "Avantages sociaux",
+      "location": "Localisation du poste",
+      "callToAction": "Appel à action clair",
+      "proofread": "Relire pour les fautes d'orthographe"
+    },
+    "languageTips": {
+      "specific": {
+        "title": "Être spécifique",
+        "description": "Utilisez des termes précis pour décrire le poste et les attentes."
+      },
+      "inclusive": {
+        "title": "Langage inclusif",
+        "description": "Privilégiez un vocabulaire qui encourage la diversité des candidatures."
+      },
+      "results": {
+        "title": "Mettre en avant les résultats",
+        "description": "Décrivez l'impact que le candidat pourra avoir dans ce rôle."
+      },
+      "concise": {
+        "title": "Être concis",
+        "description": "Allez à l'essentiel pour garder l'attention du lecteur."
+      }
+    },
+    "sections": {
+      "basics": "Les bases",
+      "structure": "Structure",
+      "language": "Langage",
+      "examples": "Exemples"
+    },
+    "jobTitles": {
+      "bad": {
+        "codingNinja": "Ninja du code",
+        "salesGuru": "Gourou des ventes",
+        "marketingRockstar": "Rockstar du marketing",
+        "adminSuperstar": "Superstar administratif"
+      },
+      "good": {
+        "seniorFrontend": "Développeur Frontend Senior",
+        "salesRep": "Représentant commercial",
+        "digitalMarketing": "Spécialiste en marketing digital",
+        "officeAdmin": "Administrateur de bureau"
+      }
+    },
+    "beforeAfter": {
+      "example1": {
+        "title": "Générique vs. Spécifique",
+        "before": "Nous recherchons une personne travailleuse, esprit d'équipe, passionnée par le marketing.",
+        "after": "Nous recherchons un Spécialiste en Marketing Digital avec 3+ ans d'expérience en gestion de campagnes réseaux sociaux et analyse de données."
+      },
+      "example2": {
+        "title": "Exigences vagues vs. précises",
+        "before": "Les candidats doivent avoir une expérience pertinente et des compétences techniques.",
+        "after": "Les candidats doivent avoir 2+ ans d'expérience en développement Python et maîtriser le framework Django."
+      },
+      "example3": {
+        "title": "Centré entreprise vs. centré candidat",
+        "before": "Notre entreprise a besoin de quelqu'un pour gérer les demandes clients et résoudre les réclamations.",
+        "after": "Vous aiderez nos clients à résoudre leurs problèmes, en utilisant vos excellentes compétences communicationnelles pour qu'ils se sentent valorisés et écoutés."
+      }
+    },
+    "basics": {
+      "foundationTitle": "Les fondations d'une offre d'emploi efficace",
+      "whyMatterTitle": "Pourquoi les offres d'emploi sont importantes",
+      "whyMatterDescription": "Votre offre d'emploi est souvent la première impression que les candidats ont de votre entreprise. Une offre bien rédigée attire non seulement plus de candidats qualifiés mais aussi :",
+      "benefits": {
+        "relevantApplicants": "Réduit le délai de recrutement en attirant des candidats pertinents",
+        "candidateExperience": "Améliore l'expérience candidat et la marque employeur",
+        "accurateExpectations": "Définit des attentes claires, améliorant la rétention",
+        "diversity": "Favorise la diversité et l'inclusion dans votre processus de recrutement"
+      },
+      "elementsTitle": "Éléments essentiels de toute offre d'emploi",
+      "elements": {
+        "clearTitle": "Intitulé clair",
+        "clearDescription": "Utilisez des intitulés standards du secteur que les candidats recherchent. Évitez les titres internes ou fantaisistes qui pourraient les induire en erreur.",
+        "requirementsTitle": "Compétences requises",
+        "requirementsDescription": "Distinguer clairement les compétences indispensables des compétences secondaires. Privilégiez les compétences plutôt que les années d'expérience.",
+        "compensationTitle": "Rémunération & Avantages",
+        "compensationDescription": "Indiquez la fourchette salariale et les avantages clés. Cette transparence augmente les candidatures et fait gagner du temps à tous.",
+        "cultureTitle": "Culture d'entreprise",
+        "cultureDescription": "Donnez aux candidats un aperçu de votre culture d'entreprise, vos valeurs et ce qui vous rend unique. Cela les aide à auto-évaluer leur adéquation."
+      },
+      "mistakesTitle": "Erreurs courantes à éviter",
+      "mistakes": {
+        "tooManyRequirements": "Lister trop d'exigences, ce qui peut décourager des candidats qualifiés",
+        "exclusionaryLanguage": "Utiliser un langage genré ou excluant",
+        "vagueResponsibilities": "Être vague sur les responsabilités ou attentes",
+        "omittingSalary": "Omettre les informations salariales, ce qui réduit les candidatures"
+      }
+    },
+    "structure": {
+      "title": "Comment structurer votre offre d'emploi",
+      "description": "Une offre bien structurée est plus facile à parcourir et comprendre. Suivez ce cadre pour créer des offres claires et centrées candidat.",
+      "sections": {
+        "introduction": {
+          "title": "Introduction engageante",
+          "description": "Commencez par une accroche qui donne envie aux candidats de postuler.",
+          "example": "Rejoignez notre équipe innovante et contribuez à façonner l'avenir de la technologie santé. En tant que Designer UX chez HealthTech, vous créerez des interfaces intuitives utilisées quotidiennement par des médecins et patients."
+        },
+        "company": {
+          "title": "Présentation de l'entreprise",
+          "description": "Fournissez une description concise mais attractive de votre entreprise, sa mission et sa culture.",
+          "example": "HealthTech est une startup en croissance avec 50 employés dédiés à améliorer les résultats patients grâce à la technologie. Notre équipe collaborative valorise l'innovation, l'empathie et l'équilibre vie pro/perso."
+        },
+        "role": {
+          "title": "Description du poste",
+          "description": "Décrivez ce que la personne fera au quotidien. Utilisez le présent et le 'vous'.",
+          "example": "Dans ce rôle, vous travaillerez en étroite collaboration avec nos équipes produit et développement pour : • Créer des maquettes et prototypes interactifs • Conduire des tests utilisateurs • Collaborer sur les systèmes design et accessibilité"
+        },
+        "requirements": {
+          "title": "Compétences & Qualifications",
+          "description": "Séparez clairement les must-have des nice-to-have. Concentrez-vous sur les compétences plutôt que les diplômes.",
+          "example": "Qualifications requises : • 2+ ans d'expérience en design UX • Maîtrise de Figma ou outils similaires • Portfolio démontrant une approche centrée utilisateur Qualifications appréciées : • Expérience en santé/logiciels médicaux • Connaissance des standards d'accessibilité (WCAG) • Bases en HTML/CSS"
+        },
+        "benefits": {
+          "title": "Avantages & Rémunération",
+          "description": "Soyez transparent sur la rémunération et mettez en avant les avantages les plus attractifs.",
+          "example": "Rémunération & Avantages : • Fourchette salariale : 40-50K€ selon expérience • Assurance santé complète • Horaires flexibles et télétravail possible • Budget formation de 2000€ annuel • Package d'actions"
+        },
+        "process": {
+          "title": "Processus de candidature",
+          "description": "Donnez des instructions claires pour postuler et décrivez les étapes du processus.",
+          "example": "Pour postuler : Envoyez CV et portfolio à careers@healthtech.com avec 'Designer UX' en objet. Date limite : 15 juin 2025. Notre processus comprend une revue de portfolio, un exercice design et des entretiens d'équipe."
+        }
+      },
+      "checklistTitle": "Checklist offre d'emploi",
+      "checklistDescription": "Utilisez cette checklist pour vous assurer que votre offre est complète :"
+    },
+    "language": {
+      "title": "Utiliser le bon langage",
+      "description": "Les mots que vous choisissez impactent fortement qui postulera. Un langage inclusif et clair attire un vivier diversifié de candidats qualifiés.",
+      "tips": {
+        "specific": {
+          "title": "Soyez spécifique",
+          "description": "Évitez les termes vagues comme 'bon communicant' ou 'esprit d'équipe'. Décrivez ce que cela signifie concrètement dans votre entreprise."
+        },
+        "inclusive": {
+          "title": "Langage inclusif",
+          "description": "Évitez le langage genré et les termes qui pourraient exclure certains groupes. Utilisez des outils comme un décodeur de genre pour vérifier vos offres."
+        },
+        "results": {
+          "title": "Mettez l'accent sur les résultats",
+          "description": "Décrivez ce que la personne accomplira plutôt que de lister des tâches. Ex: 'Vous piloterez des projets augmentant les taux de conversion' plutôt que 'Gérer des projets'."
+        },
+        "concise": {
+          "title": "Soyez concis",
+          "description": "Limitez votre offre à 300-800 mots. Organisez l'information avec des titres clairs pour une lecture facile."
+        }
+      },
+      "jobTitlesTitle": "Intitulés de poste : ce qui marche et ce qui ne marche pas",
+      "avoid": "À éviter",
+      "useInstead": "Préférez",
+      "biasTitle": "Langage genré & biais",
+      "biasDescription": "Des études montrent que le langage genré dans les offres peut décourager des candidats qualifiés. Soyez conscient de ces termes genrés courants :",
+      "masculineWords": "Termes masculinisés :",
+      "masculineList": {
+        "competitive": "Compétitif",
+        "dominant": "Dominant",
+        "aggressive": "Agressif",
+        "confident": "Confiant",
+        "independent": "Indépendant",
+        "ambitious": "Ambitieux"
+      },
+      "feminineWords": "Termes féminisés :",
+      "feminineList": {
+        "supportive": "Bienveillant",
+        "collaborative": "Collaboratif",
+        "committed": "Engagé",
+        "dependable": "Fiable",
+        "responsible": "Responsable",
+        "interpersonal": "Relationnel"
+      },
+      "biasConclusion": "Mélangez les termes ou trouvez des alternatives neutres. Utilisez un outil de détection de biais pour vérifier vos offres.",
+      "directCommunicationTitle": "Parler directement aux candidats",
+      "directCommunicationDescription": "Utiliser 'vous' et 'votre' crée une connexion plus personnelle avec les candidats. Comparez ces approches :",
+      "companyFocused": "Centré entreprise :",
+      "companyFocusedExample": "Le candidat retenu gérera les comptes clients et sera responsable d'atteindre les objectifs commerciaux.",
+      "candidateFocused": "Centré candidat :",
+      "candidateFocusedExample": "Vous développerez des relations solides avec les clients et utiliserez votre expertise commerciale pour dépasser les objectifs."
+    },
+    "examples": {
+      "title": "Exemples Avant/Après",
+      "description": "Voyez comment ces extraits d'offres se transforment de génériques à percutants avec quelques modifications clés.",
+      "before": "Avant",
+      "after": "Après",
+      "fullExampleTitle": "Exemple complet : Chef de Projet Marketing",
+      "fullExample": {
+        "position": "Chef de Projet Marketing",
+        "aboutUs": "À propos de nous :",
+        "aboutUsText": "GreenTech est une entreprise en croissance dans les énergies renouvelables, dédiée à rendre la technologie durable accessible à tous. Avec 75 employés sur trois sites, nous aidons les foyers à réduire leur empreinte carbone depuis 2018. Notre équipe inclusive valorise l'innovation, la durabilité et l'équilibre vie pro/perso.",
+        "theRole": "Le poste :",
+        "theRoleText": "En tant que Chef de Projet Marketing, vous piloterez notre stratégie marketing pour connecter nos solutions énergétiques durables avec les propriétaires qui en ont besoin. Travaillant avec notre équipe passionnée, vous développerez des campagnes qui augmentent la notoriété et l'adoption de nos produits.",
+        "whatYoullDo": "Vos missions :",
+        "responsibilities": [
+          "Développer et implémenter des stratégies marketing complètes sur tous canaux",
+          "Manager une équipe de 3 spécialistes marketing",
+          "Analyser la performance des campagnes et tendances marché",
+          "Collaborer avec les équipes produit sur le messaging",
+          "Gérer un budget marketing trimestriel de 250K€"
+        ],
+        "requiredQualifications": "Qualifications requises :",
+        "requirements": [
+          "3+ ans d'expérience en management marketing",
+          "Expérience avérée en développement de campagnes réussies",
+          "Expérience en management d'équipe",
+          "Solides compétences analytiques"
+        ],
+        "niceToHave": "Qualifications appréciées :",
+        "niceToHaveList": [
+          "Expérience dans les énergies renouvelables",
+          "Maîtrise d'outils marketing automation (HubSpot, Marketo)",
+          "Expérience en B2C"
+        ],
+        "benefits": "Avantages & Rémunération :",
+        "benefitsList": [
+          "Fourchette salariale : 45-55K€ selon expérience",
+          "Assurance santé complète",
+          "Télétravail possible avec retraites d'équipe trimestrielles",
+          "Budget formation de 3000€ annuel",
+          "Généreuse politique de congés",
+          "Réduction employé sur nos produits"
+        ],
+        "commitment": "Notre engagement pour l'inclusion :",
+        "commitmentText": "GreenTech s'engage à construire une équipe diverse. Nous encourageons les candidatures de tous horizons, identités et expériences. Nous sommes particulièrement attentifs aux candidats issus de groupes sous-représentés dans le secteur des énergies renouvelables.",
+        "toApply": "Pour postuler :",
+        "toApplyText": "Merci d'envoyer CV et lettre de motivation expliquant votre intérêt pour les énergies renouvelables et ce poste à careers@greentech.fr. Les candidatures seront étudiées au fil de l'eau, avec des entretiens démarrant le 15 mai 2025."
+      }
+    }
   }
 }

@@ -814,5 +814,250 @@
         "suggest": "Suggest a Resource"
       }
     }
+  },
+  "EffectiveJobAds": {
+    "backButton": "Back to Resources",
+    "downloadButton": "Download as PDF",
+    "title": "Tips for Writing Effective Job Ads",
+    "subtitle": "Learn how to craft compelling job advertisements that attract qualified candidates and reduce time-to-hire.",
+    "stats": {
+      "jobSeekers": "of job seekers say the job description is extremely influential in their decision to apply",
+      "qualifiedApplicants": "increase in qualified applicants when salary information is included",
+      "fewerApplications": "fewer applications from women when job ads use masculine-coded language"
+    },
+    "checklist": {
+      "clearTitle": "Clear and precise title",
+      "salaryInfo": "Salary information",
+      "qualifications": "Required qualifications",
+      "responsibilities": "Job responsibilities",
+      "companyCulture": "Company culture",
+      "growthOpportunities": "Growth opportunities",
+      "benefits": "Benefits",
+      "location": "Job location",
+      "callToAction": "Clear call to action",
+      "proofread": "Proofread for spelling mistakes"
+    },
+    "languageTips": {
+      "specific": {
+        "title": "Be specific",
+        "description": "Use precise terms to describe the role and expectations."
+      },
+      "inclusive": {
+        "title": "Inclusive language",
+        "description": "Use vocabulary that encourages diverse applications."
+      },
+      "results": {
+        "title": "Focus on results",
+        "description": "Describe the impact the candidate will have in this role."
+      },
+      "concise": {
+        "title": "Be concise",
+        "description": "Get to the point to keep the reader's attention."
+      }
+    },
+    "sections": {
+      "basics": "The Basics",
+      "structure": "Structure",
+      "language": "Language",
+      "examples": "Examples"
+    },
+    "jobTitles": {
+      "bad": {
+        "codingNinja": "Coding Ninja",
+        "salesGuru": "Sales Guru",
+        "marketingRockstar": "Marketing Rockstar",
+        "adminSuperstar": "Administrative Superstar"
+      },
+      "good": {
+        "seniorFrontend": "Senior Frontend Developer",
+        "salesRep": "Sales Representative",
+        "digitalMarketing": "Digital Marketing Specialist",
+        "officeAdmin": "Office Administrator"
+      }
+    },
+    "beforeAfter": {
+      "example1": {
+        "title": "Generic vs. Specific",
+        "before": "We're looking for a hardworking team player who is passionate about marketing.",
+        "after": "We're seeking a Digital Marketing Specialist with 3+ years of experience in social media campaign management and analytics."
+      },
+      "example2": {
+        "title": "Vague vs. Clear Requirements",
+        "before": "Candidates should have relevant experience and technical skills.",
+        "after": "Candidates should have 2+ years of Python development experience and familiarity with Django framework."
+      },
+      "example3": {
+        "title": "Company-Focused vs. Candidate-Focused",
+        "before": "Our company needs someone to handle customer inquiries and resolve complaints.",
+        "after": "You'll help our customers solve their problems, using your excellent communication skills to ensure they feel valued and heard."
+      }
+    },
+    "basics": {
+      "foundationTitle": "The Foundation of an Effective Job Ad",
+      "whyMatterTitle": "Why Job Ads Matter",
+      "whyMatterDescription": "Your job advertisement is often the first impression candidates have of your company. A well-crafted job ad not only attracts more qualified candidates but also:",
+      "benefits": {
+        "relevantApplicants": "Reduces time-to-hire by attracting relevant applicants",
+        "candidateExperience": "Improves candidate experience and employer brand",
+        "accurateExpectations": "Sets accurate expectations, leading to better retention",
+        "diversity": "Promotes diversity and inclusion in your hiring process"
+      },
+      "elementsTitle": "Essential Elements of Every Job Ad",
+      "elements": {
+        "clearTitle": "Clear Job Title",
+        "clearDescription": "Use industry-standard job titles that candidates are likely to search for. Avoid internal titles or creative names that might confuse candidates.",
+        "requirementsTitle": "Essential Requirements",
+        "requirementsDescription": "Clearly distinguish between must-have qualifications and nice-to-have ones. Focus on skills and competencies rather than years of experience.",
+        "compensationTitle": "Compensation & Benefits",
+        "compensationDescription": "Include salary range and highlight key benefits. Transparency here increases applications and saves time for both candidates and recruiters.",
+        "cultureTitle": "Company Culture",
+        "cultureDescription": "Give candidates a glimpse of your workplace culture, values, and what makes your company unique. This helps candidates self-select for cultural fit."
+      },
+      "mistakesTitle": "Common Mistakes to Avoid",
+      "mistakes": {
+        "tooManyRequirements": "Listing too many requirements, which can discourage qualified candidates",
+        "exclusionaryLanguage": "Using gender-coded or exclusionary language",
+        "vagueResponsibilities": "Being vague about responsibilities or expectations",
+        "omittingSalary": "Omitting salary information, which reduces applications"
+      }
+    },
+    "structure": {
+      "title": "How to Structure Your Job Ad",
+      "description": "A well-structured job ad is easier to scan and comprehend. Follow this framework to create clear, candidate-friendly job advertisements.",
+      "sections": {
+        "introduction": {
+          "title": "Engaging Introduction",
+          "description": "Start with a compelling hook that gives candidates a reason to be excited about this opportunity.",
+          "example": "Join our innovative team and help shape the future of healthcare technology. As a UX Designer at HealthTech, you'll create intuitive interfaces that doctors and patients rely on every day."
+        },
+        "company": {
+          "title": "Company Overview",
+          "description": "Provide a brief but compelling description of your company, mission, and culture.",
+          "example": "HealthTech is a fast-growing startup with 50 employees dedicated to improving patient outcomes through technology. Our collaborative team values innovation, empathy, and work-life balance."
+        },
+        "role": {
+          "title": "Role Description",
+          "description": "Describe what the person will actually do on a day-to-day basis. Use present tense and 'you' language.",
+          "example": "In this role, you'll work closely with our product and development teams to: • Create wireframes and interactive prototypes • Conduct user testing and incorporate feedback • Collaborate on design systems and accessibility standards"
+        },
+        "requirements": {
+          "title": "Requirements & Qualifications",
+          "description": "Clearly separate must-haves from nice-to-haves. Focus on skills and competencies, not just credentials.",
+          "example": "Must-Have Qualifications: • 2+ years of UX design experience • Proficiency with Figma or similar design tools • Portfolio demonstrating user-centered design process Nice-to-Have Qualifications: • Experience in healthcare or medical software • Knowledge of accessibility standards (WCAG) • Basic understanding of HTML/CSS"
+        },
+        "benefits": {
+          "title": "Benefits & Compensation",
+          "description": "Be transparent about salary range and highlight the most attractive benefits and perks.",
+          "example": "Compensation & Benefits: • Salary range: $85,000 - $105,000 based on experience • Comprehensive health insurance (medical, dental, vision) • Flexible working hours and remote options • Professional development budget of $2,000 annually • Company equity package"
+        },
+        "process": {
+          "title": "Application Process",
+          "description": "Provide clear instructions on how to apply and what to expect. Include a timeline if possible.",
+          "example": "To Apply: Please submit your resume and portfolio link to careers@healthtech.com with 'UX Designer' in the subject line. Application deadline: June 15, 2025. Our interview process includes a portfolio review, design exercise, and team interviews."
+        }
+      },
+      "checklistTitle": "Job Ad Checklist",
+      "checklistDescription": "Use this checklist to ensure your job ad is complete:"
+    },
+    "language": {
+      "title": "Using the Right Language",
+      "description": "The words you choose can significantly impact who applies to your job. Using inclusive, clear language helps attract a diverse pool of qualified candidates.",
+      "tips": {
+        "specific": {
+          "title": "Be Specific",
+          "description": "Avoid vague terms like 'good communicator' or 'team player.' Instead, describe what these mean in your workplace context."
+        },
+        "inclusive": {
+          "title": "Use Inclusive Language",
+          "description": "Avoid gender-coded language and terms that might exclude certain groups. Use tools like a gender decoder to check your job ads."
+        },
+        "results": {
+          "title": "Focus on Results",
+          "description": "Describe what the person will achieve rather than just listing tasks. E.g., 'You'll lead projects that increase conversion rates' vs 'Manage projects'."
+        },
+        "concise": {
+          "title": "Be Concise",
+          "description": "Keep your job ad to 300-800 words. Organize information with clear headings to make it scannable."
+        }
+      },
+      "jobTitlesTitle": "Job Titles: What Works and What Doesn't",
+      "avoid": "Avoid",
+      "useInstead": "Use Instead",
+      "biasTitle": "Gendered Language & Bias",
+      "biasDescription": "Research shows that gendered language in job ads can discourage qualified candidates from applying. Be aware of these common gendered terms:",
+      "masculineWords": "Masculine-coded words:",
+      "masculineList": {
+        "competitive": "Competitive",
+        "dominant": "Dominant",
+        "aggressive": "Aggressive",
+        "confident": "Confident",
+        "independent": "Independent",
+        "ambitious": "Ambitious"
+      },
+      "feminineWords": "Feminine-coded words:",
+      "feminineList": {
+        "supportive": "Supportive",
+        "collaborative": "Collaborative",
+        "committed": "Committed",
+        "dependable": "Dependable",
+        "responsible": "Responsible",
+        "interpersonal": "Interpersonal"
+      },
+      "biasConclusion": "Use a mix of terms or find neutral alternatives. Consider using a gender decoder tool to check your job ads.",
+      "directCommunicationTitle": "Speaking Directly to Candidates",
+      "directCommunicationDescription": "Using 'you' and 'your' language creates a more personal connection with candidates. Compare these approaches:",
+      "companyFocused": "Company-focused:",
+      "companyFocusedExample": "The successful candidate will manage client accounts and be responsible for meeting sales targets.",
+      "candidateFocused": "Candidate-focused:",
+      "candidateFocusedExample": "You'll build strong relationships with clients and use your sales expertise to exceed targets."
+    },
+    "examples": {
+      "title": "Before & After Examples",
+      "description": "See how these job ad snippets transform from generic to compelling with a few key changes.",
+      "before": "Before",
+      "after": "After",
+      "fullExampleTitle": "Full Job Ad Example: Marketing Manager",
+      "fullExample": {
+        "position": "Marketing Manager",
+        "aboutUs": "About Us:",
+        "aboutUsText": "GreenTech is a growing renewable energy company dedicated to making sustainable technology accessible to all. With 75 employees across three offices, we've been helping households reduce their carbon footprint since 2018. Our inclusive team values innovation, sustainability, and work-life balance.",
+        "theRole": "The Role:",
+        "theRoleText": "As our new Marketing Manager, you'll lead our marketing strategy to connect sustainable energy solutions with the homeowners who need them. Working with our passionate team, you'll develop campaigns that drive awareness and adoption of renewable energy products.",
+        "whatYoullDo": "What You'll Do:",
+        "responsibilities": [
+          "Develop and implement comprehensive marketing strategies across digital and traditional channels",
+          "Manage a team of 3 marketing specialists, providing guidance and mentorship",
+          "Analyze campaign performance and market trends to optimize marketing ROI",
+          "Collaborate with product teams to craft compelling messaging about our solutions",
+          "Oversee a quarterly marketing budget of $250,000"
+        ],
+        "requiredQualifications": "Required Qualifications:",
+        "requirements": [
+          "3+ years of marketing management experience",
+          "Proven track record developing successful marketing campaigns",
+          "Experience managing direct reports and cross-functional teams",
+          "Strong analytical skills and data-driven decision making"
+        ],
+        "niceToHave": "Nice-to-Have Qualifications:",
+        "niceToHaveList": [
+          "Experience in renewable energy or sustainability sectors",
+          "Familiarity with marketing automation tools (HubSpot, Marketo)",
+          "B2C marketing background"
+        ],
+        "benefits": "Benefits & Compensation:",
+        "benefitsList": [
+          "Salary range: $90,000 - $110,000 based on experience",
+          "Comprehensive health, dental, and vision insurance",
+          "Remote work options with quarterly team retreats",
+          "Professional development budget of $3,000 annually",
+          "Generous paid time off policy and volunteer days",
+          "Employee discount on our sustainable energy products"
+        ],
+        "commitment": "Our Commitment to Inclusion:",
+        "commitmentText": "GreenTech is committed to building a diverse team. We welcome applicants of all backgrounds, identities, and experiences to apply. We're especially keen to hear from candidates from underrepresented groups in the renewable energy sector.",
+        "toApply": "To Apply:",
+        "toApplyText": "Please submit your resume and a brief cover letter explaining why you're excited about renewable energy and this role to careers@greentech.com. Applications will be reviewed on a rolling basis, with interviews beginning May 15, 2025."
+      }
+    }
   }
 }
