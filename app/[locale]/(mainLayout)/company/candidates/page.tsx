@@ -1848,7 +1848,7 @@ export default function CandidatesPage() {
     current: 1,
     limit: 10,
   });
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [savedFilters, setSavedFilters] = useState<any[]>([]);
   const [newFilterName, setNewFilterName] = useState("");
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
@@ -1956,9 +1956,11 @@ export default function CandidatesPage() {
       }
     } catch (error) {
       toast.error(t("saveFilterError"));
+      console.error("Error saving filter:", error);
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const applyFilter = (filter: any) => {
     const processedFilter = {
       skills: Array.isArray(filter.skills)
@@ -2047,6 +2049,7 @@ export default function CandidatesPage() {
       router.push(`/company/candidates/${candidateId}`);
     } catch (error) {
       toast.error(t("saveViewError"));
+      console.error("Error saving view:", error);
     }
   };
 
@@ -2073,6 +2076,8 @@ export default function CandidatesPage() {
         }
       } catch (error) {
         toast.error(t("verifySubscriptionError"));
+        console.error("Error verifying your subscription status:", error);
+
         setHasValidSubscription(false);
       } finally {
         setIsLoadingSubscription(false);
