@@ -731,6 +731,7 @@ const CandidateDetailPage = () => {
         const data = await response.json();
         setCandidate(data.candidate);
         setApplications(data.applications || []);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         setError(err.message);
       } finally {
