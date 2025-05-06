@@ -626,7 +626,7 @@ export default function RecruiterResources() {
                   />
                 ))}
               </div>
-              <p className="italic mb-4">"{testimonial.quote}"</p>
+              <p className="italic mb-4">`&quot;`{testimonial.quote}`&quot;`</p>
               <p className="font-semibold text-sm">{testimonial.author}</p>
             </div>
           ))}
