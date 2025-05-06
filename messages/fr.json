@@ -594,5 +594,58 @@
       "FREELANCE": "Freelance",
       "INTERNSHIP": "Stage"
     }
+  },
+  "CandidateDetailPage": {
+    "fetchError": "Impossible de récupérer les données du candidat",
+    "loading": "Chargement des informations du candidat...",
+    "errorTitle": "Erreur",
+    "notFound": "Candidat non trouvé",
+    "backToList": "Retour à la liste des candidats",
+    "experienceYears": "{years, plural, one {an} other {ans}} d'expérience",
+    "contactTitle": "Contact",
+    "linksTitle": "Liens",
+    "linkedinProfile": "Profil LinkedIn",
+    "portfolio": "Portfolio",
+    "downloadResume": "Télécharger le CV",
+    "availabilityTitle": "Disponibilité et préférences",
+    "availabilityLabel": "Disponibilité",
+    "jobTypePreference": "Types d'emploi recherchés",
+    "expectedSalary": "Salaire attendu",
+    "contactButton": "Contacter par email",
+    "downloadCVButton": "Télécharger le CV",
+    "profileTab": "Profil",
+    "applicationsTab": "Candidatures ({count})",
+    "aboutTitle": "À propos",
+    "skillsTitle": "Compétences",
+    "languagesTitle": "Langues",
+    "educationTitle": "Formation",
+    "in": "en",
+    "present": "Actuel",
+    "applicationsTitle": "Candidatures",
+    "noApplications": "Ce candidat n'a pas encore postulé à vos offres d'emploi.",
+    "applicationSentOn": "Candidature envoyée le",
+    "viewDetails": "Voir les détails",
+    "availability": {
+      "IMMEDIATE": "Immédiate",
+      "ONE_WEEK": "Une semaine",
+      "TWO_WEEKS": "Deux semaines",
+      "ONE_MONTH": "Un mois",
+      "MORE_THAN_ONE_MONTH": "Plus d'un mois"
+    },
+    "jobType": {
+      "FULL_TIME": "Temps plein",
+      "PART_TIME": "Temps partiel",
+      "CONTRACT": "Contrat",
+      "FREELANCE": "Freelance",
+      "INTERNSHIP": "Stage"
+    },
+    "applicationStatus": {
+      "PENDING": "En attente",
+      "REVIEWED": "Examinée",
+      "SHORTLISTED": "Présélectionnée",
+      "INTERVIEWED": "Entretien effectué",
+      "ACCEPTED": "Acceptée",
+      "REJECTED": "Refusée"
+    }
   }
 }

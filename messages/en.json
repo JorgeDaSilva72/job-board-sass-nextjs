@@ -656,5 +656,58 @@
       "FREELANCE": "Freelance",
       "INTERNSHIP": "Internship"
     }
+  },
+  "CandidateDetailPage": {
+    "fetchError": "Unable to retrieve candidate data",
+    "loading": "Loading candidate information...",
+    "errorTitle": "Error",
+    "notFound": "Candidate not found",
+    "backToList": "Back to the list of candidates",
+    "experienceYears": "{years, plural, one {year} other {years}} of experience",
+    "contactTitle": "Contact",
+    "linksTitle": "Links",
+    "linkedinProfile": "LinkedIn profile",
+    "portfolio": "Portfolio",
+    "downloadResume": "Download resume",
+    "availabilityTitle": "Availability and preferences",
+    "availabilityLabel": "Availability",
+    "jobTypePreference": "Types of employment sought",
+    "expectedSalary": "Expected salary",
+    "contactButton": "Contact by email",
+    "downloadCVButton": "Download CV",
+    "profileTab": "Profile",
+    "applicationsTab": "Applications ({count})",
+    "aboutTitle": "About",
+    "skillsTitle": "Skills",
+    "languagesTitle": "Languages",
+    "educationTitle": "Education",
+    "in": "in",
+    "present": "Present",
+    "applicationsTitle": "Applications",
+    "noApplications": "This candidate has not yet applied to your job offers.",
+    "applicationSentOn": "Application sent on",
+    "viewDetails": "See details",
+    "availability": {
+      "IMMEDIATE": "Immediate",
+      "ONE_WEEK": "One week",
+      "TWO_WEEKS": "Two weeks",
+      "ONE_MONTH": "One month",
+      "MORE_THAN_ONE_MONTH": "More than one month"
+    },
+    "jobType": {
+      "FULL_TIME": "Full time",
+      "PART_TIME": "Part time",
+      "CONTRACT": "Contract",
+      "FREELANCE": "Freelance",
+      "INTERNSHIP": "Internship"
+    },
+    "applicationStatus": {
+      "PENDING": "Pending",
+      "REVIEWED": "Reviewed",
+      "SHORTLISTED": "Shortlisted",
+      "INTERVIEWED": "Interviewed",
+      "ACCEPTED": "Accepted",
+      "REJECTED": "Rejected"
+    }
   }
 }
