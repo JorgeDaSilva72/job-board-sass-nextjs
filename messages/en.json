@@ -709,5 +709,110 @@
       "ACCEPTED": "Accepted",
       "REJECTED": "Rejected"
     }
+  },
+  "RecruiterResources": {
+    "title": "Resources for Recruiters",
+    "description": "A comprehensive collection of tools, templates, and guides to help you optimize your recruitment process and attract the best talent.",
+    "searchPlaceholder": "Search for resources...",
+    "noResults": "No resources found. Try another search.",
+    "downloads": "downloads",
+    "badges": {
+      "new": "New",
+      "popular": "Popular"
+    },
+    "categories": {
+      "all": "All Resources",
+      "templates": "Templates",
+      "guides": "Guides",
+      "tools": "Tools",
+      "training": "Training"
+    },
+    "resources": {
+      "jobOfferTemplates": {
+        "title": "Job Offer Templates",
+        "description": "Customizable templates for different positions and industries",
+        "items": {
+          "developer": "Developer",
+          "salesRep": "Sales Representative",
+          "hrSpecialist": "HR Specialist",
+          "marketing": "Marketing",
+          "finance": "Finance"
+        },
+        "linkText": "Download Templates"
+      },
+      "jobAdsTips": {
+        "title": "Tips for Writing Effective Job Ads",
+        "description": "Learn how to write job postings that attract the best talent",
+        "linkText": "Read Full Article"
+      },
+      "interviewGuide": {
+        "title": "Job Interview Guide",
+        "description": "Interview questions, soft skills assessment, common pitfalls...",
+        "linkText": "Download PDF Guide"
+      },
+      "recommendedTools": {
+        "title": "Recommended Tools",
+        "description": "The complete toolkit for modern recruiters",
+        "items": {
+          "ats": "Free ATS platforms",
+          "video": "Video conferencing tools",
+          "tests": "Online technical tests",
+          "sourcing": "Sourcing tools"
+        },
+        "linkText": "View Full List"
+      },
+      "recruitmentChecklist": {
+        "title": "Recruitment Checklist",
+        "description": "A step-by-step checklist for an effective recruitment process",
+        "linkText": "Download Checklist"
+      },
+      "trainings": {
+        "title": "Trainings & Webinars",
+        "description": "Training sessions to perfect your recruitment skills",
+        "items": {
+          "biasFree": "Bias-free Recruitment",
+          "onboarding": "Successful Onboarding",
+          "linkedin": "LinkedIn Sourcing",
+          "remote": "Remote Interviews"
+        },
+        "linkText": "View Trainings"
+      }
+    },
+    "testimonialsTitle": "What Our Users Say",
+    "testimonials": [
+      {
+        "quote": "These resources helped me reduce our recruitment time by 30% and improve the quality of our hires.",
+        "author": "Mary D., HR Manager"
+      },
+      {
+        "quote": "The job offer templates are incredibly useful and easy to customize for our specific needs.",
+        "author": "Thomas L., Tech Recruiter"
+      }
+    ],
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "questions": [
+        {
+          "q": "How can I customize the templates?",
+          "a": "All our templates are available in editable .docx and .pdf formats. Simply download them and adjust the sections according to your needs."
+        },
+        {
+          "q": "Are these resources free?",
+          "a": "Yes, all resources available on this page are completely free for our users."
+        },
+        {
+          "q": "Can I suggest new resources?",
+          "a": "Absolutely! Use the contact form at the bottom of the page to send us your suggestions."
+        }
+      ]
+    },
+    "contact": {
+      "title": "Need Help or Custom Resources?",
+      "description": "Our team can help you create custom job listings or guide you through using our platform.",
+      "buttons": {
+        "contact": "Contact Our Team",
+        "suggest": "Suggest a Resource"
+      }
+    }
   }
 }

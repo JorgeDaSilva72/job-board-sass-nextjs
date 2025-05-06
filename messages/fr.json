@@ -647,5 +647,110 @@
       "ACCEPTED": "Acceptée",
       "REJECTED": "Refusée"
     }
+  },
+  "RecruiterResources": {
+    "title": "Ressources pour les recruteurs",
+    "description": "Une collection complète d'outils, de modèles et de guides pour vous aider à optimiser votre processus de recrutement et attirer les meilleurs talents.",
+    "searchPlaceholder": "Rechercher des ressources...",
+    "noResults": "Aucune ressource trouvée. Essayez une autre recherche.",
+    "downloads": "téléchargements",
+    "badges": {
+      "new": "Nouveau",
+      "popular": "Populaire"
+    },
+    "categories": {
+      "all": "Toutes les ressources",
+      "templates": "Modèles",
+      "guides": "Guides",
+      "tools": "Outils",
+      "training": "Formations"
+    },
+    "resources": {
+      "jobOfferTemplates": {
+        "title": "Modèles d'offres d'emploi",
+        "description": "Modèles personnalisables pour différents postes et secteurs",
+        "items": {
+          "developer": "Développeur",
+          "salesRep": "Représentant commercial",
+          "hrSpecialist": "Spécialiste RH",
+          "marketing": "Marketing",
+          "finance": "Finance"
+        },
+        "linkText": "Télécharger les modèles"
+      },
+      "jobAdsTips": {
+        "title": "Conseils pour rédiger des offres d'emploi efficaces",
+        "description": "Apprenez à rédiger des annonces qui attirent les meilleurs talents",
+        "linkText": "Lire l'article complet"
+      },
+      "interviewGuide": {
+        "title": "Guide d'entretien d'embauche",
+        "description": "Questions d'entretien, évaluation des compétences douces, pièges courants...",
+        "linkText": "Télécharger le guide PDF"
+      },
+      "recommendedTools": {
+        "title": "Outils recommandés",
+        "description": "La boîte à outils complète pour les recruteurs modernes",
+        "items": {
+          "ats": "Plateformes ATS gratuites",
+          "video": "Outils de visioconférence",
+          "tests": "Tests techniques en ligne",
+          "sourcing": "Outils de sourcing"
+        },
+        "linkText": "Voir la liste complète"
+      },
+      "recruitmentChecklist": {
+        "title": "Checklist de recrutement",
+        "description": "Une checklist étape par étape pour un processus de recrutement efficace",
+        "linkText": "Télécharger la checklist"
+      },
+      "trainings": {
+        "title": "Formations et webinaires",
+        "description": "Sessions de formation pour perfectionner vos compétences en recrutement",
+        "items": {
+          "biasFree": "Recrutement sans biais",
+          "onboarding": "Onboarding réussi",
+          "linkedin": "Sourcing sur LinkedIn",
+          "remote": "Entretiens à distance"
+        },
+        "linkText": "Voir les formations"
+      }
+    },
+    "testimonialsTitle": "Ce que disent nos utilisateurs",
+    "testimonials": [
+      {
+        "quote": "Ces ressources m'ont aidé à réduire notre temps de recrutement de 30% et à améliorer la qualité de nos embauches.",
+        "author": "Marie D., Responsable RH"
+      },
+      {
+        "quote": "Les modèles d'offres d'emploi sont incroyablement utiles et faciles à personnaliser pour nos besoins spécifiques.",
+        "author": "Thomas L., Recruteur tech"
+      }
+    ],
+    "faq": {
+      "title": "Questions fréquemment posées",
+      "questions": [
+        {
+          "q": "Comment puis-je personnaliser les modèles ?",
+          "a": "Tous nos modèles sont disponibles aux formats .docx et .pdf modifiables. Il vous suffit de les télécharger et d'ajuster les sections selon vos besoins."
+        },
+        {
+          "q": "Ces ressources sont-elles gratuites ?",
+          "a": "Oui, toutes les ressources disponibles sur cette page sont complètement gratuites pour nos utilisateurs."
+        },
+        {
+          "q": "Puis-je suggérer de nouvelles ressources ?",
+          "a": "Absolument ! Utilisez le formulaire de contact en bas de page pour nous envoyer vos suggestions."
+        }
+      ]
+    },
+    "contact": {
+      "title": "Besoin d'aide ou de ressources personnalisées ?",
+      "description": "Notre équipe peut vous aider à créer des offres d'emploi personnalisées ou vous guider dans l'utilisation de notre plateforme.",
+      "buttons": {
+        "contact": "Contacter notre équipe",
+        "suggest": "Suggérer une ressource"
+      }
+    }
   }
 }
