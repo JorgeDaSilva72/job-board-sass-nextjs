@@ -2809,6 +2809,7 @@ export default function RecruiterDashboard() {
                     {Object.entries(stats?.applicationStatusCounts || {}).map(
                       ([status, count]) => (
                         <Badge key={status} className={getStatusColor(status)}>
+                          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                           {t(`status.${status.toLowerCase()}` as any)}: {count}
                         </Badge>
                       )
@@ -2855,6 +2856,7 @@ export default function RecruiterDashboard() {
                   <Card key={status}>
                     <CardContent className="pt-6">
                       <Badge className={`mb-2 ${getStatusColor(status)}`}>
+                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                         {t(`status.${status.toLowerCase()}` as any)}
                       </Badge>
                       <p className="text-2xl font-bold">{count}</p>
@@ -2885,6 +2887,7 @@ export default function RecruiterDashboard() {
                   <Card key={status}>
                     <CardContent className="pt-6">
                       <Badge className={`mb-2 ${getStatusColor(status)}`}>
+                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                         {t(`status.${status.toLowerCase()}` as any)}
                       </Badge>
                       <p className="text-2xl font-bold">{count}</p>
