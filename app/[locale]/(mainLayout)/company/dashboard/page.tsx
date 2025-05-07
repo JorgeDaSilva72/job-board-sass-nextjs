@@ -1795,6 +1795,661 @@
 // }
 // END ------------------------------------------------------------
 
+// "use client";
+
+// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+// import { useEffect, useState } from "react";
+// import { Button } from "@/components/ui/button";
+// import { Badge } from "@/components/ui/badge";
+// import { Skeleton } from "@/components/ui/skeleton";
+// import { useRouter } from "next/navigation";
+// import { CheckCircle, AlertCircle, RefreshCw, Clock } from "lucide-react";
+
+// interface DashboardStats {
+//   totalJobs: number;
+//   jobStatusCounts: {
+//     DRAFT: number;
+//     ACTIVE: number;
+//     EXPIRED: number;
+//   };
+//   totalApplications: number;
+//   applicationStatusCounts: {
+//     PENDING: number;
+//     REVIEWED: number;
+//     SHORTLISTED: number;
+//     INTERVIEWED: number;
+//     ACCEPTED: number;
+//     REJECTED: number;
+//   };
+//   viewedCandidates: number;
+// }
+
+// interface SubscriptionStatus {
+//   active: boolean;
+//   planName?: string;
+//   endDate?: string;
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   features?: any;
+//   expiringStatus?: "active" | "expiring_soon";
+//   autoRenew?: boolean;
+//   lastPlan?: {
+//     id: string;
+//     name: string;
+//   };
+//   expiredAt?: string;
+// }
+
+// export default function RecruiterDashboard() {
+//   const router = useRouter();
+//   const [stats, setStats] = useState<DashboardStats | null>(null);
+//   const [subscription, setSubscription] = useState<SubscriptionStatus | null>(
+//     null
+//   );
+//   const [loading, setLoading] = useState({
+//     stats: true,
+//     subscription: true,
+//   });
+//   const [error, setError] = useState<string | null>(null);
+
+//   // useEffect(() => {
+//   //   async function fetchDashboardData() {
+//   //     try {
+//   //       setError(null);
+//   //       const [statsResponse, subscriptionResponse] = await Promise.all([
+//   //         fetch("/api/recruiter/stats"),
+//   //         fetch("/api/recruiter/database-access/status"),
+//   //       ]);
+
+//   //       if (!statsResponse.ok) {
+//   //         throw new Error("Failed to fetch dashboard data");
+//   //       }
+
+//   //       const statsData = await statsResponse.json();
+//   //       setStats(statsData);
+
+//   //       if (subscriptionResponse.ok) {
+//   //         const subscriptionData = await subscriptionResponse.json();
+//   //         setSubscription({
+//   //           ...subscriptionData,
+//   //           // Transformation des données pour compatibilité
+//   //           expiringStatus:
+//   //             subscriptionData.expiringStatus === "expiring_soon"
+//   //               ? "expiring_soon"
+//   //               : "active",
+//   //         });
+//   //       }
+//   //     } catch (error) {
+//   //       console.error("Error fetching dashboard data:", error);
+//   //       setError("Failed to load dashboard data. Please try again later.");
+//   //     } finally {
+//   //       setLoading({
+//   //         stats: false,
+//   //         subscription: false,
+//   //       });
+//   //     }
+//   //   }
+
+//   //   fetchDashboardData();
+//   // }, []);
+
+//   useEffect(() => {
+//     async function fetchDashboardData() {
+//       try {
+//         setError(null);
+//         const [statsResponse, subscriptionResponse] = await Promise.all([
+//           fetch("/api/recruiter/stats"),
+//           fetch("/api/recruiter/database-access/status"),
+//         ]);
+
+//         if (!statsResponse.ok) {
+//           throw new Error("Failed to fetch dashboard data");
+//         }
+
+//         const statsData = await statsResponse.json();
+//         setStats(statsData);
+
+//         if (subscriptionResponse.ok) {
+//           const subscriptionData = await subscriptionResponse.json();
+
+//           // Calculer si l'abonnement expire bientôt
+//           let expiringStatus: "active" | "expiring_soon" = "active";
+//           if (subscriptionData.active && subscriptionData.endDate) {
+//             const daysRemaining = getDaysRemaining(subscriptionData.endDate);
+//             if (daysRemaining <= 7) {
+//               // 7 jours avant expiration
+//               expiringStatus = "expiring_soon";
+//             }
+//           }
+
+//           setSubscription({
+//             ...subscriptionData,
+//             expiringStatus,
+//           });
+//         }
+//       } catch (error) {
+//         console.error("Error fetching dashboard data:", error);
+//         setError("Failed to load dashboard data. Please try again later.");
+//       } finally {
+//         setLoading({
+//           stats: false,
+//           subscription: false,
+//         });
+//       }
+//     }
+
+//     fetchDashboardData();
+//   }, []);
+
+//   const getStatusColor = (status: string) => {
+//     const statusColors = {
+//       ACTIVE: "bg-green-100 text-green-800",
+//       DRAFT: "bg-yellow-100 text-yellow-800",
+//       EXPIRED: "bg-red-100 text-red-800",
+//       PENDING: "bg-blue-100 text-blue-800",
+//       REVIEWED: "bg-green-100 text-green-800",
+//       SHORTLISTED: "bg-purple-100 text-purple-800",
+//       INTERVIEWED: "bg-yellow-100 text-yellow-800",
+//       ACCEPTED: "bg-green-100 text-green-800",
+//       REJECTED: "bg-red-100 text-red-800",
+//       default: "bg-gray-100 text-gray-800",
+//     };
+//     return (
+//       statusColors[status as keyof typeof statusColors] || statusColors.default
+//     );
+//   };
+
+//   const formatDate = (dateString?: string) => {
+//     if (!dateString) return "";
+//     const date = new Date(dateString);
+//     return date.toLocaleDateString();
+//   };
+
+//   // const getDaysRemaining = (endDateString?: string) => {
+//   //   if (!endDateString) return 0;
+
+//   //   const endDate = new Date(endDateString);
+//   //   const today = new Date();
+//   //   const diffTime = endDate.getTime() - today.getTime();
+//   //   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+//   //   return diffDays;
+//   // };
+
+//   const getDaysRemaining = (endDateString?: string) => {
+//     if (!endDateString) return 0;
+
+//     const endDate = new Date(endDateString);
+//     const today = new Date();
+
+//     // Reset hours to compare just dates
+//     today.setHours(0, 0, 0, 0);
+//     endDate.setHours(0, 0, 0, 0);
+
+//     const diffTime = endDate.getTime() - today.getTime();
+//     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+//     return diffDays > 0 ? diffDays : 0; // Retourne 0 si la date est passée
+//   };
+
+//   if (error) {
+//     return (
+//       <div className="flex items-center justify-center h-screen">
+//         <Card className="w-full max-w-md">
+//           <CardHeader>
+//             <CardTitle>Error Loading Dashboard</CardTitle>
+//           </CardHeader>
+//           <CardContent>
+//             <p className="text-red-500 mb-4">{error}</p>
+//             <Button onClick={() => window.location.reload()}>Retry</Button>
+//           </CardContent>
+//         </Card>
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div className="container mx-auto px-4 py-8">
+//       <h1 className="text-3xl font-bold mb-8 text-center">
+//         Recruiter Dashboard
+//       </h1>
+
+//       {/* Subscription Status Card */}
+//       {/* <section className="mb-10">
+//         <h2 className="text-2xl font-semibold mb-6">Subscription Status</h2>
+//         {loading.subscription ? (
+//           <Card>
+//             <CardHeader>
+//               <Skeleton className="h-6 w-1/4" />
+//             </CardHeader>
+//             <CardContent>
+//               <Skeleton className="h-4 w-full" />
+//               <Skeleton className="h-10 w-1/2 mt-4" />
+//             </CardContent>
+//           </Card>
+//         ) : (
+//           <Card
+//             className={
+//               subscription?.active
+//                 ? subscription?.expiringStatus === "expiring_soon"
+//                   ? "border-yellow-500"
+//                   : "border-green-500"
+//                 : "border-red-500"
+//             }
+//           >
+//             <CardHeader className="pb-2">
+//               <CardTitle className="flex items-center gap-2">
+//                 {!subscription?.active ? (
+//                   <AlertCircle className="text-red-500" />
+//                 ) : subscription?.expiringStatus === "expiring_soon" ? (
+//                   <Clock className="text-yellow-500" />
+//                 ) : (
+//                   <CheckCircle className="text-green-500" />
+//                 )}
+//                 {!subscription?.active
+//                   ? "No Active Subscription"
+//                   : subscription?.expiringStatus === "expiring_soon"
+//                   ? "Subscription Expiring Soon"
+//                   : "Active Subscription"}
+//               </CardTitle>
+//             </CardHeader>
+//             <CardContent>
+//               {subscription?.active ? (
+//                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+//                   <div>
+//                     <p className="text-lg font-medium">
+//                       Plan: {subscription.planName}
+//                     </p>
+//                     {subscription.endDate && (
+//                       <>
+//                         <p className="text-muted-foreground">
+//                           Valid until: {formatDate(subscription.endDate)}
+//                         </p>
+//                         {subscription.expiringStatus === "expiring_soon" && (
+//                           <p className="text-yellow-600 mt-1">
+//                             {getDaysRemaining(subscription.endDate)} days
+//                             remaining
+//                           </p>
+//                         )}
+//                       </>
+//                     )}
+//                     <div className="mt-2">
+//                       {subscription.features && (
+//                         <p className="text-sm text-muted-foreground">
+//                           Features: {subscription.features.join(", ")}
+//                         </p>
+//                       )}
+//                     </div>
+//                     <div className="flex gap-2 mt-2">
+//                       {subscription.autoRenew && (
+//                         <Badge
+//                           variant="outline"
+//                           className="text-green-600 border-green-500 flex items-center gap-1"
+//                         >
+//                           <RefreshCw size={14} />
+//                           Auto-renew
+//                         </Badge>
+//                       )}
+//                     </div>
+//                   </div>
+//                   <div className="flex flex-col gap-2">
+//                     <Button
+//                       onClick={() => router.push("/company/subscription")}
+//                     >
+//                       Manage Subscription
+//                     </Button>
+//                     {subscription.expiringStatus === "expiring_soon" &&
+//                       !subscription.autoRenew && (
+//                         <Button
+//                           variant="outline"
+//                           className="border-green-500 text-green-600 hover:bg-green-50"
+//                           onClick={() =>
+//                             router.push("/company/subscription/renew")
+//                           }
+//                         >
+//                           Renew Now
+//                         </Button>
+//                       )}
+//                   </div>
+//                 </div>
+//               ) : (
+//                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+//                   <div>
+//                     <p className="text-muted-foreground">
+//                       You do not have an active subscription
+//                     </p>
+//                     {subscription?.lastPlan && subscription?.expiredAt && (
+//                       <p className="text-sm text-muted-foreground mt-1">
+//                         Your {subscription.lastPlan.name} plan expired on{" "}
+//                         {formatDate(subscription.expiredAt)}
+//                       </p>
+//                     )}
+//                   </div>
+//                   <Button onClick={() => router.push("/company/subscription")}>
+//                     View Plans
+//                   </Button>
+//                 </div>
+//               )}
+//             </CardContent>
+//           </Card>
+//         )}
+//       </section> */}
+
+//       {/* Subscription Status Card */}
+//       <section className="mb-10">
+//         <h2 className="text-2xl font-semibold mb-6">
+//           Access to the candidate database status
+//         </h2>
+//         {loading.subscription ? (
+//           <Card>
+//             <CardHeader>
+//               <Skeleton className="h-6 w-1/4" />
+//             </CardHeader>
+//             <CardContent>
+//               <Skeleton className="h-4 w-full" />
+//               <Skeleton className="h-10 w-1/2 mt-4" />
+//             </CardContent>
+//           </Card>
+//         ) : (
+//           <Card
+//             className={
+//               !subscription?.active
+//                 ? "border-red-500"
+//                 : subscription?.expiringStatus === "expiring_soon"
+//                 ? "border-yellow-500 animate-pulse"
+//                 : "border-green-500"
+//             }
+//           >
+//             <CardHeader className="pb-2">
+//               <CardTitle className="flex items-center gap-2">
+//                 {!subscription?.active ? (
+//                   <AlertCircle className="text-red-500" />
+//                 ) : subscription?.expiringStatus === "expiring_soon" ? (
+//                   <Clock className="text-yellow-500" />
+//                 ) : (
+//                   <CheckCircle className="text-green-500" />
+//                 )}
+//                 {!subscription?.active
+//                   ? "No Active Access to the candidate database"
+//                   : subscription?.expiringStatus === "expiring_soon"
+//                   ? "Access to the candidate database Expiring Soon"
+//                   : "Active Access to the candidate database"}
+//               </CardTitle>
+//             </CardHeader>
+//             <CardContent>
+//               {subscription?.active ? (
+//                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+//                   <div>
+//                     <p className="text-lg font-medium">
+//                       Plan: {subscription.planName}
+//                     </p>
+//                     {subscription.endDate && (
+//                       <>
+//                         <p className="text-muted-foreground">
+//                           Valid until: {formatDate(subscription.endDate)}{" "}
+//                           {subscription?.expiringStatus === "expiring_soon" && (
+//                             <span className="text-yellow-600">
+//                               ({getDaysRemaining(subscription.endDate)} days
+//                               remaining)
+//                             </span>
+//                           )}
+//                         </p>
+//                       </>
+//                     )}
+//                     {subscription.features && (
+//                       <div className="mt-2">
+//                         <p className="text-sm font-medium mb-1">
+//                           Features included:
+//                         </p>
+//                         <ul className="text-sm text-muted-foreground list-disc list-inside">
+//                           {subscription.features.map(
+//                             (feature: string, index: number) => (
+//                               <li key={index}>{feature}</li>
+//                             )
+//                           )}
+//                         </ul>
+//                       </div>
+//                     )}
+//                     <div className="flex gap-2 mt-2">
+//                       {subscription.autoRenew && (
+//                         <Badge
+//                           variant="outline"
+//                           className="text-green-600 border-green-500 flex items-center gap-1"
+//                         >
+//                           <RefreshCw size={14} />
+//                           Auto-renew
+//                         </Badge>
+//                       )}
+//                       {subscription?.expiringStatus === "expiring_soon" && (
+//                         <Badge
+//                           variant="outline"
+//                           className="text-yellow-600 border-yellow-500 flex items-center gap-1"
+//                         >
+//                           <Clock size={14} />
+//                           Expiring soon
+//                         </Badge>
+//                       )}
+//                     </div>
+//                   </div>
+//                   <div className="flex flex-col gap-2">
+//                     {!subscription?.active && (
+//                       <Button
+//                         onClick={() => router.push("/company/subscription")}
+//                       >
+//                         Manage Subscription
+//                       </Button>
+//                     )}
+//                     {/* {subscription?.expiringStatus === "expiring_soon" && (
+//                       <Button
+//                         variant="outline"
+//                         className="border-green-500 text-green-600 hover:bg-green-50"
+//                         onClick={() =>
+//                           router.push("/company/subscription/renew")
+//                         }
+//                       >
+//                         Renew Now
+//                       </Button>
+//                     )} */}
+//                   </div>
+//                 </div>
+//               ) : (
+//                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+//                   <div>
+//                     <p className="text-muted-foreground">
+//                       You do not have an active subscription
+//                     </p>
+//                     {subscription?.lastPlan && subscription?.expiredAt && (
+//                       <p className="text-sm text-muted-foreground mt-1">
+//                         Your {subscription.lastPlan.name} plan expired on{" "}
+//                         {formatDate(subscription.expiredAt)}
+//                       </p>
+//                     )}
+//                   </div>
+//                   <Button onClick={() => router.push("/company/subscription")}>
+//                     View Plans
+//                   </Button>
+//                 </div>
+//               )}
+//             </CardContent>
+//           </Card>
+//         )}
+//       </section>
+
+//       {subscription?.active &&
+//         subscription?.expiringStatus === "expiring_soon" && (
+//           <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-6">
+//             <div className="flex items-center">
+//               <div className="flex-shrink-0">
+//                 <Clock className="h-5 w-5 text-yellow-500" />
+//               </div>
+//               <div className="ml-3">
+//                 <p className="text-sm text-yellow-700">
+//                   {/* Your subscription expires in{" "} */}
+//                   The access to the candidate database expires in{" "}
+//                   {getDaysRemaining(subscription.endDate)} days.{" "}
+//                   {/* <button
+//                     onClick={() => router.push("/company/subscription/renew")}
+//                     className="font-medium underline text-yellow-700 hover:text-yellow-600"
+//                   >
+//                     Renew now to avoid interruption
+//                   </button> */}
+//                 </p>
+//               </div>
+//             </div>
+//           </div>
+//         )}
+
+//       {/* Rest of the dashboard remains unchanged */}
+//       {/* Job Posts Statistics */}
+//       <section className="mb-10">
+//         <h2 className="text-2xl font-semibold mb-6">Overview</h2>
+//         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+//           {loading.stats ? (
+//             Array.from({ length: 3 }).map((_, i) => (
+//               <Card key={`stats-skeleton-${i}`}>
+//                 <CardHeader>
+//                   <Skeleton className="h-6 w-3/4" />
+//                 </CardHeader>
+//                 <CardContent>
+//                   <Skeleton className="h-8 w-1/2 mb-2" />
+//                   <Skeleton className="h-4 w-full" />
+//                 </CardContent>
+//               </Card>
+//             ))
+//           ) : (
+//             <>
+//               <Card>
+//                 <CardHeader className="pb-2">
+//                   <CardTitle className="text-lg">Total Job Posts</CardTitle>
+//                 </CardHeader>
+//                 <CardContent>
+//                   <p className="text-3xl font-bold mb-2">{stats?.totalJobs}</p>
+//                   <div className="flex flex-col gap-1">
+//                     <Badge className={getStatusColor("ACTIVE")}>
+//                       Active: {stats?.jobStatusCounts.ACTIVE}
+//                     </Badge>
+//                     <Badge className={getStatusColor("DRAFT")}>
+//                       Draft: {stats?.jobStatusCounts.DRAFT}
+//                     </Badge>
+//                     <Badge className={getStatusColor("EXPIRED")}>
+//                       Expired: {stats?.jobStatusCounts.EXPIRED}
+//                     </Badge>
+//                   </div>
+//                 </CardContent>
+//               </Card>
+
+//               <Card>
+//                 <CardHeader className="pb-2">
+//                   <CardTitle className="text-lg">Total Applications</CardTitle>
+//                 </CardHeader>
+//                 <CardContent>
+//                   <p className="text-3xl font-bold mb-2">
+//                     {stats?.totalApplications}
+//                   </p>
+//                   <div className="flex gap-2 flex-wrap">
+//                     <Badge className={getStatusColor("PENDING")}>
+//                       Pending: {stats?.applicationStatusCounts.PENDING}
+//                     </Badge>
+//                     <Badge className={getStatusColor("REVIEWED")}>
+//                       Reviewed: {stats?.applicationStatusCounts.REVIEWED}
+//                     </Badge>
+//                     <Badge className={getStatusColor("SHORTLISTED")}>
+//                       Shortlisted: {stats?.applicationStatusCounts.SHORTLISTED}
+//                     </Badge>
+//                     <Badge className={getStatusColor("INTERVIEWED")}>
+//                       Interviewed: {stats?.applicationStatusCounts.INTERVIEWED}
+//                     </Badge>
+//                     <Badge className={getStatusColor("ACCEPTED")}>
+//                       Accepted: {stats?.applicationStatusCounts.ACCEPTED}
+//                     </Badge>
+//                     <Badge className={getStatusColor("REJECTED")}>
+//                       Rejected: {stats?.applicationStatusCounts.REJECTED}
+//                     </Badge>
+//                   </div>
+//                 </CardContent>
+//               </Card>
+
+//               <Card>
+//                 <CardHeader className="pb-2">
+//                   <CardTitle className="text-lg">
+//                     Candidate Engagement
+//                   </CardTitle>
+//                 </CardHeader>
+//                 <CardContent>
+//                   <p className="text-3xl font-bold mb-2">
+//                     {stats?.viewedCandidates}
+//                   </p>
+//                   <p className="text-sm text-muted-foreground">
+//                     Candidates viewed
+//                   </p>
+//                 </CardContent>
+//               </Card>
+//             </>
+//           )}
+//         </div>
+//       </section>
+
+//       {/* Jobs Status Breakdown */}
+//       <section>
+//         <h2 className="text-2xl font-semibold mb-6">Job Post Status</h2>
+//         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+//           {loading.stats
+//             ? Array.from({ length: 3 }).map((_, i) => (
+//                 <Card key={`app-status-skeleton-${i}`}>
+//                   <CardContent className="pt-6">
+//                     <Skeleton className="h-6 w-full mb-2" />
+//                     <Skeleton className="h-8 w-3/4" />
+//                   </CardContent>
+//                 </Card>
+//               ))
+//             : Object.entries(stats?.jobStatusCounts || {}).map(
+//                 ([status, count]) => (
+//                   <Card key={status}>
+//                     <CardContent className="pt-6">
+//                       <Badge className={`mb-2 ${getStatusColor(status)}`}>
+//                         {status}
+//                       </Badge>
+//                       <p className="text-2xl font-bold">{count}</p>
+//                     </CardContent>
+//                   </Card>
+//                 )
+//               )}
+//         </div>
+//       </section>
+
+//       {/* Application Status Breakdown */}
+//       <section className="mt-10">
+//         <h2 className="text-2xl font-semibold mb-6">Application Status</h2>
+//         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+//           {loading.stats
+//             ? Array.from({ length: 6 }).map((_, i) => (
+//                 <Card key={`app-status-skeleton-${i}`}>
+//                   <CardContent className="pt-6">
+//                     <Skeleton className="h-6 w-full mb-2" />
+//                     <Skeleton className="h-8 w-3/4" />
+//                   </CardContent>
+//                 </Card>
+//               ))
+//             : Object.entries(stats?.applicationStatusCounts || {}).map(
+//                 ([status, count]) => (
+//                   <Card key={status}>
+//                     <CardContent className="pt-6">
+//                       <Badge className={`mb-2 ${getStatusColor(status)}`}>
+//                         {status}
+//                       </Badge>
+//                       <p className="text-2xl font-bold">{count}</p>
+//                     </CardContent>
+//                   </Card>
+//                 )
+//               )}
+//         </div>
+//       </section>
+//     </div>
+//   );
+// }
+
+// END --------------------------------------------------------
+// 07/05/2025 compatible next-intl
+
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -1802,8 +2457,9 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useRouter } from "next/navigation";
 import { CheckCircle, AlertCircle, RefreshCw, Clock } from "lucide-react";
+import { useTranslations } from "next-intl"; // Ajouté pour les traductions
+import { useRouter } from "@/i18n/navigation";
 
 interface DashboardStats {
   totalJobs: number;
@@ -1828,8 +2484,7 @@ interface SubscriptionStatus {
   active: boolean;
   planName?: string;
   endDate?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  features?: any;
+  features?: string[];
   expiringStatus?: "active" | "expiring_soon";
   autoRenew?: boolean;
   lastPlan?: {
@@ -1841,6 +2496,7 @@ interface SubscriptionStatus {
 
 export default function RecruiterDashboard() {
   const router = useRouter();
+  const t = useTranslations("RecruiterDashboard"); // Traductions
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [subscription, setSubscription] = useState<SubscriptionStatus | null>(
     null
@@ -1850,47 +2506,6 @@ export default function RecruiterDashboard() {
     subscription: true,
   });
   const [error, setError] = useState<string | null>(null);
-
-  // useEffect(() => {
-  //   async function fetchDashboardData() {
-  //     try {
-  //       setError(null);
-  //       const [statsResponse, subscriptionResponse] = await Promise.all([
-  //         fetch("/api/recruiter/stats"),
-  //         fetch("/api/recruiter/database-access/status"),
-  //       ]);
-
-  //       if (!statsResponse.ok) {
-  //         throw new Error("Failed to fetch dashboard data");
-  //       }
-
-  //       const statsData = await statsResponse.json();
-  //       setStats(statsData);
-
-  //       if (subscriptionResponse.ok) {
-  //         const subscriptionData = await subscriptionResponse.json();
-  //         setSubscription({
-  //           ...subscriptionData,
-  //           // Transformation des données pour compatibilité
-  //           expiringStatus:
-  //             subscriptionData.expiringStatus === "expiring_soon"
-  //               ? "expiring_soon"
-  //               : "active",
-  //         });
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching dashboard data:", error);
-  //       setError("Failed to load dashboard data. Please try again later.");
-  //     } finally {
-  //       setLoading({
-  //         stats: false,
-  //         subscription: false,
-  //       });
-  //     }
-  //   }
-
-  //   fetchDashboardData();
-  // }, []);
 
   useEffect(() => {
     async function fetchDashboardData() {
@@ -1902,7 +2517,7 @@ export default function RecruiterDashboard() {
         ]);
 
         if (!statsResponse.ok) {
-          throw new Error("Failed to fetch dashboard data");
+          throw new Error(t("errors.fetchFailed"));
         }
 
         const statsData = await statsResponse.json();
@@ -1911,12 +2526,10 @@ export default function RecruiterDashboard() {
         if (subscriptionResponse.ok) {
           const subscriptionData = await subscriptionResponse.json();
 
-          // Calculer si l'abonnement expire bientôt
           let expiringStatus: "active" | "expiring_soon" = "active";
           if (subscriptionData.active && subscriptionData.endDate) {
             const daysRemaining = getDaysRemaining(subscriptionData.endDate);
             if (daysRemaining <= 7) {
-              // 7 jours avant expiration
               expiringStatus = "expiring_soon";
             }
           }
@@ -1928,7 +2541,7 @@ export default function RecruiterDashboard() {
         }
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
-        setError("Failed to load dashboard data. Please try again later.");
+        setError(t("errors.loadFailed"));
       } finally {
         setLoading({
           stats: false,
@@ -1938,7 +2551,7 @@ export default function RecruiterDashboard() {
     }
 
     fetchDashboardData();
-  }, []);
+  }, [t]);
 
   const getStatusColor = (status: string) => {
     const statusColors = {
@@ -1964,31 +2577,14 @@ export default function RecruiterDashboard() {
     return date.toLocaleDateString();
   };
 
-  // const getDaysRemaining = (endDateString?: string) => {
-  //   if (!endDateString) return 0;
-
-  //   const endDate = new Date(endDateString);
-  //   const today = new Date();
-  //   const diffTime = endDate.getTime() - today.getTime();
-  //   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-  //   return diffDays;
-  // };
-
   const getDaysRemaining = (endDateString?: string) => {
     if (!endDateString) return 0;
-
     const endDate = new Date(endDateString);
     const today = new Date();
-
-    // Reset hours to compare just dates
     today.setHours(0, 0, 0, 0);
     endDate.setHours(0, 0, 0, 0);
-
     const diffTime = endDate.getTime() - today.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    return diffDays > 0 ? diffDays : 0; // Retourne 0 si la date est passée
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   };
 
   if (error) {
@@ -1996,11 +2592,13 @@ export default function RecruiterDashboard() {
       <div className="flex items-center justify-center h-screen">
         <Card className="w-full max-w-md">
           <CardHeader>
-            <CardTitle>Error Loading Dashboard</CardTitle>
+            <CardTitle>{t("error.title")}</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-red-500 mb-4">{error}</p>
-            <Button onClick={() => window.location.reload()}>Retry</Button>
+            <Button onClick={() => window.location.reload()}>
+              {t("error.retry")}
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -2009,135 +2607,12 @@ export default function RecruiterDashboard() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8 text-center">
-        Recruiter Dashboard
-      </h1>
-
-      {/* Subscription Status Card */}
-      {/* <section className="mb-10">
-        <h2 className="text-2xl font-semibold mb-6">Subscription Status</h2>
-        {loading.subscription ? (
-          <Card>
-            <CardHeader>
-              <Skeleton className="h-6 w-1/4" />
-            </CardHeader>
-            <CardContent>
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-10 w-1/2 mt-4" />
-            </CardContent>
-          </Card>
-        ) : (
-          <Card
-            className={
-              subscription?.active
-                ? subscription?.expiringStatus === "expiring_soon"
-                  ? "border-yellow-500"
-                  : "border-green-500"
-                : "border-red-500"
-            }
-          >
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2">
-                {!subscription?.active ? (
-                  <AlertCircle className="text-red-500" />
-                ) : subscription?.expiringStatus === "expiring_soon" ? (
-                  <Clock className="text-yellow-500" />
-                ) : (
-                  <CheckCircle className="text-green-500" />
-                )}
-                {!subscription?.active
-                  ? "No Active Subscription"
-                  : subscription?.expiringStatus === "expiring_soon"
-                  ? "Subscription Expiring Soon"
-                  : "Active Subscription"}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {subscription?.active ? (
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                  <div>
-                    <p className="text-lg font-medium">
-                      Plan: {subscription.planName}
-                    </p>
-                    {subscription.endDate && (
-                      <>
-                        <p className="text-muted-foreground">
-                          Valid until: {formatDate(subscription.endDate)}
-                        </p>
-                        {subscription.expiringStatus === "expiring_soon" && (
-                          <p className="text-yellow-600 mt-1">
-                            {getDaysRemaining(subscription.endDate)} days
-                            remaining
-                          </p>
-                        )}
-                      </>
-                    )}
-                    <div className="mt-2">
-                      {subscription.features && (
-                        <p className="text-sm text-muted-foreground">
-                          Features: {subscription.features.join(", ")}
-                        </p>
-                      )}
-                    </div>
-                    <div className="flex gap-2 mt-2">
-                      {subscription.autoRenew && (
-                        <Badge
-                          variant="outline"
-                          className="text-green-600 border-green-500 flex items-center gap-1"
-                        >
-                          <RefreshCw size={14} />
-                          Auto-renew
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <Button
-                      onClick={() => router.push("/company/subscription")}
-                    >
-                      Manage Subscription
-                    </Button>
-                    {subscription.expiringStatus === "expiring_soon" &&
-                      !subscription.autoRenew && (
-                        <Button
-                          variant="outline"
-                          className="border-green-500 text-green-600 hover:bg-green-50"
-                          onClick={() =>
-                            router.push("/company/subscription/renew")
-                          }
-                        >
-                          Renew Now
-                        </Button>
-                      )}
-                  </div>
-                </div>
-              ) : (
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                  <div>
-                    <p className="text-muted-foreground">
-                      You do not have an active subscription
-                    </p>
-                    {subscription?.lastPlan && subscription?.expiredAt && (
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Your {subscription.lastPlan.name} plan expired on{" "}
-                        {formatDate(subscription.expiredAt)}
-                      </p>
-                    )}
-                  </div>
-                  <Button onClick={() => router.push("/company/subscription")}>
-                    View Plans
-                  </Button>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        )}
-      </section> */}
+      <h1 className="text-3xl font-bold mb-8 text-center">{t("title")}</h1>
 
       {/* Subscription Status Card */}
       <section className="mb-10">
         <h2 className="text-2xl font-semibold mb-6">
-          Access to the candidate database status
+          {t("subscription.title")}
         </h2>
         {loading.subscription ? (
           <Card>
@@ -2169,10 +2644,10 @@ export default function RecruiterDashboard() {
                   <CheckCircle className="text-green-500" />
                 )}
                 {!subscription?.active
-                  ? "No Active Access to the candidate database"
+                  ? t("subscription.inactive")
                   : subscription?.expiringStatus === "expiring_soon"
-                  ? "Access to the candidate database Expiring Soon"
-                  : "Active Access to the candidate database"}
+                  ? t("subscription.expiringSoon")
+                  : t("subscription.active")}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -2180,16 +2655,17 @@ export default function RecruiterDashboard() {
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                   <div>
                     <p className="text-lg font-medium">
-                      Plan: {subscription.planName}
+                      {t("subscription.plan")}: {subscription.planName}
                     </p>
                     {subscription.endDate && (
                       <>
                         <p className="text-muted-foreground">
-                          Valid until: {formatDate(subscription.endDate)}{" "}
+                          {t("subscription.validUntil")}:{" "}
+                          {formatDate(subscription.endDate)}{" "}
                           {subscription?.expiringStatus === "expiring_soon" && (
                             <span className="text-yellow-600">
-                              ({getDaysRemaining(subscription.endDate)} days
-                              remaining)
+                              ({getDaysRemaining(subscription.endDate)}{" "}
+                              {t("subscription.daysRemaining")})
                             </span>
                           )}
                         </p>
@@ -2198,14 +2674,12 @@ export default function RecruiterDashboard() {
                     {subscription.features && (
                       <div className="mt-2">
                         <p className="text-sm font-medium mb-1">
-                          Features included:
+                          {t("subscription.features")}:
                         </p>
                         <ul className="text-sm text-muted-foreground list-disc list-inside">
-                          {subscription.features.map(
-                            (feature: string, index: number) => (
-                              <li key={index}>{feature}</li>
-                            )
-                          )}
+                          {subscription.features.map((feature, index) => (
+                            <li key={index}>{feature}</li>
+                          ))}
                         </ul>
                       </div>
                     )}
@@ -2216,7 +2690,7 @@ export default function RecruiterDashboard() {
                           className="text-green-600 border-green-500 flex items-center gap-1"
                         >
                           <RefreshCw size={14} />
-                          Auto-renew
+                          {t("subscription.autoRenew")}
                         </Badge>
                       )}
                       {subscription?.expiringStatus === "expiring_soon" && (
@@ -2225,47 +2699,36 @@ export default function RecruiterDashboard() {
                           className="text-yellow-600 border-yellow-500 flex items-center gap-1"
                         >
                           <Clock size={14} />
-                          Expiring soon
+                          {t("subscription.expiringSoon")}
                         </Badge>
                       )}
                     </div>
                   </div>
                   <div className="flex flex-col gap-2">
-                    {!subscription?.active && (
-                      <Button
-                        onClick={() => router.push("/company/subscription")}
-                      >
-                        Manage Subscription
-                      </Button>
-                    )}
-                    {/* {subscription?.expiringStatus === "expiring_soon" && (
-                      <Button
-                        variant="outline"
-                        className="border-green-500 text-green-600 hover:bg-green-50"
-                        onClick={() =>
-                          router.push("/company/subscription/renew")
-                        }
-                      >
-                        Renew Now
-                      </Button>
-                    )} */}
+                    <Button
+                      onClick={() => router.push("/company/subscription")}
+                    >
+                      {t("subscription.manage")}
+                    </Button>
                   </div>
                 </div>
               ) : (
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                   <div>
                     <p className="text-muted-foreground">
-                      You do not have an active subscription
+                      {t("subscription.noActive")}
                     </p>
                     {subscription?.lastPlan && subscription?.expiredAt && (
                       <p className="text-sm text-muted-foreground mt-1">
-                        Your {subscription.lastPlan.name} plan expired on{" "}
-                        {formatDate(subscription.expiredAt)}
+                        {t("subscription.planExpired", {
+                          plan: subscription.lastPlan.name,
+                          date: formatDate(subscription.expiredAt),
+                        })}
                       </p>
                     )}
                   </div>
                   <Button onClick={() => router.push("/company/subscription")}>
-                    View Plans
+                    {t("subscription.viewPlans")}
                   </Button>
                 </div>
               )}
@@ -2283,25 +2746,18 @@ export default function RecruiterDashboard() {
               </div>
               <div className="ml-3">
                 <p className="text-sm text-yellow-700">
-                  {/* Your subscription expires in{" "} */}
-                  The access to the candidate database expires in{" "}
-                  {getDaysRemaining(subscription.endDate)} days.{" "}
-                  {/* <button
-                    onClick={() => router.push("/company/subscription/renew")}
-                    className="font-medium underline text-yellow-700 hover:text-yellow-600"
-                  >
-                    Renew now to avoid interruption
-                  </button> */}
+                  {t("subscription.expirationWarning", {
+                    days: getDaysRemaining(subscription.endDate),
+                  })}
                 </p>
               </div>
             </div>
           </div>
         )}
 
-      {/* Rest of the dashboard remains unchanged */}
       {/* Job Posts Statistics */}
       <section className="mb-10">
-        <h2 className="text-2xl font-semibold mb-6">Overview</h2>
+        <h2 className="text-2xl font-semibold mb-6">{t("overview.title")}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {loading.stats ? (
             Array.from({ length: 3 }).map((_, i) => (
@@ -2319,50 +2775,21 @@ export default function RecruiterDashboard() {
             <>
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">Total Job Posts</CardTitle>
+                  <CardTitle className="text-lg">
+                    {t("overview.totalJobs")}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-3xl font-bold mb-2">{stats?.totalJobs}</p>
                   <div className="flex flex-col gap-1">
                     <Badge className={getStatusColor("ACTIVE")}>
-                      Active: {stats?.jobStatusCounts.ACTIVE}
+                      {t("status.active")}: {stats?.jobStatusCounts.ACTIVE}
                     </Badge>
                     <Badge className={getStatusColor("DRAFT")}>
-                      Draft: {stats?.jobStatusCounts.DRAFT}
+                      {t("status.draft")}: {stats?.jobStatusCounts.DRAFT}
                     </Badge>
                     <Badge className={getStatusColor("EXPIRED")}>
-                      Expired: {stats?.jobStatusCounts.EXPIRED}
-                    </Badge>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">Total Applications</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-3xl font-bold mb-2">
-                    {stats?.totalApplications}
-                  </p>
-                  <div className="flex gap-2 flex-wrap">
-                    <Badge className={getStatusColor("PENDING")}>
-                      Pending: {stats?.applicationStatusCounts.PENDING}
-                    </Badge>
-                    <Badge className={getStatusColor("REVIEWED")}>
-                      Reviewed: {stats?.applicationStatusCounts.REVIEWED}
-                    </Badge>
-                    <Badge className={getStatusColor("SHORTLISTED")}>
-                      Shortlisted: {stats?.applicationStatusCounts.SHORTLISTED}
-                    </Badge>
-                    <Badge className={getStatusColor("INTERVIEWED")}>
-                      Interviewed: {stats?.applicationStatusCounts.INTERVIEWED}
-                    </Badge>
-                    <Badge className={getStatusColor("ACCEPTED")}>
-                      Accepted: {stats?.applicationStatusCounts.ACCEPTED}
-                    </Badge>
-                    <Badge className={getStatusColor("REJECTED")}>
-                      Rejected: {stats?.applicationStatusCounts.REJECTED}
+                      {t("status.expired")}: {stats?.jobStatusCounts.EXPIRED}
                     </Badge>
                   </div>
                 </CardContent>
@@ -2371,7 +2798,29 @@ export default function RecruiterDashboard() {
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-lg">
-                    Candidate Engagement
+                    {t("overview.totalApplications")}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-3xl font-bold mb-2">
+                    {stats?.totalApplications}
+                  </p>
+                  <div className="flex gap-2 flex-wrap">
+                    {Object.entries(stats?.applicationStatusCounts || {}).map(
+                      ([status, count]) => (
+                        <Badge key={status} className={getStatusColor(status)}>
+                          {t(`status.${status.toLowerCase()}` as any)}: {count}
+                        </Badge>
+                      )
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg">
+                    {t("overview.candidateEngagement")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -2379,7 +2828,7 @@ export default function RecruiterDashboard() {
                     {stats?.viewedCandidates}
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    Candidates viewed
+                    {t("overview.candidatesViewed")}
                   </p>
                 </CardContent>
               </Card>
@@ -2390,7 +2839,7 @@ export default function RecruiterDashboard() {
 
       {/* Jobs Status Breakdown */}
       <section>
-        <h2 className="text-2xl font-semibold mb-6">Job Post Status</h2>
+        <h2 className="text-2xl font-semibold mb-6">{t("jobStatus.title")}</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {loading.stats
             ? Array.from({ length: 3 }).map((_, i) => (
@@ -2406,7 +2855,7 @@ export default function RecruiterDashboard() {
                   <Card key={status}>
                     <CardContent className="pt-6">
                       <Badge className={`mb-2 ${getStatusColor(status)}`}>
-                        {status}
+                        {t(`status.${status.toLowerCase()}` as any)}
                       </Badge>
                       <p className="text-2xl font-bold">{count}</p>
                     </CardContent>
@@ -2418,7 +2867,9 @@ export default function RecruiterDashboard() {
 
       {/* Application Status Breakdown */}
       <section className="mt-10">
-        <h2 className="text-2xl font-semibold mb-6">Application Status</h2>
+        <h2 className="text-2xl font-semibold mb-6">
+          {t("applicationStatus.title")}
+        </h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {loading.stats
             ? Array.from({ length: 6 }).map((_, i) => (
@@ -2434,7 +2885,7 @@ export default function RecruiterDashboard() {
                   <Card key={status}>
                     <CardContent className="pt-6">
                       <Badge className={`mb-2 ${getStatusColor(status)}`}>
-                        {status}
+                        {t(`status.${status.toLowerCase()}` as any)}
                       </Badge>
                       <p className="text-2xl font-bold">{count}</p>
                     </CardContent>

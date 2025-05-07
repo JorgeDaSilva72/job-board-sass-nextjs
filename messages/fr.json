@@ -1139,5 +1139,54 @@
     "Logistics": "Logistique",
     "Biotech": "Biotechnologie",
     "Other": "Autres"
+  },
+  "RecruiterDashboard": {
+    "title": "Tableau de bord recruteur",
+    "error": {
+      "title": "Erreur de chargement",
+      "fetchFailed": "Échec du chargement des données",
+      "loadFailed": "Échec du chargement du tableau de bord. Veuillez réessayer.",
+      "retry": "Réessayer"
+    },
+    "subscription": {
+      "title": "Statut d'accès à la base de candidats",
+      "active": "Accès actif à la base de candidats",
+      "inactive": "Pas d'accès actif à la base de candidats",
+      "expiringSoon": "Accès à la base de candidats expire bientôt",
+      "plan": "Plan",
+      "validUntil": "Valide jusqu'au",
+      "daysRemaining": "jours restants",
+      "features": "Fonctionnalités incluses",
+      "autoRenew": "Renouvellement automatique",
+      "noActive": "Vous n'avez pas d'abonnement actif",
+      "planExpired": "Votre plan {plan} a expiré le {date}",
+      "manage": "Gérer l'abonnement",
+      "viewPlans": "Voir les offres",
+      "expirationWarning": "Votre accès expire dans {days} jours."
+    },
+    "overview": {
+      "title": "Aperçu",
+      "totalJobs": "Total des offres",
+      "totalApplications": "Total des candidatures",
+      "candidateEngagement": "Engagement des candidats",
+      "candidatesViewed": "Candidats consultés"
+    },
+    "jobStatus": {
+      "title": "Statut des offres"
+    },
+    "applicationStatus": {
+      "title": "Statut des candidatures"
+    },
+    "status": {
+      "active": "Actif",
+      "draft": "Brouillon",
+      "expired": "Expiré",
+      "pending": "En attente",
+      "reviewed": "Examiné",
+      "shortlisted": "Présélectionné",
+      "interviewed": "Interviewé",
+      "accepted": "Accepté",
+      "rejected": "Rejeté"
+    }
   }
 }

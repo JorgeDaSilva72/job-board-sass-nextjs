@@ -1201,5 +1201,54 @@
     "Telecommunications": "Telecommunications",
     "Transportation": "Transportation",
     "Other": "Other"
+  },
+  "RecruiterDashboard": {
+    "title": "Recruiter Dashboard",
+    "error": {
+      "title": "Loading Error",
+      "fetchFailed": "Failed to load data",
+      "loadFailed": "Failed to load dashboard. Please try again.",
+      "retry": "Retry"
+    },
+    "subscription": {
+      "title": "Candidate Database Access Status",
+      "active": "Active access to candidate database",
+      "inactive": "No active access to candidate database",
+      "expiringSoon": "Candidate database access expiring soon",
+      "plan": "Plan",
+      "validUntil": "Valid until",
+      "daysRemaining": "days remaining",
+      "features": "Included features",
+      "autoRenew": "Auto-renewal",
+      "noActive": "You do not have an active subscription",
+      "planExpired": "Your {plan} plan expired on {date}",
+      "manage": "Manage subscription",
+      "viewPlans": "View plans",
+      "expirationWarning": "Your access expires in {days} days."
+    },
+    "overview": {
+      "title": "Overview",
+      "totalJobs": "Total job postings",
+      "totalApplications": "Total applications",
+      "candidateEngagement": "Candidate engagement",
+      "candidatesViewed": "Candidates viewed"
+    },
+    "jobStatus": {
+      "title": "Job Status"
+    },
+    "applicationStatus": {
+      "title": "Application Status"
+    },
+    "status": {
+      "active": "Active",
+      "draft": "Draft",
+      "expired": "Expired",
+      "pending": "Pending",
+      "reviewed": "Reviewed",
+      "shortlisted": "Shortlisted",
+      "interviewed": "Interviewed",
+      "accepted": "Accepted",
+      "rejected": "Rejected"
+    }
   }
 }
