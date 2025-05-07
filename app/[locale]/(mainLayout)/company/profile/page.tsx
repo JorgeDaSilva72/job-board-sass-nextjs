@@ -136,7 +136,7 @@
 // export default CompanyProfilePage;
 
 // --------------------------------------------------------
-// 06/05/2025 compatible next-intl
+// 07/05/2025 compatible next-intl
 
 "use client";
 
