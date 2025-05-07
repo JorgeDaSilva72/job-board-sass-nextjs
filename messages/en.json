@@ -1059,5 +1059,12 @@
         "toApplyText": "Please submit your resume and a brief cover letter explaining why you're excited about renewable energy and this role to careers@greentech.com. Applications will be reviewed on a rolling basis, with interviews beginning May 15, 2025."
       }
     }
+  },
+  "CompanyProfilePage": {
+    "loadError": "Failed to load profile data",
+    "loading": "Loading profile data...",
+    "profileNotFound": "Company Profile Not Found",
+    "noProfileMessage": "You don't have a company profile yet.",
+    "createProfile": "Create Company Profile"
   }
 }

@@ -997,5 +997,12 @@
         "toApplyText": "Merci d'envoyer CV et lettre de motivation expliquant votre intérêt pour les énergies renouvelables et ce poste à careers@greentech.fr. Les candidatures seront étudiées au fil de l'eau, avec des entretiens démarrant le 15 mai 2025."
       }
     }
+  },
+  "CompanyProfilePage": {
+    "loadError": "Échec du chargement des données du profil",
+    "loading": "Chargement des données du profil...",
+    "profileNotFound": "Profil d'entreprise non trouvé",
+    "noProfileMessage": "Vous n'avez pas encore de profil d'entreprise.",
+    "createProfile": "Créer un profil d'entreprise"
   }
 }
