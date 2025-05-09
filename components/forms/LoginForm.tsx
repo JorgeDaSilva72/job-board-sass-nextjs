@@ -112,7 +112,7 @@ import * as React from "react";
 import type { SVGProps } from "react";
 import { GeneralSubmitButton } from "../general/SubmitButtons";
 import { redirect } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 
 const Google = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -143,7 +143,7 @@ const Google = (props: SVGProps<SVGSVGElement>) => (
 );
 
 export async function LoginForm() {
-  const t = useTranslations("LoginForm");
+  const t = await getTranslations("LoginForm");
   const session = await auth();
 
   if (session?.user) {
