@@ -1,6 +1,68 @@
-/* eslint-disable react/no-unescaped-entities */
+// /* eslint-disable react/no-unescaped-entities */
+// import { Button } from "@/components/ui/button";
+// import { Building2, UserRound } from "lucide-react";
+
+// type UserType = "company" | "jobSeeker";
+
+// interface UserTypeSelectionProps {
+//   onSelect: (type: UserType) => void;
+// }
+
+// export default function UserTypeSelection({
+//   onSelect,
+// }: UserTypeSelectionProps) {
+//   return (
+//     <div className="space-y-8">
+//       <div className="text-center space-y-2">
+//         <h2 className="text-2xl font-bold ">Welcome! Let's get started</h2>
+//         <p className="text-muted-foreground">
+//           Choose how you'd like to use our platform
+//         </p>
+//       </div>
+
+//       <div className="grid gap-4">
+//         <Button
+//           onClick={() => onSelect("company")}
+//           variant="outline"
+//           className="w-full h-auto p-6 flex items-center gap-4 border-2 transition-all duration-200 hover:border-primary hover:bg-primary/5"
+//         >
+//           <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
+//             <Building2 className="h-6 w-6 text-primary" />
+//           </div>
+//           <div className="text-left">
+//             <h3 className="font-semibold text-lg">Company / Organization</h3>
+//             <p className="text-sm text-muted-foreground">
+//               Post jobs and find great talent
+//             </p>
+//           </div>
+//         </Button>
+
+//         <Button
+//           onClick={() => onSelect("jobSeeker")}
+//           variant="outline"
+//           className="w-full h-auto p-6 flex items-center gap-4 border-2 transition-all duration-200 hover:border-primary hover:bg-primary/5"
+//         >
+//           <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
+//             <UserRound className="h-6 w-6 text-primary" />
+//           </div>
+//           <div className="text-left">
+//             <h3 className="font-semibold text-lg">Job Seeker</h3>
+//             <p className="text-sm text-muted-foreground">
+//               Find your dream job opportunity
+//             </p>
+//           </div>
+//         </Button>
+//       </div>
+//     </div>
+//   );
+// }
+
+// END --------------------------------------------------------
+// 07/05/2025 compatible next-intl
+
 import { Button } from "@/components/ui/button";
 import { Building2, UserRound } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 type UserType = "company" | "jobSeeker";
 
@@ -11,13 +73,13 @@ interface UserTypeSelectionProps {
 export default function UserTypeSelection({
   onSelect,
 }: UserTypeSelectionProps) {
+  const t = useTranslations("UserTypeSelection");
+
   return (
     <div className="space-y-8">
       <div className="text-center space-y-2">
-        <h2 className="text-2xl font-bold ">Welcome! Let's get started</h2>
-        <p className="text-muted-foreground">
-          Choose how you'd like to use our platform
-        </p>
+        <h2 className="text-2xl font-bold">{t("welcomeTitle")}</h2>
+        <p className="text-muted-foreground">{t("welcomeSubtitle")}</p>
       </div>
 
       <div className="grid gap-4">
@@ -30,9 +92,9 @@ export default function UserTypeSelection({
             <Building2 className="h-6 w-6 text-primary" />
           </div>
           <div className="text-left">
-            <h3 className="font-semibold text-lg">Company / Organization</h3>
+            <h3 className="font-semibold text-lg">{t("company.title")}</h3>
             <p className="text-sm text-muted-foreground">
-              Post jobs and find great talent
+              {t("company.description")}
             </p>
           </div>
         </Button>
@@ -46,9 +108,9 @@ export default function UserTypeSelection({
             <UserRound className="h-6 w-6 text-primary" />
           </div>
           <div className="text-left">
-            <h3 className="font-semibold text-lg">Job Seeker</h3>
+            <h3 className="font-semibold text-lg">{t("jobSeeker.title")}</h3>
             <p className="text-sm text-muted-foreground">
-              Find your dream job opportunity
+              {t("jobSeeker.description")}
             </p>
           </div>
         </Button>

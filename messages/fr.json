@@ -1204,5 +1204,66 @@
       "and": "et",
       "privacy": "Politique de confidentialité"
     }
+  },
+  "OnboardingForm": {
+    "logoAlt": "Logo Afrique Avenir Emplois",
+    "titlePart1": "Afrique Avenir",
+    "titlePart2": " Emplois"
+  },
+  "UserTypeSelection": {
+    "welcomeTitle": "Bienvenue ! Commençons",
+    "welcomeSubtitle": "Choisissez comment utiliser notre plateforme",
+    "company": {
+      "title": "Entreprise / Organisation",
+      "description": "Publiez des offres et trouvez des talents"
+    },
+    "jobSeeker": {
+      "title": "Candidat",
+      "description": "Trouvez l'emploi de vos rêves"
+    }
+  },
+  "CompanyForm": {
+    "title": "Créer un profil entreprise",
+    "successMessage": "Profil créé avec succès !",
+    "errorMessage": "Échec de la création du profil",
+    "genericError": "Une erreur s'est produite. Veuillez réessayer.",
+    "uploadSuccess": "Logo téléchargé avec succès !",
+    "uploadError": "Une erreur s'est produite. Veuillez réessayer.",
+    "employees": "employés",
+    "worldwide": "Monde entier",
+    "worldwideOption": "Monde entier / Télétravail",
+    "location": "Localisation",
+    "logoAlt": "Logo de l'entreprise",
+    "removeLogo": "Supprimer le logo",
+    "formLabels": {
+      "companyName": "Nom de l'entreprise",
+      "industry": "Secteur d'activité",
+      "companySize": "Taille de l'entreprise",
+      "about": "À propos",
+      "location": "Localisation",
+      "city": "Ville",
+      "phoneNumber": "Numéro de téléphone",
+      "website": "Site web",
+      "xAccount": "Compte X (Twitter)",
+      "linkedinProfile": "Profil LinkedIn",
+      "languages": "Langues de travail",
+      "logo": "Logo de l'entreprise"
+    },
+    "placeholders": {
+      "companyName": "Entrez le nom de l'entreprise",
+      "selectIndustry": "Sélectionnez un secteur",
+      "selectCompanySize": "Sélectionnez la taille",
+      "about": "Décrivez votre entreprise...",
+      "selectLocation": "Sélectionnez une localisation",
+      "city": "Entrez une ville",
+      "phoneNumber": "+33123456789",
+      "website": "https://votre-entreprise.com",
+      "xAccount": "@votreentreprise",
+      "linkedinProfile": "https://linkedin.com/company/...",
+      "addLanguage": "Ajouter une langue"
+    },
+    "addButton": "Ajouter",
+    "submitting": "Envoi en cours...",
+    "continueButton": "Continuer"
   }
 }

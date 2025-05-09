@@ -1266,5 +1266,66 @@
       "and": "and",
       "privacy": "Privacy Policy"
     }
+  },
+  "OnboardingForm": {
+    "logoAlt": "Afrique Avenir Jobs Logo",
+    "titlePart1": "Afrique Avenir",
+    "titlePart2": " Jobs"
+  },
+  "UserTypeSelection": {
+    "welcomeTitle": "Welcome! Let's get started",
+    "welcomeSubtitle": "Choose how you'd like to use our platform",
+    "company": {
+      "title": "Company / Organization",
+      "description": "Post jobs and find great talent"
+    },
+    "jobSeeker": {
+      "title": "Job Seeker",
+      "description": "Find your dream job opportunity"
+    }
+  },
+  "CompanyForm": {
+    "title": "Create Company Profile",
+    "successMessage": "Profile created successfully!",
+    "errorMessage": "Failed to create profile",
+    "genericError": "Something went wrong. Please try again.",
+    "uploadSuccess": "Logo uploaded successfully!",
+    "uploadError": "Something went wrong. Please try again.",
+    "employees": "employees",
+    "worldwide": "Worldwide",
+    "worldwideOption": "Worldwide / Remote",
+    "location": "Location",
+    "logoAlt": "Company Logo",
+    "removeLogo": "Remove logo",
+    "formLabels": {
+      "companyName": "Company Name",
+      "industry": "Industry",
+      "companySize": "Company Size",
+      "about": "About",
+      "location": "Location",
+      "city": "City",
+      "phoneNumber": "Phone Number",
+      "website": "Website",
+      "xAccount": "X (Twitter) Account",
+      "linkedinProfile": "LinkedIn Profile",
+      "languages": "Working Languages",
+      "logo": "Company Logo"
+    },
+    "placeholders": {
+      "companyName": "Enter company name",
+      "selectIndustry": "Select industry",
+      "selectCompanySize": "Select company size",
+      "about": "Tell us about your company...",
+      "selectLocation": "Select Location",
+      "city": "Enter city",
+      "phoneNumber": "+1234567890",
+      "website": "https://your-company.com",
+      "xAccount": "@yourcompany",
+      "linkedinProfile": "https://linkedin.com/company/...",
+      "addLanguage": "Add a language"
+    },
+    "addButton": "Add",
+    "submitting": "Submitting...",
+    "continueButton": "Continue"
   }
 }
