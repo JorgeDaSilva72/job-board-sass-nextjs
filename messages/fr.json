@@ -1188,5 +1188,10 @@
       "accepted": "Accepté",
       "rejected": "Rejeté"
     }
+  },
+  "LoginPage": {
+    "logoAlt": "Logo Afrique Avenir Emploi",
+    "titlePart1": "Afrique Avenir",
+    "titlePart2": " Emploi"
   }
 }
