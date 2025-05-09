@@ -1255,5 +1255,16 @@
     "logoAlt": "Afrique Avenir Jobs logo",
     "titlePart1": "Afrique Avenir",
     "titlePart2": " Jobs"
+  },
+  "LoginForm": {
+    "welcomeBack": "Welcome back",
+    "loginDescription": "Login with your Google account",
+    "loginWithGoogle": "Login with Google",
+    "termsAndPrivacy": {
+      "text": "By clicking continue, you agree to our",
+      "terms": "Terms of Service",
+      "and": "and",
+      "privacy": "Privacy Policy"
+    }
   }
 }
