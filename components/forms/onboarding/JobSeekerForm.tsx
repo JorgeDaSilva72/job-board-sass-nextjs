@@ -1153,6 +1153,528 @@
 
 // export default JobSeekerForm;
 
+//-------------------------------------------------
+
+// BEGIN
+
+// "use client";
+// import React, { useState } from "react";
+// import { useForm } from "react-hook-form";
+// import { zodResolver } from "@hookform/resolvers/zod";
+// import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+// import { Input } from "@/components/ui/input";
+// import { Button } from "@/components/ui/button";
+// import { Textarea } from "@/components/ui/textarea";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select";
+// import {
+//   Form,
+//   FormControl,
+//   FormField,
+//   FormItem,
+//   FormLabel,
+//   FormMessage,
+// } from "@/components/ui/form";
+// import { jobSeekerSchema } from "@/app/utils/zodSchemas";
+// import { Availability } from "@/app/utils/zodSchemas";
+// import { JobType } from "@/app/utils/zodSchemas";
+// import * as z from "zod";
+// import { UploadDropzone } from "@/components/general/UploadThingReExport";
+// import { toast } from "sonner";
+// import { XIcon } from "lucide-react";
+
+// import PDFImage from "@/public/pdf.png";
+// import Image from "next/image";
+// import { createJobSeeker } from "@/app/actions";
+// import { Checkbox } from "@/components/ui/checkbox";
+// import { useRouter } from "next/navigation";
+// import { CountrySelector } from "@/components/general/CountrySelector";
+
+// const JobSeekerForm = () => {
+//   const [pending, setPending] = useState(false);
+//   const [newSkill, setNewSkill] = useState("");
+//   const [newLanguage, setNewLanguage] = useState("");
+
+//   const router = useRouter();
+
+//   const form = useForm<z.infer<typeof jobSeekerSchema>>({
+//     resolver: zodResolver(jobSeekerSchema),
+//     defaultValues: {
+//       firstName: "",
+//       lastName: "",
+//       email: "",
+//       about: "",
+//       title: "",
+//       experience: 0,
+//       skills: [],
+//       languages: [],
+//       city: "",
+//       countryCode: "",
+//       phoneNumber: "",
+//       linkedinProfile: "",
+//       portfolioUrl: "",
+//       availability: Availability.IMMEDIATE,
+//       preferredJobType: [JobType.FULL_TIME],
+//       expectedSalary: 0,
+//       resume: "",
+//     },
+//   });
+
+//   async function onSubmit(values: z.infer<typeof jobSeekerSchema>) {
+//     try {
+//       setPending(true);
+//       const result = await createJobSeeker(values);
+//       if (result.success) {
+//         toast.success("Profile created successfully!");
+
+//         // Attendre un peu pour laisser le toast s'afficher
+//         setTimeout(() => {
+//           router.push("/find-job");
+//         }, 1000);
+//       } else {
+//         toast.error("Failed to create profile");
+//       }
+//     } catch (error) {
+//       console.log(error);
+//       if (error instanceof Error && error.message !== "NEXT_REDIRECT") {
+//         toast.error("Something went wrong. Please try again.");
+//       }
+//     } finally {
+//       setPending(false);
+//     }
+//   }
+
+//   const addSkill = () => {
+//     if (newSkill && !form.getValues("skills").includes(newSkill)) {
+//       form.setValue("skills", [...form.getValues("skills"), newSkill]);
+//       setNewSkill("");
+//     }
+//   };
+
+//   const addLanguage = () => {
+//     if (newLanguage && !form.getValues("languages").includes(newLanguage)) {
+//       form.setValue("languages", [...form.getValues("languages"), newLanguage]);
+//       setNewLanguage("");
+//     }
+//   };
+
+//   const handleJobTypeChange = (checked: boolean, value: string) => {
+//     const currentValues = form.getValues("preferredJobType");
+//     let newValues;
+
+//     if (checked) {
+//       newValues = [...currentValues, value];
+//     } else {
+//       newValues = currentValues.filter((type) => type !== value);
+//     }
+
+//     form.setValue("preferredJobType", newValues, { shouldValidate: true });
+//   };
+
+//   return (
+//     <Card className="w-full max-w-5xl mx-auto">
+//       <CardHeader>
+//         <CardTitle className="text-xl text-center uppercase">
+//           {" "}
+//           Create Job Seeker Profile
+//         </CardTitle>
+//       </CardHeader>
+//       <CardContent>
+//         <Form {...form}>
+//           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+//             <div className="grid grid-cols-2 gap-4">
+//               <FormField
+//                 control={form.control}
+//                 name="firstName"
+//                 render={({ field }) => (
+//                   <FormItem>
+//                     <FormLabel>First Name</FormLabel>
+//                     <FormControl>
+//                       <Input {...field} />
+//                     </FormControl>
+//                     <FormMessage />
+//                   </FormItem>
+//                 )}
+//               />
+
+//               <FormField
+//                 control={form.control}
+//                 name="lastName"
+//                 render={({ field }) => (
+//                   <FormItem>
+//                     <FormLabel>Last Name</FormLabel>
+//                     <FormControl>
+//                       <Input {...field} />
+//                     </FormControl>
+//                     <FormMessage />
+//                   </FormItem>
+//                 )}
+//               />
+//             </div>
+
+//             <FormField
+//               control={form.control}
+//               name="email"
+//               render={({ field }) => (
+//                 <FormItem>
+//                   <FormLabel>Email</FormLabel>
+//                   <FormControl>
+//                     <Input type="email" {...field} />
+//                   </FormControl>
+//                   <FormMessage />
+//                 </FormItem>
+//               )}
+//             />
+
+//             <FormField
+//               control={form.control}
+//               name="about"
+//               render={({ field }) => (
+//                 <FormItem>
+//                   <FormLabel>About</FormLabel>
+//                   <FormControl>
+//                     <Textarea {...field} />
+//                   </FormControl>
+//                   <FormMessage />
+//                 </FormItem>
+//               )}
+//             />
+
+//             <FormField
+//               control={form.control}
+//               name="title"
+//               render={({ field }) => (
+//                 <FormItem>
+//                   <FormLabel>Job Title</FormLabel>
+//                   <FormControl>
+//                     <Input {...field} />
+//                   </FormControl>
+//                   <FormMessage />
+//                 </FormItem>
+//               )}
+//             />
+
+//             <FormField
+//               control={form.control}
+//               name="experience"
+//               render={({ field }) => (
+//                 <FormItem>
+//                   <FormLabel>Years of Experience</FormLabel>
+//                   <FormControl>
+//                     <Input
+//                       type="number"
+//                       {...field}
+//                       onChange={(e) => field.onChange(Number(e.target.value))}
+//                     />
+//                   </FormControl>
+//                   <FormMessage />
+//                 </FormItem>
+//               )}
+//             />
+
+//             <div className="space-y-2">
+//               <FormLabel>Skills</FormLabel>
+//               <div className="flex gap-2">
+//                 <Input
+//                   value={newSkill}
+//                   onChange={(e) => setNewSkill(e.target.value)}
+//                   placeholder="Add a skill"
+//                 />
+//                 <Button type="button" onClick={addSkill}>
+//                   Add
+//                 </Button>
+//               </div>
+//               <div className="flex flex-wrap gap-2">
+//                 {form.watch("skills").map((skill, index) => (
+//                   <div
+//                     key={index}
+//                     className="bg-gray-100 px-3 py-1 rounded-full  dark:bg-gray-700 dark:text-white" // Ajoutez des styles pour le mode sombre
+//                   >
+//                     {skill}
+//                     <button
+//                       type="button"
+//                       className="ml-2 text-red-500"
+//                       onClick={() => {
+//                         const skills = form.getValues("skills");
+//                         form.setValue(
+//                           "skills",
+//                           skills.filter((_, i) => i !== index)
+//                         );
+//                       }}
+//                     >
+//                       ×
+//                     </button>
+//                   </div>
+//                 ))}
+//               </div>
+//               <FormMessage>{form.formState.errors.skills?.message}</FormMessage>
+//             </div>
+
+//             <div className="space-y-2">
+//               <FormLabel>Languages</FormLabel>
+//               <div className="flex gap-2">
+//                 <Input
+//                   value={newLanguage}
+//                   onChange={(e) => setNewLanguage(e.target.value)}
+//                   placeholder="Add a language"
+//                 />
+//                 <Button type="button" onClick={addLanguage}>
+//                   Add
+//                 </Button>
+//               </div>
+//               <div className="flex flex-wrap gap-2">
+//                 {form.watch("languages").map((language, index) => (
+//                   <div
+//                     key={index}
+//                     className="bg-gray-100 px-3 py-1 rounded-full   dark:bg-gray-700 dark:text-white" // Ajoutez des styles pour le mode sombre
+//                   >
+//                     {language}
+//                     <button
+//                       type="button"
+//                       className="ml-2 text-red-800"
+//                       onClick={() => {
+//                         const languages = form.getValues("languages");
+//                         form.setValue(
+//                           "languages",
+//                           languages.filter((_, i) => i !== index)
+//                         );
+//                       }}
+//                     >
+//                       ×
+//                     </button>
+//                   </div>
+//                 ))}
+//               </div>
+//               <FormMessage>
+//                 {form.formState.errors.languages?.message}
+//               </FormMessage>
+//             </div>
+
+//             <div className="grid grid-cols-2 gap-4">
+//               {/* <FormField
+//                 control={form.control}
+//                 name="countryCode"
+//                 render={({ field }) => (
+//                   <FormItem>
+//                     <FormLabel>Country Code</FormLabel>
+//                     <FormControl>
+//                       <Input maxLength={2} {...field} />
+//                     </FormControl>
+//                     <FormMessage />
+//                   </FormItem>
+//                 )}
+//               /> */}
+
+//               <FormField
+//                 control={form.control}
+//                 name="countryCode"
+//                 render={() => <CountrySelector form={form} />}
+//               />
+
+//               <FormField
+//                 control={form.control}
+//                 name="city"
+//                 render={({ field }) => (
+//                   <FormItem>
+//                     <FormLabel>City</FormLabel>
+//                     <FormControl>
+//                       <Input {...field} />
+//                     </FormControl>
+//                     <FormMessage />
+//                   </FormItem>
+//                 )}
+//               />
+//             </div>
+
+//             <FormField
+//               control={form.control}
+//               name="phoneNumber"
+//               render={({ field }) => (
+//                 <FormItem>
+//                   <FormLabel>Phone Number</FormLabel>
+//                   <FormControl>
+//                     <Input type="tel" {...field} />
+//                   </FormControl>
+//                   <FormMessage />
+//                 </FormItem>
+//               )}
+//             />
+
+//             <FormField
+//               control={form.control}
+//               name="linkedinProfile"
+//               render={({ field }) => (
+//                 <FormItem>
+//                   <FormLabel>LinkedIn Profile</FormLabel>
+//                   <FormControl>
+//                     <Input type="url" {...field} />
+//                   </FormControl>
+//                   <FormMessage />
+//                 </FormItem>
+//               )}
+//             />
+
+//             <FormField
+//               control={form.control}
+//               name="portfolioUrl"
+//               render={({ field }) => (
+//                 <FormItem>
+//                   <FormLabel>Portfolio URL</FormLabel>
+//                   <FormControl>
+//                     <Input type="url" {...field} />
+//                   </FormControl>
+//                   <FormMessage />
+//                 </FormItem>
+//               )}
+//             />
+
+//             <FormField
+//               control={form.control}
+//               name="availability"
+//               render={({ field }) => (
+//                 <FormItem>
+//                   <FormLabel>Availability</FormLabel>
+//                   <Select
+//                     onValueChange={field.onChange}
+//                     defaultValue={field.value}
+//                   >
+//                     <FormControl>
+//                       <SelectTrigger>
+//                         <SelectValue placeholder="Select availability" />
+//                       </SelectTrigger>
+//                     </FormControl>
+//                     <SelectContent>
+//                       {Object.entries(Availability).map(([key, value]) => (
+//                         <SelectItem key={key} value={value}>
+//                           {key.replace("_", " ")}
+//                         </SelectItem>
+//                       ))}
+//                     </SelectContent>
+//                   </Select>
+//                   <FormMessage />
+//                 </FormItem>
+//               )}
+//             />
+
+//             <FormField
+//               control={form.control}
+//               name="preferredJobType"
+//               render={({ field }) => (
+//                 <FormItem>
+//                   <FormLabel>Preferred Job Types</FormLabel>
+//                   <div className="grid grid-cols-2 gap-4">
+//                     {Object.entries(JobType).map(([key, value]) => (
+//                       <div key={value} className="flex items-center space-x-2">
+//                         <Checkbox
+//                           id={value}
+//                           checked={field.value?.includes(value)}
+//                           onCheckedChange={(checked: boolean) => {
+//                             handleJobTypeChange(checked, value);
+//                           }}
+//                         />
+//                         <label
+//                           htmlFor={value}
+//                           className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+//                         >
+//                           {key.replace(/_/g, " ")}
+//                         </label>
+//                       </div>
+//                     ))}
+//                   </div>
+//                   <FormMessage />
+//                 </FormItem>
+//               )}
+//             />
+
+//             <FormField
+//               control={form.control}
+//               name="expectedSalary"
+//               render={({ field }) => (
+//                 <FormItem>
+//                   <FormLabel>Expected Salary</FormLabel>
+//                   <FormControl>
+//                     <Input
+//                       type="number"
+//                       {...field}
+//                       onChange={(e) => field.onChange(Number(e.target.value))}
+//                     />
+//                   </FormControl>
+//                   <FormMessage />
+//                 </FormItem>
+//               )}
+//             />
+
+//             <FormField
+//               control={form.control}
+//               name="resume"
+//               render={({ field }) => (
+//                 <FormItem>
+//                   <FormLabel>Resume (PDF)</FormLabel>
+//                   <FormControl>
+//                     <div>
+//                       {field.value ? (
+//                         <div className="relative w-fit">
+//                           <Image
+//                             src={PDFImage}
+//                             alt="Company Logo"
+//                             width={100}
+//                             height={100}
+//                             className="rounded-lg"
+//                           />
+//                           <Button
+//                             type="button"
+//                             variant="destructive"
+//                             size="icon"
+//                             className="absolute -top-2 -right-2 "
+//                             onClick={() => field.onChange("")}
+//                           >
+//                             <XIcon className="h-4 w-4" />
+//                           </Button>
+//                         </div>
+//                       ) : (
+//                         <UploadDropzone
+//                           endpoint="resumeUploader"
+//                           onClientUploadComplete={(res) => {
+//                             field.onChange(res[0].url);
+//                             toast.success("Resume uploaded successfully!");
+//                           }}
+//                           onUploadError={() => {
+//                             toast.error(
+//                               "Something went wrong. Please try again."
+//                             );
+//                           }}
+//                           className="ut-button:bg-primary ut-button:text-white ut-button:hover:bg-primary/90 ut-label:text-muted-foreground ut-allowed-content:text-muted-foreground border-primary"
+//                         />
+//                       )}
+//                     </div>
+//                   </FormControl>
+//                   <FormMessage />
+//                 </FormItem>
+//               )}
+//             />
+
+//             <Button type="submit" className="w-full" disabled={pending}>
+//               {pending ? "Submitting..." : "Continue"}
+//             </Button>
+//           </form>
+//         </Form>
+//       </CardContent>
+//     </Card>
+//   );
+// };
+
+// export default JobSeekerForm;
+
+// END ---------------------------------------
+
+// BRGIN
+// 10/05/2025 compatible next-intl
+
 "use client";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -1190,8 +1712,12 @@ import { createJobSeeker } from "@/app/actions";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
 import { CountrySelector } from "@/components/general/CountrySelector";
+import { useTranslations } from "next-intl";
 
 const JobSeekerForm = () => {
+  const t = useTranslations("JobSeekerForm");
+  const tCountries = useTranslations("countries");
+
   const [pending, setPending] = useState(false);
   const [newSkill, setNewSkill] = useState("");
   const [newLanguage, setNewLanguage] = useState("");
@@ -1226,19 +1752,18 @@ const JobSeekerForm = () => {
       setPending(true);
       const result = await createJobSeeker(values);
       if (result.success) {
-        toast.success("Profile created successfully!");
+        toast.success(t("successMessage"));
 
-        // Attendre un peu pour laisser le toast s'afficher
         setTimeout(() => {
           router.push("/find-job");
         }, 1000);
       } else {
-        toast.error("Failed to create profile");
+        toast.error(t("errorMessage"));
       }
     } catch (error) {
       console.log(error);
       if (error instanceof Error && error.message !== "NEXT_REDIRECT") {
-        toast.error("Something went wrong. Please try again.");
+        toast.error(t("genericError"));
       }
     } finally {
       setPending(false);
@@ -1276,8 +1801,7 @@ const JobSeekerForm = () => {
     <Card className="w-full max-w-5xl mx-auto">
       <CardHeader>
         <CardTitle className="text-xl text-center uppercase">
-          {" "}
-          Create Job Seeker Profile
+          {t("title")}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -1289,7 +1813,7 @@ const JobSeekerForm = () => {
                 name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>First Name</FormLabel>
+                    <FormLabel>{t("firstName")}</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -1303,7 +1827,7 @@ const JobSeekerForm = () => {
                 name="lastName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Last Name</FormLabel>
+                    <FormLabel>{t("lastName")}</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -1318,7 +1842,7 @@ const JobSeekerForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t("email")}</FormLabel>
                   <FormControl>
                     <Input type="email" {...field} />
                   </FormControl>
@@ -1332,7 +1856,7 @@ const JobSeekerForm = () => {
               name="about"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>About</FormLabel>
+                  <FormLabel>{t("about")}</FormLabel>
                   <FormControl>
                     <Textarea {...field} />
                   </FormControl>
@@ -1346,7 +1870,7 @@ const JobSeekerForm = () => {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Job Title</FormLabel>
+                  <FormLabel>{t("jobTitle")}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -1360,7 +1884,7 @@ const JobSeekerForm = () => {
               name="experience"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Years of Experience</FormLabel>
+                  <FormLabel>{t("experience")}</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
@@ -1374,22 +1898,22 @@ const JobSeekerForm = () => {
             />
 
             <div className="space-y-2">
-              <FormLabel>Skills</FormLabel>
+              <FormLabel>{t("skills")}</FormLabel>
               <div className="flex gap-2">
                 <Input
                   value={newSkill}
                   onChange={(e) => setNewSkill(e.target.value)}
-                  placeholder="Add a skill"
+                  placeholder={t("addSkillPlaceholder")}
                 />
                 <Button type="button" onClick={addSkill}>
-                  Add
+                  {t("addButton")}
                 </Button>
               </div>
               <div className="flex flex-wrap gap-2">
                 {form.watch("skills").map((skill, index) => (
                   <div
                     key={index}
-                    className="bg-gray-100 px-3 py-1 rounded-full  dark:bg-gray-700 dark:text-white" // Ajoutez des styles pour le mode sombre
+                    className="bg-gray-100 px-3 py-1 rounded-full dark:bg-gray-700 dark:text-white"
                   >
                     {skill}
                     <button
@@ -1412,22 +1936,22 @@ const JobSeekerForm = () => {
             </div>
 
             <div className="space-y-2">
-              <FormLabel>Languages</FormLabel>
+              <FormLabel>{t("languages")}</FormLabel>
               <div className="flex gap-2">
                 <Input
                   value={newLanguage}
                   onChange={(e) => setNewLanguage(e.target.value)}
-                  placeholder="Add a language"
+                  placeholder={t("addLanguagePlaceholder")}
                 />
                 <Button type="button" onClick={addLanguage}>
-                  Add
+                  {t("addButton")}
                 </Button>
               </div>
               <div className="flex flex-wrap gap-2">
                 {form.watch("languages").map((language, index) => (
                   <div
                     key={index}
-                    className="bg-gray-100 px-3 py-1 rounded-full   dark:bg-gray-700 dark:text-white" // Ajoutez des styles pour le mode sombre
+                    className="bg-gray-100 px-3 py-1 rounded-full dark:bg-gray-700 dark:text-white"
                   >
                     {language}
                     <button
@@ -1452,20 +1976,6 @@ const JobSeekerForm = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              {/* <FormField
-                control={form.control}
-                name="countryCode"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Country Code</FormLabel>
-                    <FormControl>
-                      <Input maxLength={2} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
-
               <FormField
                 control={form.control}
                 name="countryCode"
@@ -1477,7 +1987,7 @@ const JobSeekerForm = () => {
                 name="city"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>City</FormLabel>
+                    <FormLabel>{t("city")}</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -1492,7 +2002,7 @@ const JobSeekerForm = () => {
               name="phoneNumber"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Phone Number</FormLabel>
+                  <FormLabel>{t("phoneNumber")}</FormLabel>
                   <FormControl>
                     <Input type="tel" {...field} />
                   </FormControl>
@@ -1506,7 +2016,7 @@ const JobSeekerForm = () => {
               name="linkedinProfile"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>LinkedIn Profile</FormLabel>
+                  <FormLabel>{t("linkedinProfile")}</FormLabel>
                   <FormControl>
                     <Input type="url" {...field} />
                   </FormControl>
@@ -1520,7 +2030,7 @@ const JobSeekerForm = () => {
               name="portfolioUrl"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Portfolio URL</FormLabel>
+                  <FormLabel>{t("portfolioUrl")}</FormLabel>
                   <FormControl>
                     <Input type="url" {...field} />
                   </FormControl>
@@ -1534,20 +2044,20 @@ const JobSeekerForm = () => {
               name="availability"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Availability</FormLabel>
+                  <FormLabel>{t("availability")}</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select availability" />
+                        <SelectValue placeholder={t("selectAvailability")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       {Object.entries(Availability).map(([key, value]) => (
                         <SelectItem key={key} value={value}>
-                          {key.replace("_", " ")}
+                          {t(`availabilityOptions.${key}`)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -1562,7 +2072,7 @@ const JobSeekerForm = () => {
               name="preferredJobType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Preferred Job Types</FormLabel>
+                  <FormLabel>{t("preferredJobTypes")}</FormLabel>
                   <div className="grid grid-cols-2 gap-4">
                     {Object.entries(JobType).map(([key, value]) => (
                       <div key={value} className="flex items-center space-x-2">
@@ -1577,7 +2087,7 @@ const JobSeekerForm = () => {
                           htmlFor={value}
                           className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                         >
-                          {key.replace(/_/g, " ")}
+                          {t(`jobTypeOptions.${key}`)}
                         </label>
                       </div>
                     ))}
@@ -1592,7 +2102,7 @@ const JobSeekerForm = () => {
               name="expectedSalary"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Expected Salary</FormLabel>
+                  <FormLabel>{t("expectedSalary")}</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
@@ -1610,7 +2120,7 @@ const JobSeekerForm = () => {
               name="resume"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Resume (PDF)</FormLabel>
+                  <FormLabel>{t("resume")}</FormLabel>
                   <FormControl>
                     <div>
                       {field.value ? (
@@ -1637,12 +2147,10 @@ const JobSeekerForm = () => {
                           endpoint="resumeUploader"
                           onClientUploadComplete={(res) => {
                             field.onChange(res[0].url);
-                            toast.success("Resume uploaded successfully!");
+                            toast.success(t("resumeUploadSuccess"));
                           }}
                           onUploadError={() => {
-                            toast.error(
-                              "Something went wrong. Please try again."
-                            );
+                            toast.error(t("uploadError"));
                           }}
                           className="ut-button:bg-primary ut-button:text-white ut-button:hover:bg-primary/90 ut-label:text-muted-foreground ut-allowed-content:text-muted-foreground border-primary"
                         />
@@ -1655,7 +2163,7 @@ const JobSeekerForm = () => {
             />
 
             <Button type="submit" className="w-full" disabled={pending}>
-              {pending ? "Submitting..." : "Continue"}
+              {pending ? t("submitting") : t("submitButton")}
             </Button>
           </form>
         </Form>

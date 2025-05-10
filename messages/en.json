@@ -1327,5 +1327,50 @@
     "addButton": "Add",
     "submitting": "Submitting...",
     "continueButton": "Continue"
+  },
+  "JobSeekerForm": {
+    "title": "Create Job Seeker Profile",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "about": "About",
+    "jobTitle": "Job Title",
+    "experience": "Years of Experience",
+    "skills": "Skills",
+    "addSkillPlaceholder": "Add a skill",
+    "languages": "Languages",
+    "addLanguagePlaceholder": "Add a language",
+    "city": "City",
+    "phoneNumber": "Phone Number",
+    "linkedinProfile": "LinkedIn Profile",
+    "portfolioUrl": "Portfolio URL",
+    "availability": "Availability",
+    "selectAvailability": "Select availability",
+    "availabilityOptions": {
+      "IMMEDIATE": "Immediate",
+      "ONE_WEEK": "1 Week",
+      "TWO_WEEKS": "2 Weeks",
+      "ONE_MONTH": "1 Month",
+      "MORE_THAN_ONE_MONTH": "More than 1 month"
+    },
+    "preferredJobTypes": "Preferred Job Types",
+    "jobTypeOptions": {
+      "FULL_TIME": "Full Time",
+      "PART_TIME": "Part Time",
+      "CONTRACT": "Contract",
+      "TEMPORARY": "Temporary",
+      "INTERNSHIP": "Internship",
+      "FREELANCE": "Freelance"
+    },
+    "expectedSalary": "Expected Salary",
+    "resume": "Resume (PDF)",
+    "addButton": "Add",
+    "submitButton": "Continue",
+    "submitting": "Submitting...",
+    "successMessage": "Profile created successfully!",
+    "errorMessage": "Failed to create profile",
+    "genericError": "Something went wrong. Please try again.",
+    "resumeUploadSuccess": "Resume uploaded successfully!",
+    "uploadError": "Something went wrong. Please try again."
   }
 }

@@ -1265,5 +1265,50 @@
     "addButton": "Ajouter",
     "submitting": "Envoi en cours...",
     "continueButton": "Continuer"
+  },
+  "JobSeekerForm": {
+    "title": "Créer un profil candidat",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "email": "Email",
+    "about": "À propos",
+    "jobTitle": "Poste recherché",
+    "experience": "Années d'expérience",
+    "skills": "Compétences",
+    "addSkillPlaceholder": "Ajouter une compétence",
+    "languages": "Langues",
+    "addLanguagePlaceholder": "Ajouter une langue",
+    "city": "Ville",
+    "phoneNumber": "Numéro de téléphone",
+    "linkedinProfile": "Profil LinkedIn",
+    "portfolioUrl": "URL du portfolio",
+    "availability": "Disponibilité",
+    "selectAvailability": "Sélectionnez une disponibilité",
+    "availabilityOptions": {
+      "IMMEDIATE": "Immédiate",
+      "ONE_WEEK": "1 Semaine",
+      "TWO_WEEKS": "2 Semaines",
+      "ONE_MONTH": "1 Mois",
+      "MORE_THAN_ONE_MONTH": "Plus d'1 mois"
+    },
+    "preferredJobTypes": "Types de poste préférés",
+    "jobTypeOptions": {
+      "FULL_TIME": "Temps plein",
+      "PART_TIME": "Temps partiel",
+      "CONTRACT": "Contrat",
+      "TEMPORARY": "Intérim",
+      "INTERNSHIP": "Stage",
+      "FREELANCE": "Freelance"
+    },
+    "expectedSalary": "Salaire attendu",
+    "resume": "CV (PDF)",
+    "addButton": "Ajouter",
+    "submitButton": "Continuer",
+    "submitting": "Envoi en cours...",
+    "successMessage": "Profil créé avec succès !",
+    "errorMessage": "Échec de la création du profil",
+    "genericError": "Une erreur est survenue. Veuillez réessayer.",
+    "resumeUploadSuccess": "CV téléchargé avec succès !",
+    "uploadError": "Une erreur est survenue. Veuillez réessayer."
   }
 }
