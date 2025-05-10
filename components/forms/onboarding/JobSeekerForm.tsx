@@ -1716,7 +1716,6 @@ import { useTranslations } from "next-intl";
 
 const JobSeekerForm = () => {
   const t = useTranslations("JobSeekerForm");
-  const tCountries = useTranslations("countries");
 
   const [pending, setPending] = useState(false);
   const [newSkill, setNewSkill] = useState("");
