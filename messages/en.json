@@ -1471,5 +1471,61 @@
     "errors": {
       "loadFailed": "Failed to load profile data"
     }
+  },
+  "ViewJobSeekerForm": {
+    "title": "Job Seeker Profile",
+    "loading": "Loading profile...",
+    "noProfile": "No profile found.",
+    "form": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "about": "About",
+      "jobTitle": "Job Title",
+      "experience": "Years of Experience",
+      "skills": "Skills",
+      "noSkills": "No skills entered.",
+      "languages": "Languages",
+      "noLanguages": "No language specified.",
+      "countryCode": "Country Code",
+      "city": "City",
+      "phoneNumber": "Phone Number",
+      "linkedin": "LinkedIn Profile",
+      "portfolio": "Portfolio URL",
+      "notSpecified": "Not specified.",
+      "availability": "Availability",
+      "preferredJobTypes": "Preferred Job Types",
+      "noJobTypes": "No type specified.",
+      "expectedSalary": "Expected Salary in $",
+      "resume": "Resume",
+      "viewResume": "View Resume"
+    },
+    "buttons": {
+      "delete": "Delete",
+      "edit": "Edit"
+    },
+    "availabilityOptions": {
+      "IMMEDIATE": "Immediately",
+      "ONE_WEEK": "Within 1 week",
+      "TWO_WEEKS": "Within 2 weeks",
+      "ONE_MONTH": "Within 1 month",
+      "MORE_THAN_ONE_MONTH": "More than 1 month"
+    },
+    "jobTypes": {
+      "full_time": "Full-time",
+      "part_time": "Part-time",
+      "contract": "Contract",
+      "temporary": "Temporary",
+      "internship": "Internship",
+      "freelance": "Freelance"
+    },
+    "jobTypeOptions": {
+      "FULL_TIME": "Full Time",
+      "PART_TIME": "Part Time",
+      "CONTRACT": "Contract",
+      "TEMPORARY": "Temporary",
+      "INTERNSHIP": "Internship",
+      "FREELANCE": "Freelance"
+    }
   }
 }

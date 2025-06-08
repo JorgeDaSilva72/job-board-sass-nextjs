@@ -56,7 +56,7 @@
 
 // export default JobSeekerProfilePage;
 
-// 08/06/2025 inyegration de next-intl
+// 08/06/2025 integration de next-intl
 // BEGIN
 
 "use client";

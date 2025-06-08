@@ -1409,5 +1409,53 @@
     "errors": {
       "loadFailed": "Échec du chargement des données du profil"
     }
+  },
+  "ViewJobSeekerForm": {
+    "title": "Profil du candidat",
+    "loading": "Chargement du profil...",
+    "noProfile": "Aucun profil trouvé.",
+    "form": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Email",
+      "about": "À propos",
+      "jobTitle": "Titre du poste",
+      "experience": "Années d'expérience",
+      "skills": "Compétences",
+      "noSkills": "Aucune compétence renseignée.",
+      "languages": "Langues",
+      "noLanguages": "Aucune langue spécifiée.",
+      "countryCode": "Code pays",
+      "city": "Ville",
+      "phoneNumber": "Téléphone",
+      "linkedin": "Profil LinkedIn",
+      "portfolio": "URL du portfolio",
+      "notSpecified": "Non spécifié.",
+      "availability": "Disponibilité",
+      "preferredJobTypes": "Types de poste préférés",
+      "noJobTypes": "Aucun type spécifié.",
+      "expectedSalary": "Salaire attendu en $",
+      "resume": "CV",
+      "viewResume": "Voir le CV"
+    },
+    "buttons": {
+      "delete": "Supprimer",
+      "edit": "Modifier"
+    },
+    "availabilityOptions": {
+      "IMMEDIATE": "Immédiatement",
+      "ONE_WEEK": "Sous 1 semaine",
+      "TWO_WEEKS": "Sous 2 semaines",
+      "ONE_MONTH": "Sous 1 mois",
+      "MORE_THAN_ONE_MONTH": "Plus d'1 mois"
+    },
+    "jobTypeOptions": {
+      "FULL_TIME": "Temps plein",
+      "PART_TIME": "Temps partiel",
+      "CONTRACT": "Contrat",
+      "TEMPORARY": "Intérim",
+      "INTERNSHIP": "Stage",
+      "FREELANCE": "Freelance"
+    }
   }
 }
