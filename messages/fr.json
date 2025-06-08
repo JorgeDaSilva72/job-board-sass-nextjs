@@ -1457,5 +1457,65 @@
       "INTERNSHIP": "Stage",
       "FREELANCE": "Freelance"
     }
+  },
+  "EditJobSeekerForm": {
+    "title": "Modifier le profil du candidat",
+    "loading": "Chargement des données du profil...",
+    "success": {
+      "update": "Profil mis à jour avec succès !",
+      "upload": "CV téléchargé avec succès !"
+    },
+    "errors": {
+      "loadFailed": "Échec du chargement des données du profil",
+      "updateFailed": "Échec de la mise à jour du profil",
+      "uploadFailed": "Un problème est survenu. Veuillez réessayer.",
+      "generic": "Un problème est survenu. Veuillez réessayer."
+    },
+    "form": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Email",
+      "about": "À propos",
+      "jobTitle": "Titre du poste",
+      "experience": "Années d'expérience",
+      "skills": "Compétences",
+      "addSkill": "Ajouter une compétence",
+      "noSkills": "Aucune compétence renseignée",
+      "languages": "Langues",
+      "addLanguage": "Ajouter une langue",
+      "noLanguages": "Aucune langue spécifiée",
+      "countryCode": "Code pays",
+      "city": "Ville",
+      "phoneNumber": "Téléphone",
+      "linkedin": "Profil LinkedIn",
+      "portfolio": "URL du portfolio",
+      "availability": "Disponibilité",
+      "selectAvailability": "Sélectionner la disponibilité",
+      "preferredJobTypes": "Types de poste préférés",
+      "expectedSalary": "Salaire attendu",
+      "resume": "CV (PDF)",
+      "resumeAlt": "CV PDF"
+    },
+    "buttons": {
+      "add": "Ajouter",
+      "cancel": "Annuler",
+      "save": "Enregistrer les modifications",
+      "saving": "Enregistrement..."
+    },
+    "availability": {
+      "immediate": "Immédiatement",
+      "one_week": "Sous 1 semaine",
+      "two_weeks": "Sous 2 semaines",
+      "one_month": "Sous 1 mois",
+      "more_than_one_month": "Plus d'un mois"
+    },
+    "jobTypes": {
+      "full_time": "Temps plein",
+      "part_time": "Temps partiel",
+      "contract": "Contrat",
+      "temporary": "Intérim",
+      "internship": "Stage",
+      "freelance": "Freelance"
+    }
   }
 }

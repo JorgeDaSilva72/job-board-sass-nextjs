@@ -34,7 +34,7 @@ export const Availability = {
   ONE_WEEK: "ONE_WEEK",
   TWO_WEEKS: "TWO_WEEKS",
   ONE_MONTH: "ONE_MONTH",
-  MORE_THAN_MONTH: "MORE_THAN_MONTH",
+  MORE_THAN_ONE_MONTH: "MORE_THAN_ONE_MONTH",
 } as const;
 
 export const JobType = {
@@ -42,7 +42,7 @@ export const JobType = {
   PART_TIME: "PART_TIME",
   CONTRACT: "CONTRACT",
   INTERNSHIP: "INTERNSHIP",
-  REMOTE: "REMOTE",
+  FREELANCE: "FREELANCE",
 } as const;
 
 export const jobSeekerSchema = z.object({

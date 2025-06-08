@@ -1527,5 +1527,65 @@
       "INTERNSHIP": "Internship",
       "FREELANCE": "Freelance"
     }
+  },
+  "EditJobSeekerForm": {
+    "title": "Edit Job Seeker Profile",
+    "loading": "Loading profile data...",
+    "success": {
+      "update": "Profile updated successfully!",
+      "upload": "Resume uploaded successfully!"
+    },
+    "errors": {
+      "loadFailed": "Failed to load profile data",
+      "updateFailed": "Failed to update profile",
+      "uploadFailed": "Something went wrong. Please try again.",
+      "generic": "Something went wrong. Please try again."
+    },
+    "form": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "about": "About",
+      "jobTitle": "Job Title",
+      "experience": "Years of Experience",
+      "skills": "Skills",
+      "addSkill": "Add a skill",
+      "noSkills": "No skills entered",
+      "languages": "Languages",
+      "addLanguage": "Add a language",
+      "noLanguages": "No languages specified",
+      "countryCode": "Country Code",
+      "city": "City",
+      "phoneNumber": "Phone Number",
+      "linkedin": "LinkedIn Profile",
+      "portfolio": "Portfolio URL",
+      "availability": "Availability",
+      "selectAvailability": "Select availability",
+      "preferredJobTypes": "Preferred Job Types",
+      "expectedSalary": "Expected Salary",
+      "resume": "Resume (PDF)",
+      "resumeAlt": "Resume PDF"
+    },
+    "buttons": {
+      "add": "Add",
+      "cancel": "Cancel",
+      "save": "Save Changes",
+      "saving": "Saving..."
+    },
+    "availability": {
+      "immediate": "Immediately",
+      "one_week": "Within 1 week",
+      "two_weeks": "Within 2 weeks",
+      "one_month": "Within 1 month",
+      "more_than_one_month": "More than 1 month"
+    },
+    "jobTypes": {
+      "full_time": "Full-time",
+      "part_time": "Part-time",
+      "contract": "Contract",
+      "temporary": "Temporary",
+      "internship": "Internship",
+      "freelance": "Freelance"
+    }
   }
 }
