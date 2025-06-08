@@ -116,3 +116,99 @@ export const jobSchema = z.object({
   // deadline: z.date().optional(),
   // companyId: z.string().uuid(),
 });
+
+// END ---------------------------------------
+
+// BEGIN
+// 10/05/2025 compatible next-intl
+
+// import { z } from "zod";
+
+// export const Availability = {
+//   IMMEDIATE: "IMMEDIATE",
+//   ONE_WEEK: "ONE_WEEK",
+//   TWO_WEEKS: "TWO_WEEKS",
+//   ONE_MONTH: "ONE_MONTH",
+//   MORE_THAN_MONTH: "MORE_THAN_MONTH",
+// } as const;
+
+// export const JobType = {
+//   FULL_TIME: "FULL_TIME",
+//   PART_TIME: "PART_TIME",
+//   CONTRACT: "CONTRACT",
+//   INTERNSHIP: "INTERNSHIP",
+//   REMOTE: "REMOTE",
+// } as const;
+
+// export const createSchemas = (t: (key: string) => string) => ({
+//   companySchema: z.object({
+//     name: z.string().min(2, t("company.nameError")),
+//     location: z.string().min(2, t("company.locationError")),
+//     about: z.string().min(10, t("company.aboutError")),
+//     logo: z.string().min(1, t("company.logoError")),
+//     languages: z.array(z.string()).min(1, t("company.languagesError")),
+//     website: z.string().optional(),
+//     xAccount: z.string().optional(),
+//     industry: z.string().optional(),
+//     companySize: z.string().optional(),
+//     countryCode: z.string().optional(),
+//     city: z.string().optional(),
+//     phoneNumber: z.string().optional(),
+//     linkedinProfile: z.string().optional(),
+//   }),
+
+//   jobSeekerSchema: z.object({
+//     firstName: z.string().min(2, t("jobSeeker.firstNameError")),
+//     lastName: z.string().min(2, t("jobSeeker.lastNameError")),
+//     email: z.string().email(t("jobSeeker.emailError")),
+//     about: z.string().min(10, t("jobSeeker.aboutError")),
+//     resume: z.string().min(1, t("jobSeeker.resumeError")),
+//     title: z.string().min(2, t("jobSeeker.titleError")),
+//     experience: z.number().min(0, t("jobSeeker.experienceError")),
+//     skills: z.array(z.string()).min(1, t("jobSeeker.skillsError")),
+//     languages: z.array(z.string()).min(1, t("jobSeeker.languagesError")),
+//     availability: z.enum(Object.values(Availability) as [string, ...string[]]),
+//     preferredJobType: z
+//       .array(z.enum(Object.values(JobType) as [string, ...string[]]))
+//       .min(1, t("jobSeeker.preferredJobTypeError")),
+//     education: z
+//       .array(
+//         z.object({
+//           degree: z.string(),
+//           school: z.string(),
+//           endDate: z.date(),
+//           startDate: z.date(),
+//         })
+//       )
+//       .nullable()
+//       .optional(),
+//     countryCode: z.string().optional(),
+//     city: z.string().optional(),
+//     phoneNumber: z.string().optional(),
+//     linkedinProfile: z.string().optional(),
+//     portfolioUrl: z.string().optional(),
+//     expectedSalary: z.number().optional(),
+//   }),
+
+//   jobSchema: z.object({
+//     jobTitle: z.string().min(2, t("job.jobTitleError")),
+//     employmentType: z.string().min(1, t("job.employmentTypeError")),
+//     location: z.string().min(1, t("job.locationError")),
+//     salaryFrom: z.number().min(1, t("job.salaryFromError")),
+//     salaryTo: z.number().min(1, t("job.salaryToError")),
+//     jobDescription: z.string().min(1, t("job.jobDescriptionError")),
+//     benefits: z.array(z.string()).min(1, t("job.benefitsError")),
+//     companyName: z.string().min(1, t("job.companyNameError")),
+//     companyLocation: z.string().min(1, t("job.companyLocationError")),
+//     companyLogo: z.string().min(1, t("job.companyLogoError")),
+//     companyWebsite: z.string().optional(),
+//     companyXAccount: z.string().optional(),
+//     companyDescription: z.string().min(1, t("job.companyDescriptionError")),
+//     listingDuration: z.number().min(1, t("job.listingDurationError")),
+//   }),
+// });
+
+// export type SchemaType = ReturnType<typeof createSchemas>;
+
+// ---------------------------------------------------------
+// END

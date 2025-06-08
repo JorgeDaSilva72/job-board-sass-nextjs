@@ -1310,5 +1310,84 @@
     "genericError": "Une erreur est survenue. Veuillez réessayer.",
     "resumeUploadSuccess": "CV téléchargé avec succès !",
     "uploadError": "Une erreur est survenue. Veuillez réessayer."
+  },
+  "schemas": {
+    "company": {
+      "nameError": "Le nom de l'entreprise doit contenir au moins 2 caractères",
+      "locationError": "La localisation doit contenir au moins 2 caractères",
+      "aboutError": "Veuillez fournir plus d'informations sur votre entreprise",
+      "logoError": "Veuillez télécharger un logo",
+      "languagesError": "Au moins une langue est requise"
+    },
+    "jobSeeker": {
+      "firstNameError": "Le prénom doit contenir au moins 2 caractères",
+      "lastNameError": "Le nom doit contenir au moins 2 caractères",
+      "emailError": "Veuillez entrer une adresse email valide",
+      "aboutError": "La bio doit contenir au moins 10 caractères",
+      "resumeError": "Un CV est requis",
+      "titleError": "Le titre du poste doit contenir au moins 2 caractères",
+      "experienceError": "L'expérience ne peut pas être négative",
+      "skillsError": "Au moins une compétence est requise",
+      "languagesError": "Au moins une langue est requise",
+      "preferredJobTypeError": "Au moins un type de poste est requis"
+    },
+    "job": {
+      "jobTitleError": "Le titre du poste doit contenir au moins 2 caractères",
+      "employmentTypeError": "Veuillez sélectionner un type d'emploi",
+      "locationError": "Veuillez sélectionner une localisation",
+      "salaryFromError": "Le salaire minimum est requis",
+      "salaryToError": "Le salaire maximum est requis",
+      "jobDescriptionError": "Une description du poste est requise",
+      "benefitsError": "Veuillez sélectionner au moins un avantage",
+      "companyNameError": "Le nom de l'entreprise est requis",
+      "companyLocationError": "La localisation de l'entreprise est requise",
+      "companyLogoError": "Le logo de l'entreprise est requis",
+      "companyDescriptionError": "Une description de l'entreprise est requise",
+      "listingDurationError": "La durée de publication est requise"
+    }
+  },
+  "LoadingMyApplications": {
+    "title": "Mes Candidatures",
+    "description": "Gérez vos candidatures ici.",
+    "tableHeaders": {
+      "logo": "Logo",
+      "company": "Entreprise",
+      "jobTitle": "Poste",
+      "status": "Statut",
+      "appliedOn": "Postulé le",
+      "actions": "Actions"
+    }
+  },
+  "ApplicationsPage": {
+    "title": "Mes Candidatures",
+    "description": "Gérez vos candidatures ici.",
+    "emptyState": {
+      "title": "Aucune candidature trouvée",
+      "description": "Vous n'avez postulé à aucun emploi pour le moment.",
+      "buttonText": "Trouver un emploi"
+    },
+    "tableHeaders": {
+      "logo": "Logo",
+      "company": "Entreprise",
+      "jobTitle": "Poste",
+      "status": "Statut",
+      "appliedOn": "Postulé le",
+      "actions": "Actions"
+    },
+    "dropdownMenu": {
+      "actionsLabel": "Actions",
+      "viewJob": "Voir l'offre",
+      "editApplication": "Modifier la candidature",
+      "deleteApplication": "Supprimer la candidature"
+    },
+    "imageAlt": {
+      "logo": "logo"
+    },
+    "status": {
+      "pending": "En attente",
+      "reviewed": "Examiné",
+      "accepted": "Accepté",
+      "rejected": "Rejeté"
+    }
   }
 }

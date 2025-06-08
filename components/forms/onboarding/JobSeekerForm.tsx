@@ -1672,7 +1672,7 @@
 
 // END ---------------------------------------
 
-// BRGIN
+// BEGIN
 // 10/05/2025 compatible next-intl
 
 "use client";
@@ -1698,8 +1698,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { jobSeekerSchema } from "@/app/utils/zodSchemas";
-import { Availability } from "@/app/utils/zodSchemas";
+// import { createSchemas } from "@/app/utils/zodSchemas";
+import { Availability, jobSeekerSchema } from "@/app/utils/zodSchemas";
 import { JobType } from "@/app/utils/zodSchemas";
 import * as z from "zod";
 import { UploadDropzone } from "@/components/general/UploadThingReExport";
@@ -1716,7 +1716,8 @@ import { useTranslations } from "next-intl";
 
 const JobSeekerForm = () => {
   const t = useTranslations("JobSeekerForm");
-
+  // const tSchemas = useTranslations("schemas");
+  // const { jobSeekerSchema } = createSchemas(tSchemas);
   const [pending, setPending] = useState(false);
   const [newSkill, setNewSkill] = useState("");
   const [newLanguage, setNewLanguage] = useState("");

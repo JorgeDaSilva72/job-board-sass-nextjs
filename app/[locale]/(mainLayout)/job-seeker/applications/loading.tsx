@@ -1,3 +1,74 @@
+// import { Skeleton } from "@/components/ui/skeleton";
+// import {
+//   Card,
+//   CardContent,
+//   CardDescription,
+//   CardHeader,
+//   CardTitle,
+// } from "@/components/ui/card";
+// import {
+//   Table,
+//   TableBody,
+//   TableCell,
+//   TableHead,
+//   TableHeader,
+//   TableRow,
+// } from "@/components/ui/table";
+
+// const LoadingMyApplications = () => {
+//   return (
+//     <Card>
+//       <CardHeader>
+//         <CardTitle>My Applications</CardTitle>
+//         <CardDescription>Manage your job applications here.</CardDescription>
+//       </CardHeader>
+//       <CardContent>
+//         <Table>
+//           <TableHeader>
+//             <TableRow>
+//               <TableHead>Logo</TableHead>
+//               <TableHead>Company</TableHead>
+//               <TableHead>Job Title</TableHead>
+//               <TableHead>Status</TableHead>
+//               <TableHead>Applied On</TableHead>
+//               <TableHead className="text-right">Actions</TableHead>
+//             </TableRow>
+//           </TableHeader>
+//           <TableBody>
+//             {[...Array(10)].map((_, index) => (
+//               <TableRow key={index}>
+//                 <TableCell>
+//                   <Skeleton className="size-10 rounded-lg" />
+//                 </TableCell>
+//                 <TableCell>
+//                   <Skeleton className="h-4 w-[140px]" />
+//                 </TableCell>
+//                 <TableCell>
+//                   <Skeleton className="h-4 w-[180px]" />
+//                 </TableCell>
+//                 <TableCell>
+//                   <Skeleton className="h-4 w-[100px]" />
+//                 </TableCell>
+//                 <TableCell>
+//                   <Skeleton className="h-4 w-[120px]" />
+//                 </TableCell>
+//                 <TableCell className="text-right">
+//                   <Skeleton className="h-8 w-8 rounded-md ml-auto" />
+//                 </TableCell>
+//               </TableRow>
+//             ))}
+//           </TableBody>
+//         </Table>
+//       </CardContent>
+//     </Card>
+//   );
+// };
+
+// export default LoadingMyApplications;
+
+// 08/06/2025 inyegration de next-intl
+// BEGIN
+
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Card,
@@ -14,24 +85,31 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useTranslations } from "next-intl";
 
 const LoadingMyApplications = () => {
+  const t = useTranslations("LoadingMyApplications");
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>My Applications</CardTitle>
-        <CardDescription>Manage your job applications here.</CardDescription>
+        <CardTitle className="text-center text-2xl">{t("title")}</CardTitle>
+        <CardDescription className="text-center ">
+          {t("description")}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Logo</TableHead>
-              <TableHead>Company</TableHead>
-              <TableHead>Job Title</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Applied On</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>{t("tableHeaders.logo")}</TableHead>
+              <TableHead>{t("tableHeaders.company")}</TableHead>
+              <TableHead>{t("tableHeaders.jobTitle")}</TableHead>
+              <TableHead>{t("tableHeaders.status")}</TableHead>
+              <TableHead>{t("tableHeaders.appliedOn")}</TableHead>
+              <TableHead className="text-right">
+                {t("tableHeaders.actions")}
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

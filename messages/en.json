@@ -1372,5 +1372,84 @@
     "genericError": "Something went wrong. Please try again.",
     "resumeUploadSuccess": "Resume uploaded successfully!",
     "uploadError": "Something went wrong. Please try again."
+  },
+  "schemas": {
+    "company": {
+      "nameError": "Company name must be at least 2 characters",
+      "locationError": "Location must be at least 2 characters",
+      "aboutError": "Please provide more information about your company",
+      "logoError": "Please upload a logo",
+      "languagesError": "At least one language is required"
+    },
+    "jobSeeker": {
+      "firstNameError": "First name must be at least 2 characters",
+      "lastNameError": "Last name must be at least 2 characters",
+      "emailError": "Please enter a valid email address",
+      "aboutError": "Bio must be at least 10 characters",
+      "resumeError": "Resume is required",
+      "titleError": "Job title must be at least 2 characters",
+      "experienceError": "Experience cannot be negative",
+      "skillsError": "At least one skill is required",
+      "languagesError": "At least one language is required",
+      "preferredJobTypeError": "At least one preferred job type is required"
+    },
+    "job": {
+      "jobTitleError": "Job title must be at least 2 characters",
+      "employmentTypeError": "Please select an employment type",
+      "locationError": "Please select a location",
+      "salaryFromError": "Salary from is required",
+      "salaryToError": "Salary to is required",
+      "jobDescriptionError": "Job description is required",
+      "benefitsError": "Please select at least one benefit",
+      "companyNameError": "Company name is required",
+      "companyLocationError": "Company location is required",
+      "companyLogoError": "Company logo is required",
+      "companyDescriptionError": "Company description is required",
+      "listingDurationError": "Listing duration is required"
+    }
+  },
+  "LoadingMyApplications": {
+    "title": "My Applications",
+    "description": "Manage your job applications here.",
+    "tableHeaders": {
+      "logo": "Logo",
+      "company": "Company",
+      "jobTitle": "Job Title",
+      "status": "Status",
+      "appliedOn": "Applied On",
+      "actions": "Actions"
+    }
+  },
+  "ApplicationsPage": {
+    "title": "My Applications",
+    "description": "Manage your job applications here.",
+    "emptyState": {
+      "title": "No applications found",
+      "description": "You haven't applied for any jobs yet.",
+      "buttonText": "Find a job"
+    },
+    "tableHeaders": {
+      "logo": "Logo",
+      "company": "Company",
+      "jobTitle": "Job Title",
+      "status": "Status",
+      "appliedOn": "Applied On",
+      "actions": "Actions"
+    },
+    "dropdownMenu": {
+      "actionsLabel": "Actions",
+      "viewJob": "View Job",
+      "editApplication": "Edit Application",
+      "deleteApplication": "Delete Application"
+    },
+    "imageAlt": {
+      "logo": "logo"
+    },
+    "status": {
+      "pending": "Pending",
+      "reviewed": "Reviewed",
+      "accepted": "Accepted",
+      "rejected": "Rejected"
+    }
   }
 }
