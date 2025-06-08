@@ -1389,5 +1389,18 @@
       "accepted": "Accepté",
       "rejected": "Rejeté"
     }
+  },
+  "FavoritesPage": {
+    "emptyState": {
+      "title": "Aucun favori trouvé",
+      "description": "Vous n'avez encore aucun favori.",
+      "buttonText": "Trouver un emploi"
+    },
+    "jobCard": {
+      "salary": "Salaire",
+      "posted": "Publié il y a",
+      "ago": "",
+      "days": "jours"
+    }
   }
 }

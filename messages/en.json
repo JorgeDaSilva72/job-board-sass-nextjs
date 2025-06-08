@@ -1451,5 +1451,18 @@
       "accepted": "Accepted",
       "rejected": "Rejected"
     }
+  },
+  "FavoritesPage": {
+    "emptyState": {
+      "title": "No favorites found",
+      "description": "You don't have any favorites yet.",
+      "buttonText": "Find a job"
+    },
+    "jobCard": {
+      "salary": "Salary",
+      "posted": "Posted",
+      "ago": "ago",
+      "days": "days"
+    }
   }
 }
