@@ -1464,5 +1464,12 @@
       "ago": "ago",
       "days": "days"
     }
+  },
+  "JobSeekerProfilePage": {
+    "loading": "Loading profile data...",
+    "noProfile": "No profile data found.",
+    "errors": {
+      "loadFailed": "Failed to load profile data"
+    }
   }
 }

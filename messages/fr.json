@@ -1402,5 +1402,12 @@
       "ago": "",
       "days": "jours"
     }
+  },
+  "JobSeekerProfilePage": {
+    "loading": "Chargement des données du profil...",
+    "noProfile": "Aucune donnée de profil trouvée.",
+    "errors": {
+      "loadFailed": "Échec du chargement des données du profil"
+    }
   }
 }
