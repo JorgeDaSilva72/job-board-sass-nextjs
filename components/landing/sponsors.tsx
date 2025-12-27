@@ -169,10 +169,11 @@ export const SponsorsSection = () => {
           pauseOnHover={true}
           innerClassName="gap-[3rem]"
         >
-          {sponsors.map(({ image, name, link }) => (
+          {sponsors.map(({ image, name, link }, index) => (
             <Link
               href={link}
-              key={name}
+              // On combine le nom et l'index pour garantir une clé unique
+              key={`${name}-${index}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex flex-col items-center text-xl md:text-2xl font-medium"
