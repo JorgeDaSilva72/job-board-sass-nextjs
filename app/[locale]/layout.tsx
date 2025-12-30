@@ -11,6 +11,7 @@ import { getMessages } from "next-intl/server";
 
 import { routing } from "@/i18n/routing";
 import BackToTop from "@/components/landing/BackTotop";
+import { SessionWrapper } from "@/components/general/SessionWrapper";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -75,25 +76,27 @@ export default async function LocaleLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Toaster
-              position="top-right"
-              duration={3000}
-              visibleToasts={3}
-              expand
-              closeButton
-              richColors
-            />
-            {children}
-            <BackToTop />
-          </ThemeProvider>
-        </NextIntlClientProvider>
+        <SessionWrapper>
+          <NextIntlClientProvider locale={locale} messages={messages}>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Toaster
+                position="top-right"
+                duration={3000}
+                visibleToasts={3}
+                expand
+                closeButton
+                richColors
+              />
+              {children}
+              <BackToTop />
+            </ThemeProvider>
+          </NextIntlClientProvider>
+        </SessionWrapper>
       </body>
     </html>
   );
